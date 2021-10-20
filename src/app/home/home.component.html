@@ -1,0 +1,81 @@
+<div class="container">
+  <div class="top-box">
+    <div class="main-title">
+      <h1>Bienvenue</h1>
+      <span>{{ info.username | titlecase }}</span>
+    </div>
+
+    <div class="info-box">
+      <div class="info-box-left">
+        <h4>System</h4>
+        <div class="table-grp-left">
+          <table>
+            <tr>
+              <td>
+                <span>OS : {{ info.os }}</span>
+              </td>
+            </tr>
+            <tr></tr>
+            <tr>
+              <td>
+                <span>Version : {{ info.version }}</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span>RAM : {{ info.memory }} GB</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span>ARCH : {{ info.architecture }}</span>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="info-box-right">
+        <h4>Storage</h4>
+        <div class="table-grp-right">
+          <table>
+            <tr>
+              <td>
+                <span>Downloads : {{ info.storage.downloads }} MB</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span>Documents : {{ info.storage.documents }} MB</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span>Bureau : {{ info.storage.desktop }} MB</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span
+                  >Total : <strong>{{ info.storage.total }} MB</strong></span
+                >
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-logo">
+    <img *ngIf="info.loaded; else notLoaded" src="assets/icons/castor.png" />
+    <ng-template #notLoaded>
+      <app-loading></app-loading>
+    </ng-template>
+    <div class="logo-ground"></div>
+  </div>
+
+  <div class="bottom-box">
+    <button class="left-btn" routerLink="/restore">Restaurer</button>
+    <button class="right-btn" routerLink="/save">Sauvegarder</button>
+  </div>
+</div>

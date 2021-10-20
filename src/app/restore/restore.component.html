@@ -1,0 +1,79 @@
+<div class="container">
+
+    <div class="top-box">
+
+        <div class="main-title">
+            <h4>Restauration</h4>
+        </div>
+
+        <div class="info-box">
+            <div *ngIf="saveLoaded; else notLoaded">
+                <ng-container *ngIf="getItemLength(); else itemEmpty">
+                    <div class="last-save-info">Sauvegardé le : {{ lastSaveInfo }}</div>
+                    <table>
+                        <ng-container *ngFor="let item of itemToRestore | keyvalue">
+                            <tr *ngIf="getItem(item.key)">
+                                <td> {{ item.key | titlecase }} </td>
+                            </tr>
+                        </ng-container>
+                    </table>
+                </ng-container>
+                <ng-template #itemEmpty>
+                    Aucune sauvegarde trouvée
+                </ng-template>
+            </div>
+            <ng-template #notLoaded>
+                <app-loading></app-loading>
+                <span class="loading-info">Searching save ...</span>
+            </ng-template>
+            <div class="logo-ground"></div>
+        </div>
+        <div class="selection-box">
+            <div class="selection-group" *ngFor="let option of options | keyvalue" (click)="toggleOption(option.key)"
+                [ngClass]="{'active' : getOption(option.key, 'isSelected')}">
+                <input type="checkbox" [id]="option.key" [name]="option.key" (click)="toggleOption(option.key)">
+                <label [for]="option.key">{{ option.key | titlecase }}</label>
+                <!-- SELECTED BUT NOT SAVED -->
+                <ng-container *ngIf="getOption(option.key, 'isSelected') && !getOption(option.key, 'isSaved')">
+                    <fa-icon class="isSelected" [icon]="faCheck"></fa-icon>
+                </ng-container>
+                <!-- SELECTED AND SAVED -->
+                <ng-container *ngIf="getOption(option.key, 'isSaved')">
+                    <fa-icon class="isSaved" [icon]="faThumbsUp"></fa-icon>
+                </ng-container>
+                <!-- NOT SELECTED -->
+                <ng-container *ngIf="!getOption(option.key, 'isSelected')">
+                    <fa-icon [icon]="faTimesCircle"></fa-icon>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-box">
+        <div class="container-progress" *ngIf="progressVisibility">
+            <nav class="progress-info">
+                <p class="progress-text" [ngStyle]="{'color': progressError ? 'red' : '#363636' }">
+                    {{ progressMessage }}
+                </p>
+            </nav>
+            <div class="progress-bar {{color}}" [ngStyle]="{'width': progress + '%'}">
+            </div>
+        </div>
+        <button class="left-btn start-btn" (click)="process()"
+            [disabled]="progressVisibility || (getOptionLength() < 1 && getItemLength() < 1)">
+
+            <nav *ngIf="!progressVisibility; else inProgress">
+                <fa-icon [icon]="faRocket"></fa-icon> Start
+            </nav>
+
+            <ng-template #inProgress>
+                <app-loading-dot></app-loading-dot>
+            </ng-template>
+
+        </button>
+        <button class="right-btn" [routerLink]="['/']" *ngIf="!progressVisibility">
+            <fa-icon [icon]="faArrowRight"></fa-icon>
+        </button>
+    </div>
+
+</div>
