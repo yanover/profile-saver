@@ -1,4 +1,4 @@
-import { spawn, exec, SpawnOptions } from "child_process";
+import { spawn, SpawnOptions } from "child_process";
 import fs = require("fs-extra");
 import os = require("os");
 
@@ -6,7 +6,7 @@ import { Files, getFullPath, Repertories } from "./configService";
 
 const regedit = require("regedit");
 
-// Get fullPath from
+// Get fullPath from configService
 const rootPath: string = getFullPath();
 
 interface IitemToSave {
@@ -149,7 +149,6 @@ export async function restoreTaskbar(): Promise<void> {
   let registryName: string =
     "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Taskband";
   let rootPathDestination: string = `${rootPath}\\${Repertories.taskbar}\\${Files.taskbar}`;
-  let errorMessage: string = "";
 
   // Retrieve .json file
   if (fs.existsSync(rootPathDestination)) {
@@ -228,7 +227,12 @@ export async function restorePrinters(
     }
     // Launch child_process execute function
     printersSorted.forEach((printer) => {
-      execute(printer["name"]);
+      try {
+        execute(printer["name"]);
+      } catch (err) {
+        console.error(err);
+        // Swallow
+      }
     });
   } else {
     console.error(
@@ -236,10 +240,6 @@ export async function restorePrinters(
     );
     throw new Error("An error occured during printers restoration");
   }
-}
-
-function userInfo() {
-  return os.userInfo();
 }
 
 function execute(command: string) {
@@ -261,4 +261,8 @@ function execute(command: string) {
   stmt.stderr.on("data", (data) => {
     console.error(`stderr: ${data}`);
   });
+}
+
+function userInfo() {
+  return os.userInfo();
 }
