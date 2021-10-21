@@ -4,7 +4,6 @@
 
   .top-box {
     height: 65%;
-    display: flex;
 
     .main-title {
       display: box;
@@ -19,55 +18,57 @@
 
     .selection-box {
       position: absolute;
-      height: auto;
       left: 25%;
       width: 50%;
       bottom: 35%;
-      border-top: 1px solid #363636;
-      border-left: 1px solid #363636;
-      border-right: 1px solid #363636;
-      border-radius: 0.6em 0.6em 0 0;
-      background: whitesmoke;
+      text-align: center;
 
-      .selection-group {
-        text-align: center;
-        padding: 0.3em;
-        cursor: pointer;
+      .selection-input {
+        border-top: 1px solid #363636;
+        border-left: 1px solid #363636;
+        border-right: 1px solid #363636;
+        border-radius: 0.6em 0.6em 0 0;
 
-        input {
-          display: none;
-        }
-
-        label {
-          font-size: 1em;
+        .selection-group {
+          text-align: center;
+          padding: 0.3em;
           cursor: pointer;
-          -webkit-user-select: none; /* Chrome all / Safari all */
-          -moz-user-select: none; /* Firefox all */
-          -ms-user-select: none; /* IE 10+ */
-          user-select: none;
-        }
 
-        fa-icon {
-          position: absolute;
-          right: 4%;
-          color: rgb(165, 1, 1);
-        }
-
-        &.active {
-          background-color: #c7e5c8;
-
-          fa-icon,
-          .isSelected {
-            color: #738973;
+          input {
+            display: none;
           }
 
-          fa-icon,
-          .isSaved {
-            color: #536d8f;
+          label {
+            font-size: 1em;
+            cursor: pointer;
+            -webkit-user-select: none; /* Chrome all / Safari all */
+            -moz-user-select: none; /* Firefox all */
+            -ms-user-select: none; /* IE 10+ */
+            user-select: none;
           }
-        }
-        &.active:first-child {
-          border-radius: 0.6em 0.6em 0 0;
+
+          fa-icon {
+            position: absolute;
+            right: 4%;
+            color: rgb(165, 1, 1);
+          }
+
+          &.active {
+            background-color: #c7e5c8;
+
+            fa-icon,
+            .isSelected {
+              color: #738973;
+            }
+
+            fa-icon,
+            .isSaved {
+              color: #536d8f;
+            }
+          }
+          &.active:first-child {
+            border-radius: 0.6em 0.6em 0 0;
+          }
         }
       }
     }
@@ -159,5 +160,12 @@
         }
       }
     }
+  }
+
+  .sub-title {
+    margin-top: 2%;
+    font-size: 0.8em;
+    color: grey;
+    font-style: italic;
   }
 }

@@ -1,308 +1,199 @@
 .container {
-    position: relative;
-    background: white;
+  position: relative;
+  background: white;
 
-    .top-box {
-        height: 65%;
+  .top-box {
+    height: 65%;
 
-        .main-title {
-            display: box;
-            width: 100%;
-            padding: 2% 0 0 0;
-            text-align: center;
+    .main-title {
+      display: box;
+      width: 100%;
+      padding: 2% 0 0 0;
+      text-align: center;
 
-            h4 {
-                margin-bottom: 0;
-            }
-        }
-
-        .info-box {
-            width: 100%;
-            height: auto;
-            text-align: center;
-            margin-top: 3%;
-
-            .loading-info {
-                display: block;
-                font-style: italic;
-                font-size: 0.8em;
-                color: #363636;
-            }
-
-            .itemToRestore {
-                display: block;
-            }
-
-            table {
-                width: 35%;
-                margin: auto;
-                text-align: center;
-                border: 1px solid #363636;
-                border-radius: 0.25rem;
-
-                tr {
-                    background-color: whitesmoke;
-                    font-style: italic;
-                    font-size: 0.9em;
-                }
-            }
-
-            .last-save-info {
-                margin-top: 2%;
-                font-size: 0.8em;
-                color: grey;
-                font-style: italic;
-            }
-        }
-
-        .selection-box {
-            position: absolute;
-            height: auto;
-            left: 25%;
-            width: 50%;
-            bottom: 35%;
-            border-top: 1px solid #363636;
-            border-left: 1px solid #363636;
-            border-right: 1px solid #363636;
-            border-radius: 0.6em 0.6em 0 0;
-            background: whitesmoke;
-
-            .selection-group {
-                text-align: center;
-                padding: 0.3em;
-                cursor: pointer;
-
-                input {
-                    display: none;
-                }
-
-                label {
-                    font-size: 1em;
-                    cursor: pointer;
-                    -webkit-user-select: none; /* Chrome all / Safari all */
-                    -moz-user-select: none; /* Firefox all */
-                    -ms-user-select: none; /* IE 10+ */
-                    user-select: none;
-                }
-
-                fa-icon {
-                    position: absolute;
-                    right: 4%;
-                    color: rgb(165, 1, 1);
-                }
-
-                &.active {
-                    background-color: #c7e5c8;
-
-                    fa-icon,
-                    .isSelected {
-                        color: #738973;
-                    }
-
-                    fa-icon,
-                    .isSaved {
-                        color: #536d8f;
-                    }
-                }
-                &.active:first-child {
-                    border-radius: 0.6em 0.6em 0 0;
-                }
-            }
-        }
+      h4 {
+        margin-bottom: 0;
+      }
     }
 
-    .bottom-box {
-        width: 100%;
-        background: #363636;
-        height: 35%;
-        display: flex;
+    .info-box {
+      width: 100%;
+      height: auto;
+      text-align: center;
+      margin-top: 3%;
 
-        .container-progress {
-            position: absolute;
-            bottom: 5%;
-            right: 10%;
-            width: 50%;
-            height: 39px;
-            border-radius: 0.6em;
-            background: rgba(216, 226, 245, 1);
-            border: 3px solid white;
-            font-weight: bold;
+      .loading-info {
+        display: block;
+        font-style: italic;
+        font-size: 0.8em;
+        color: #363636;
+      }
 
-            .progress-info {
-                position: absolute;
-                width: 100%;
-                height: 100%;
-                text-align: center;
+      .itemToRestore {
+        display: block;
+      }
 
-                p {
-                    font-size: 0.8em;
-                    font-style: italic !important;
-                }
-            }
+      table {
+        width: 35%;
+        margin: auto;
+        text-align: center;
+        border: 1px solid #363636;
+        border-radius: 0.25rem;
 
-            .progress-bar {
-                width: 0;
-                height: 100%;
-                border-radius: 0.6em;
-                background-color: rgb(176, 199, 241);
-            }
+        tr {
+          background-color: whitesmoke;
+          font-style: italic;
+          font-size: 0.9em;
         }
+      }
+    }
 
-        button {
-            position: absolute;
-            height: 45px;
-            width: 190px;
-            border-radius: 0.6em;
-            background: rgba(216, 226, 245, 1);
-            border: 3px solid white;
+    .selection-box {
+      position: absolute;
+      left: 25%;
+      width: 50%;
+      bottom: 35%;
+      text-align: center;
+
+      .selection-input {
+        border-top: 1px solid #363636;
+        border-left: 1px solid #363636;
+        border-right: 1px solid #363636;
+        border-radius: 0.6em 0.6em 0 0;
+
+        .selection-group {
+          text-align: center;
+          padding: 0.3em;
+          cursor: pointer;
+
+          input {
+            display: none;
+          }
+
+          label {
             font-size: 1em;
-            font-weight: bold;
-            color: #363636;
+            cursor: pointer;
+            -webkit-user-select: none; /* Chrome all / Safari all */
+            -moz-user-select: none; /* Firefox all */
+            -ms-user-select: none; /* IE 10+ */
+            user-select: none;
+          }
 
-            &.left-btn {
-                bottom: 5%;
-                left: 10%;
+          fa-icon {
+            position: absolute;
+            right: 4%;
+            color: rgb(165, 1, 1);
+          }
+
+          &.active {
+            background-color: #c7e5c8;
+
+            fa-icon,
+            .isSelected {
+              color: #738973;
             }
 
-            &.right-btn {
-                bottom: 5%;
-                right: 10%;
+            fa-icon,
+            .isSaved {
+              color: #536d8f;
             }
-
-            &:hover {
-                transition: 0.4s;
-                border: 3px solid #363636;
-                background-color: rgb(176, 199, 241);
-            }
-
-            &:not(:hover) {
-                transition: 0.4s;
-            }
-
-            &.start-btn {
-                fa-icon {
-                    position: absolute;
-                    left: 10%;
-                }
-
-                &:hover {
-                    fa-icon {
-                        transition: 0.5s;
-                        color: #000;
-                    }
-                }
-            }
+          }
+          &.active:first-child {
+            border-radius: 0.6em 0.6em 0 0;
+          }
         }
+      }
     }
-}
+  }
 
-/* 
-.container {
+  .bottom-box {
+    width: 100%;
+    background: #363636;
+    height: 35%;
     display: flex;
 
-    .container-restore {
-        text-align: center;
-        margin: auto;
-
-        .header {
-            border-radius: 0.2rem 0.2rem 0 0;
-            background-color: #fff;
-            padding: 1rem 2rem;
-            border-bottom: 2px solid #363636;
-            h3 {
-                margin: 0px;
-            }
-        }
-
-        .destination-box {
-            padding: 1rem 2rem 2rem 2rem;
-            background-color: #fff;
-
-            .destination {
-                width: 80%;
-                fa-icon {
-                    color: #fa8508;
-                }
-
-                &:hover {
-                    fa-icon {
-                        transition: 0.5s;
-                        color: #c96800;
-                    }
-                }
-            }
-        }
-
-        .selection-box {
-            padding: 1rem 2rem 1rem 2rem;
-            background-color: #fff;
-            border-bottom: 1px solid #363636;
-
-            .selection-group {
-                padding-bottom: 1rem;
-
-                input,
-                label {
-                    cursor: pointer;
-                }
-
-                input {
-                    float: right;
-                }
-
-                label {
-                    float: left;
-                }
-            }
-        }
-
-        .footer {
-            display: flex;
-            padding: 1rem 2rem;
-            border-radius: 0.2rem 0.2rem 0 0;
-            background-color: #fff;
-            border-top: 2px solid #363636;
-
-            .back {
-                cursor: pointer;
-                fa-icon {
-                    color: #363636;
-                }
-            }
-
-            .restore {
-                margin-left: auto;
-            }
-
-            .hidden {
-                visibility: hidden;
-                width: 1px;
-                height: 1px;
-            }
-        }
-    }
-
     .container-progress {
+      position: absolute;
+      bottom: 5%;
+      right: 10%;
+      width: 50%;
+      height: 39px;
+      border-radius: 0.6em;
+      background: rgba(216, 226, 245, 1);
+      border: 3px solid white;
+      font-weight: bold;
+
+      .progress-info {
         position: absolute;
-        width: 50%;
-        height: 1.6em;
-        bottom: 30%;
-        border: 1px solid #fff;
+        width: 100%;
+        height: 100%;
+        text-align: center;
 
-        .progress-info {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            padding-top: 0.2rem;
-            text-align: center;
-            color: #fff;
+        p {
+          font-size: 0.8em;
+          font-style: italic !important;
         }
+      }
 
-        .progress-bar {
-            width: 0;
-            height: 100%;
-            background-color: #0075ff;
-        }
+      .progress-bar {
+        width: 0;
+        height: 100%;
+        border-radius: 0.6em;
+        background-color: rgb(176, 199, 241);
+      }
     }
+
+    button {
+      position: absolute;
+      height: 45px;
+      width: 190px;
+      border-radius: 0.6em;
+      background: rgba(216, 226, 245, 1);
+      border: 3px solid white;
+      font-size: 1em;
+      font-weight: bold;
+      color: #363636;
+
+      &.left-btn {
+        bottom: 5%;
+        left: 10%;
+      }
+
+      &.right-btn {
+        bottom: 5%;
+        right: 10%;
+      }
+
+      &:hover {
+        transition: 0.4s;
+        border: 3px solid #363636;
+        background-color: rgb(176, 199, 241);
+      }
+
+      &:not(:hover) {
+        transition: 0.4s;
+      }
+
+      &.start-btn {
+        fa-icon {
+          position: absolute;
+          left: 10%;
+        }
+
+        &:hover {
+          fa-icon {
+            transition: 0.5s;
+            color: #000;
+          }
+        }
+      }
+    }
+  }
+
+  .sub-title {
+    margin-top: 2%;
+    font-size: 0.8em;
+    color: grey;
+    font-style: italic;
+  }
 }
- */

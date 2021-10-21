@@ -1,71 +1,53 @@
 <div class="container">
+  <!-- TOP BOX -->
   <div class="top-box">
     <div class="main-title">
-      <h4>Sauvegarde</h4>
-      <span class="main-title-subtitle"
-        >Choisissez les éléments que vous souhaitez sauvegarder</span
-      >
+      <h3>Sauvegarde</h3>
     </div>
-
+    <!-- SELECTION BOX -->
     <div class="selection-box">
-      <div
-        class="selection-group"
-        *ngFor="let option of options | keyvalue"
-        (click)="toggleOption(option.key)"
-        [ngClass]="{ active: getOption(option.key, 'isSelected') }"
-      >
-        <input
-          type="checkbox"
-          [id]="option.key"
-          [name]="option.key"
+      <span class="sub-title">Sélectionner les éléments à inclure lors de la sauvegarde</span>
+      <div class="selection-input">
+        <div
+          class="selection-group"
+          *ngFor="let option of options | keyvalue"
           (click)="toggleOption(option.key)"
-        />
-        <label [for]="option.key">{{ option.key | titlecase }}</label>
-        <!-- SELECTED BUT NOT SAVED -->
-        <ng-container
-          *ngIf="
-            getOption(option.key, 'isSelected') &&
-            !getOption(option.key, 'isSaved')
-          "
+          [ngClass]="{ active: getOption(option.key, 'isSelected') }"
         >
-          <fa-icon class="isSelected" [icon]="faCheck"></fa-icon>
-        </ng-container>
-        <!-- SELECTED AND SAVED -->
-        <ng-container *ngIf="getOption(option.key, 'isSaved')">
-          <fa-icon class="isSaved" [icon]="faThumbsUp"></fa-icon>
-        </ng-container>
-        <!-- NOT SELECTED -->
-        <ng-container *ngIf="!getOption(option.key, 'isSelected')">
-          <fa-icon [icon]="faTimesCircle"></fa-icon>
-        </ng-container>
+          <input type="checkbox" [id]="option.key" [name]="option.key" (click)="toggleOption(option.key)" />
+          <label [for]="option.key">{{ option.key | titlecase }}</label>
+          <!-- SELECTED BUT NOT SAVED -->
+          <ng-container *ngIf="getOption(option.key, 'isSelected') && !getOption(option.key, 'isSaved')">
+            <fa-icon class="isSelected" [icon]="faCheck"></fa-icon>
+          </ng-container>
+          <!-- SELECTED AND SAVED -->
+          <ng-container *ngIf="getOption(option.key, 'isSaved')">
+            <fa-icon class="isSaved" [icon]="faThumbsUp"></fa-icon>
+          </ng-container>
+          <!-- NOT SELECTED -->
+          <ng-container *ngIf="!getOption(option.key, 'isSelected')">
+            <fa-icon [icon]="faTimesCircle"></fa-icon>
+          </ng-container>
+        </div>
       </div>
     </div>
   </div>
-
+  <!-- BOTTOM BOX -->
   <div class="bottom-box">
     <button class="left-btn" [routerLink]="['/']" *ngIf="!progressVisibility">
       <fa-icon [icon]="faArrowLeft"></fa-icon>
     </button>
     <div class="container-progress" *ngIf="progressVisibility">
       <nav class="progress-info">
-        <p
-          class="progress-text"
-          [ngStyle]="{ color: progressError ? 'red' : '#363636' }"
-        >
+        <p class="progress-text" [ngStyle]="{ color: progressError ? 'red' : '#363636' }">
           {{ progressMessage }}
         </p>
       </nav>
       <div class="progress-bar" [ngStyle]="{ width: progress + '%' }"></div>
     </div>
 
-    <button
-      class="right-btn start-btn"
-      (click)="process()"
-      [disabled]="progressVisibility || getOptionLength() < 1"
-    >
-      <nav *ngIf="!progressVisibility; else inProgress">
-        <fa-icon [icon]="faRocket"></fa-icon> Start
-      </nav>
+    <button class="right-btn start-btn" (click)="process()" [disabled]="progressVisibility || getOptionLength() < 1">
+      <nav *ngIf="!progressVisibility; else inProgress"><fa-icon [icon]="faRocket"></fa-icon> Start</nav>
 
       <ng-template #inProgress>
         <app-loading-dot></app-loading-dot>
