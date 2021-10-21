@@ -87,9 +87,8 @@ function getSave() {
 }
 exports.getSave = getSave;
 /**
- * Description : Returns items to save
- * @return Promise<string>
- * @throws CopyError | FileNotFoundException
+ * Description : Returns a litteral object that use IitemToSave with values that needs to be save
+ * @return Promise<IitemToSave>
  */
 function restore() {
     return __awaiter(this, void 0, void 0, function () {
@@ -119,7 +118,9 @@ function restore() {
 }
 exports.restore = restore;
 /**
- * TODO
+ * Description : Restore desktop process, copy saved content on user's current desktop
+ * @return Promise<void>
+ * @throws CopyError | FileNotFoundException
  */
 function restoreDesktop() {
     return __awaiter(this, void 0, void 0, function () {
@@ -151,7 +152,9 @@ function restoreDesktop() {
 }
 exports.restoreDesktop = restoreDesktop;
 /**
- * TODO
+ * Description : Restore signature process, copy saved content on user's current signature's directory
+ * @return Promise<void>
+ * @throws CopyError | FileNotFoundException
  */
 function restoreSignature() {
     return __awaiter(this, void 0, void 0, function () {
@@ -183,50 +186,57 @@ function restoreSignature() {
 }
 exports.restoreSignature = restoreSignature;
 /**
- * TODO
+ * Description : Restore taskbar process, copy registry entry found in registry.json file
+ * @return Promise<void>
+ * @throws CopyError | FileNotFoundException
  */
 function restoreTaskbar() {
     return __awaiter(this, void 0, void 0, function () {
-        var registryName, rootPathDestination, errorMessage, result, data, item, key, registryValue;
+        var registryName, rootPathDestination, errorMessage, data, item, key, registryValue;
         var _a, _b;
         return __generator(this, function (_c) {
             registryName = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Taskband";
             rootPathDestination = rootPath + "\\" + configService_1.Repertories.taskbar + "\\" + configService_1.Files.taskbar;
             errorMessage = "";
-            result = true;
             // Retrieve .json file
             if (fs.existsSync(rootPathDestination)) {
                 data = JSON.parse(fs.readFileSync(rootPathDestination, "utf8"));
                 item = new registryItem();
                 item.values = data[registryName]["values"];
-                for (key in item.values) {
-                    registryValue = (_a = {},
-                        _a[registryName] = (_b = {},
-                            _b[key] = {
-                                value: item.values[key]["value"],
-                                type: item.values[key]["type"],
-                            },
-                            _b),
-                        _a);
-                    regedit.putValue(registryValue, function (err) {
-                        if (err) {
-                            errorMessage = err.message;
-                            result = false;
-                        }
-                    });
+                try {
+                    for (key in item.values) {
+                        registryValue = (_a = {},
+                            _a[registryName] = (_b = {},
+                                _b[key] = {
+                                    value: item.values[key]["value"],
+                                    type: item.values[key]["type"],
+                                },
+                                _b),
+                            _a);
+                        regedit.putValue(registryValue, function (err) {
+                            if (err) {
+                                throw new Error("An error occured during signature restoration");
+                            }
+                        });
+                    }
+                }
+                catch (err) {
+                    throw new Error("An error occured during signature restoration");
                 }
             }
             else {
-                errorMessage = "File " + rootPathDestination + " has not been found";
-                result = false;
+                console.error("Error detected in restorTaskbar, folder " + rootPathDestination + " not found");
+                throw new Error("An error occured during taskbar restoration");
             }
-            return [2 /*return*/, { result: result, message: errorMessage }];
+            return [2 /*return*/];
         });
     });
 }
 exports.restoreTaskbar = restoreTaskbar;
 /**
- * TODO
+ * Description : Restore printers process, copy printer from printers.json file, install with child_process
+ * @return Promise<void>
+ * @throws CopyError | FileNotFoundException
  */
 function restorePrinters(contents) {
     return __awaiter(this, void 0, void 0, function () {
@@ -256,16 +266,14 @@ function restorePrinters(contents) {
                         }
                     }
                 }
+                // Launch child_process execute function
                 printersSorted.forEach(function (printer) {
-                    console.log("Installing printer " + printer["name"]);
-                    execute(printer["name"], function (result) {
-                        console.log(result);
-                    });
+                    execute(printer["name"]);
                 });
             }
             else {
-                errorMessage = "File " + rootPathDestination + " has not been found";
-                result = false;
+                console.error("Error detected in restorePrinters, folder " + rootPathDestination + " not found");
+                throw new Error("An error occured during printers restoration");
             }
             return [2 /*return*/];
         });
@@ -275,7 +283,7 @@ exports.restorePrinters = restorePrinters;
 function userInfo() {
     return os.userInfo();
 }
-function execute(command, callback) {
+function execute(command) {
     // command = `start ${command}`;
     console.log("Commande intercepted : " + command);
     // Build args
@@ -287,6 +295,9 @@ function execute(command, callback) {
         windowsHide: true,
     };
     // Execute statment
-    child_process_1.spawn("cmd.exe", args, opts);
+    var stmt = child_process_1.spawn("cmd.exe", args, opts);
+    stmt.stderr.on("data", function (data) {
+        console.error("stderr: " + data);
+    });
 }
 //# sourceMappingURL=restore.js.map

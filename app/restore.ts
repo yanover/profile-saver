@@ -145,15 +145,11 @@ export async function restoreSignature(): Promise<void> {
  * @return Promise<void>
  * @throws CopyError | FileNotFoundException
  */
-export async function restoreTaskbar(): Promise<{
-  result: boolean;
-  message: string;
-}> {
+export async function restoreTaskbar(): Promise<void> {
   let registryName: string =
     "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Taskband";
   let rootPathDestination: string = `${rootPath}\\${Repertories.taskbar}\\${Files.taskbar}`;
   let errorMessage: string = "";
-  let result: boolean = true;
 
   // Retrieve .json file
   if (fs.existsSync(rootPathDestination)) {
@@ -165,35 +161,42 @@ export async function restoreTaskbar(): Promise<{
     let item = new registryItem();
     item.values = data[registryName]["values"];
 
-    for (let key in item.values) {
-      const registryValue = {
-        [registryName]: {
-          [key]: {
-            value: item.values[key]["value"],
-            type: item.values[key]["type"],
+    try {
+      for (let key in item.values) {
+        const registryValue = {
+          [registryName]: {
+            [key]: {
+              value: item.values[key]["value"],
+              type: item.values[key]["type"],
+            },
           },
-        },
-      };
+        };
 
-      regedit.putValue(registryValue, (err: Error) => {
-        if (err) {
-          errorMessage = err.message;
-          result = false;
-        }
-      });
+        regedit.putValue(registryValue, (err: Error) => {
+          if (err) {
+            throw new Error("An error occured during signature restoration");
+          }
+        });
+      }
+    } catch (err) {
+      throw new Error("An error occured during signature restoration");
     }
   } else {
-    errorMessage = `File ${rootPathDestination} has not been found`;
-    result = false;
+    console.error(
+      `Error detected in restorTaskbar, folder ${rootPathDestination} not found`
+    );
+    throw new Error("An error occured during taskbar restoration");
   }
-
-  return { result: result, message: errorMessage };
 }
 
 /**
- * TODO
+ * Description : Restore printers process, copy printer from printers.json file, install with child_process
+ * @return Promise<void>
+ * @throws CopyError | FileNotFoundException
  */
-export async function restorePrinters(contents: Electron.WebContents) {
+export async function restorePrinters(
+  contents: Electron.WebContents
+): Promise<void> {
   let rootPathDestination: string = `${rootPath}\\${Repertories.printers}\\${Files.printers}`;
 
   let errorMessage: string = "";
@@ -223,16 +226,15 @@ export async function restorePrinters(contents: Electron.WebContents) {
         }
       }
     }
-
+    // Launch child_process execute function
     printersSorted.forEach((printer) => {
-      console.log(`Installing printer ${printer["name"]}`);
-      execute(printer["name"], (result) => {
-        console.log(result);
-      });
+      execute(printer["name"]);
     });
   } else {
-    errorMessage = `File ${rootPathDestination} has not been found`;
-    result = false;
+    console.error(
+      `Error detected in restorePrinters, folder ${rootPathDestination} not found`
+    );
+    throw new Error("An error occured during printers restoration");
   }
 }
 
@@ -240,7 +242,7 @@ function userInfo() {
   return os.userInfo();
 }
 
-function execute(command: string, callback: any) {
+function execute(command: string) {
   // command = `start ${command}`;
   console.log("Commande intercepted : " + command);
 
@@ -254,5 +256,9 @@ function execute(command: string, callback: any) {
   };
 
   // Execute statment
-  spawn("cmd.exe", args, opts);
+  let stmt = spawn("cmd.exe", args, opts);
+
+  stmt.stderr.on("data", (data) => {
+    console.error(`stderr: ${data}`);
+  });
 }

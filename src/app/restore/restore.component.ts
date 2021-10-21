@@ -62,13 +62,8 @@ export class RestoreComponent implements OnInit {
     this.getSave();
   }
 
-  async setProgressMessage(text: string, errorstmt: boolean = false) {
-    if (errorstmt) {
-      this.progressMessage = text;
-      this.progressError = errorstmt;
-    } else {
-      this.progressMessage = text;
-    }
+  async setProgressMessage(text: string) {
+    this.progressMessage = text;
   }
 
   async process() {
@@ -87,6 +82,7 @@ export class RestoreComponent implements OnInit {
         this.progressError = false;
         if (this.itemToRestore[key]) {
           // Refresh progressBar message
+          this.progressError = false;
           this.setProgressMessage(
             `Restoring ${key.charAt(0).toUpperCase() + key.slice(1)}`
           );
@@ -95,13 +91,14 @@ export class RestoreComponent implements OnInit {
             await this._electronService.ipcRenderer.invoke(`restore-${key}`);
           } catch (err) {
             // Error occured backend side
-            this.setProgressMessage(err.toString().split(":")[3], true);
+            this.progressError = true;
+            this.setProgressMessage(err.toString().split(":")[3]);
             await new Promise((resolve) => setTimeout(resolve, 3000));
             continue;
+          } finally {
+            // Update progress
+            this.progress = this.progress + progressIncrement;
           }
-
-          // Update progress
-          this.progress = this.progress + progressIncrement;
         }
       }
 
