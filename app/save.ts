@@ -5,7 +5,7 @@ import { getFullPath, Repertories } from "./configService";
 
 const regedit = require("regedit");
 
-// Get fullPath from
+// Get fullPath from configService
 const rootPath: string = getFullPath();
 
 function userInfo() {
