@@ -3,7 +3,7 @@
   "version": "1.4.0",
   "main": "main.js",
   "private": true,
-  "description": "Permet la sauvegarde et la restauration d'un profile Windows",
+  "description": "TODO",
   "author": "Yann Schoeni",
   "dependencies": {
     "@electron/remote": "1.2.0",
