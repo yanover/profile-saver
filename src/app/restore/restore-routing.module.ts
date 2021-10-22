@@ -1,18 +1,18 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Routes, RouterModule } from '@angular/router';
-import { RestoreComponent } from './restore.component';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { Routes, RouterModule } from "@angular/router";
+import { RestoreComponent } from "./restore.component";
 
 const routes: Routes = [
   {
-    path: 'restore',
+    path: "restore",
     component: RestoreComponent
-  }
+  },
 ];
 
 @NgModule({
   declarations: [],
   imports: [CommonModule, RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class RestoreRoutingModule { }
+export class RestoreRoutingModule {}

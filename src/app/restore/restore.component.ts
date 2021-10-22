@@ -83,9 +83,7 @@ export class RestoreComponent implements OnInit {
         if (this.itemToRestore[key]) {
           // Refresh progressBar message
           this.progressError = false;
-          this.setProgressMessage(
-            `Restoring ${key.charAt(0).toUpperCase() + key.slice(1)}`
-          );
+          this.setProgressMessage(`Restoring ${key.charAt(0).toUpperCase() + key.slice(1)}`);
           try {
             // Restore process
             await this._electronService.ipcRenderer.invoke(`restore-${key}`);
@@ -106,9 +104,7 @@ export class RestoreComponent implements OnInit {
       for (let key in this.options) {
         if (this.options[key].isSelected) {
           // Refresh progressBar message
-          this.setProgressMessage(
-            `Saving ${key.charAt(0).toUpperCase() + key.slice(1)}`
-          );
+          this.setProgressMessage(`Saving ${key.charAt(0).toUpperCase() + key.slice(1)}`);
           // Save process
           //await this._electronService.ipcRenderer.invoke(`restore-${key}`);
           // Update progress
@@ -135,10 +131,7 @@ export class RestoreComponent implements OnInit {
     let result: boolean = false;
 
     try {
-      this.itemToRestore = await this._electronService.ipcRenderer.invoke(
-        "restore",
-        this.options
-      );
+      this.itemToRestore = await this._electronService.ipcRenderer.invoke("restore", this.options);
 
       let check: boolean = false;
       Object.keys(this.itemToRestore).forEach((key) => {
@@ -149,10 +142,7 @@ export class RestoreComponent implements OnInit {
 
       if (check) {
         // Get information date
-        this.lastSaveInfo = await this._electronService.ipcRenderer.invoke(
-          "get-save",
-          this.options
-        );
+        this.lastSaveInfo = await this._electronService.ipcRenderer.invoke("get-save", this.options);
       }
     } catch (err) {
       console.log(err);

@@ -42,7 +42,7 @@ var fs = require("fs-extra");
 var os = require("os");
 var configService_1 = require("./configService");
 var regedit = require("regedit");
-// Get fullPath from
+// Get fullPath from configService
 var rootPath = configService_1.getFullPath();
 var registryItem = /** @class */ (function () {
     function registryItem() {
@@ -192,12 +192,11 @@ exports.restoreSignature = restoreSignature;
  */
 function restoreTaskbar() {
     return __awaiter(this, void 0, void 0, function () {
-        var registryName, rootPathDestination, errorMessage, data, item, key, registryValue;
+        var registryName, rootPathDestination, data, item, key, registryValue;
         var _a, _b;
         return __generator(this, function (_c) {
             registryName = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Taskband";
             rootPathDestination = rootPath + "\\" + configService_1.Repertories.taskbar + "\\" + configService_1.Files.taskbar;
-            errorMessage = "";
             // Retrieve .json file
             if (fs.existsSync(rootPathDestination)) {
                 data = JSON.parse(fs.readFileSync(rootPathDestination, "utf8"));
@@ -268,7 +267,13 @@ function restorePrinters(contents) {
                 }
                 // Launch child_process execute function
                 printersSorted.forEach(function (printer) {
-                    execute(printer["name"]);
+                    try {
+                        execute(printer["name"]);
+                    }
+                    catch (err) {
+                        console.error(err);
+                        // Swallow
+                    }
                 });
             }
             else {
@@ -280,9 +285,6 @@ function restorePrinters(contents) {
     });
 }
 exports.restorePrinters = restorePrinters;
-function userInfo() {
-    return os.userInfo();
-}
 function execute(command) {
     // command = `start ${command}`;
     console.log("Commande intercepted : " + command);
@@ -299,5 +301,8 @@ function execute(command) {
     stmt.stderr.on("data", function (data) {
         console.error("stderr: " + data);
     });
+}
+function userInfo() {
+    return os.userInfo();
 }
 //# sourceMappingURL=restore.js.map

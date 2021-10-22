@@ -42,7 +42,7 @@ var fs = require("fs-extra");
 var os = require("os");
 var configService_1 = require("./configService");
 var regedit = require("regedit");
-// Get fullPath from
+// Get fullPath from configService
 var rootPath = configService_1.getFullPath();
 function userInfo() {
     return os.userInfo();
