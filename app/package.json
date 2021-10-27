@@ -1,13 +1,12 @@
 {
   "name": "profile-saver",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "main": "main.js",
   "private": true,
   "description": "TODO",
   "author": "Yann Schoeni",
   "dependencies": {
     "@electron/remote": "1.2.0",
-    "dotenv": "^10.0.0",
     "fast-folder-size": "^1.4.0",
     "file-system": "^2.2.2",
     "fs": "0.0.1-security",

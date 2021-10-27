@@ -1,16 +1,13 @@
-// Initialize dotenv
-require("dotenv").config();
-
 // Interface for managing return values
 interface IConfig {
   folderPath?: string;
   folderName?: string;
 }
 
-// Enum for managing keys
-enum EnvKey {
-  folderPath = "DIRECTORY_PATH",
-  folderName = "DIRECTORY_NAME",
+// Enum for managing path
+enum Default {
+  DIRECTORY_PATH = "m:\\",
+  DIRECTORY_NAME = "Profil-Saver",
 }
 
 // Enum for managing folder name
@@ -33,7 +30,7 @@ export enum Files {
  */
 export function getFolderPath(): IConfig {
   return {
-    folderPath: process.env[EnvKey.folderPath],
+    folderPath: Default.DIRECTORY_PATH,
   };
 }
 
@@ -43,7 +40,7 @@ export function getFolderPath(): IConfig {
  */
 export function getFolderName(): IConfig {
   return {
-    folderPath: process.env[EnvKey.folderName],
+    folderPath: Default.DIRECTORY_NAME,
   };
 }
 
@@ -52,5 +49,5 @@ export function getFolderName(): IConfig {
  * @returns string
  */
 export function getFullPath(): string {
-  return process.env[EnvKey.folderPath] + process.env[EnvKey.folderName];
+  return Default.DIRECTORY_PATH + Default.DIRECTORY_NAME;
 }

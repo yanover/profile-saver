@@ -1,14 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getFullPath = exports.getFolderName = exports.getFolderPath = exports.Files = exports.Repertories = void 0;
-// Initialize dotenv
-require("dotenv").config();
-// Enum for managing keys
-var EnvKey;
-(function (EnvKey) {
-    EnvKey["folderPath"] = "DIRECTORY_PATH";
-    EnvKey["folderName"] = "DIRECTORY_NAME";
-})(EnvKey || (EnvKey = {}));
+// Enum for managing path
+var Default;
+(function (Default) {
+    Default["DIRECTORY_PATH"] = "m:\\";
+    Default["DIRECTORY_NAME"] = "Profil-Saver";
+})(Default || (Default = {}));
 // Enum for managing folder name
 var Repertories;
 (function (Repertories) {
@@ -29,7 +27,7 @@ var Files;
  */
 function getFolderPath() {
     return {
-        folderPath: process.env[EnvKey.folderPath],
+        folderPath: Default.DIRECTORY_PATH,
     };
 }
 exports.getFolderPath = getFolderPath;
@@ -39,7 +37,7 @@ exports.getFolderPath = getFolderPath;
  */
 function getFolderName() {
     return {
-        folderPath: process.env[EnvKey.folderName],
+        folderPath: Default.DIRECTORY_NAME,
     };
 }
 exports.getFolderName = getFolderName;
@@ -48,7 +46,7 @@ exports.getFolderName = getFolderName;
  * @returns string
  */
 function getFullPath() {
-    return process.env[EnvKey.folderPath] + process.env[EnvKey.folderName];
+    return Default.DIRECTORY_PATH + Default.DIRECTORY_NAME;
 }
 exports.getFullPath = getFullPath;
 //# sourceMappingURL=configService.js.map

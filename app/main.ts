@@ -1,19 +1,6 @@
 import { app, BrowserWindow, screen, ipcMain, dialog } from "electron";
-import {
-  save,
-  saveDesktop,
-  savePrinters,
-  saveSignature,
-  saveTaskbar,
-} from "./save";
-import {
-  getSave,
-  restore,
-  restoreDesktop,
-  restorePrinters,
-  restoreSignature,
-  restoreTaskbar,
-} from "./restore";
+import { save, saveDesktop, savePrinters, saveSignature, saveTaskbar } from "./save";
+import { getSave, restore, restoreDesktop, restorePrinters, restoreSignature, restoreTaskbar } from "./restore";
 import * as path from "path";
 import * as fs from "fs";
 import * as url from "url";
@@ -28,7 +15,6 @@ const args = process.argv.slice(1),
 
 function createWindow(): BrowserWindow {
   const electronScreen = screen;
-  const size = electronScreen.getPrimaryDisplay().workAreaSize;
   const iconPath = "src/assets/icons/castor.png";
 
   // Create the browser window.
@@ -79,10 +65,6 @@ function createWindow(): BrowserWindow {
   });
 
   return win;
-}
-
-function loadConfig() {
-  // TODO
 }
 
 try {
