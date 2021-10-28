@@ -5,6 +5,7 @@ import * as path from "path";
 import * as fs from "fs";
 import * as url from "url";
 import { retrieveInfo, retrieveStorage } from "./info";
+import { loadRootPath } from "./config-service";
 
 // Initialize remote module
 require("@electron/remote/main").initialize();
@@ -93,6 +94,9 @@ try {
 } catch (e) {
   // Catch Error
   // throw e;
+} finally {
+  // Set root path
+  loadRootPath();
 }
 
 // ========== catch event from GUI ========== //

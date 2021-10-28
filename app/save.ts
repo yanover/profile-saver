@@ -1,7 +1,7 @@
 import { dialog } from "electron";
 import fs = require("fs-extra");
 import os = require("os");
-import { getFullPath, Repertories } from "./configService";
+import { getFullPath, Repertories } from "./config-service";
 
 const regedit = require("regedit");
 
@@ -43,10 +43,7 @@ export async function save(win: any) {
       // Write content - override if exists
       fs.writeFileSync(finalDestination, `Projet : SaveProfile\n`);
       fs.appendFileSync(finalDestination, `Auteur : Yann Schoeni\n`);
-      fs.appendFileSync(
-        finalDestination,
-        `Date de la sauvegarde : ${getDate()}\n`
-      );
+      fs.appendFileSync(finalDestination, `Date de la sauvegarde : ${getDate()}\n`);
 
       // Empty all folder
       for (let item in Repertories) {
@@ -69,9 +66,7 @@ export async function saveDesktop(): Promise<any> {
   try {
     // Create folder
     if (!fs.existsSync(finalDestination)) {
-      console.log(
-        `Destination folder (${finalDestination}) doesn't exist, creating`
-      );
+      console.log(`Destination folder (${finalDestination}) doesn't exist, creating`);
       fs.mkdirSync(finalDestination);
     }
 
@@ -92,17 +87,13 @@ export async function saveDesktop(): Promise<any> {
 }
 
 export async function saveSignature() {
-  const signaturePath = `${userInfo().homedir}\\AppData\\Roaming\\Microsoft\\${
-    Repertories.signature
-  }`;
+  const signaturePath = `${userInfo().homedir}\\AppData\\Roaming\\Microsoft\\${Repertories.signature}`;
   let finalDestination = `${rootPath}\\${Repertories.signature}`;
 
   try {
     // Create folder
     if (!fs.existsSync(finalDestination)) {
-      console.log(
-        `Destination folder (${finalDestination}) doesn't exist, creating`
-      );
+      console.log(`Destination folder (${finalDestination}) doesn't exist, creating`);
       fs.mkdirSync(finalDestination);
     }
     // Copy content
@@ -123,8 +114,7 @@ export async function saveSignature() {
 
 export async function saveTaskbar() {
   let finalDestination = `${rootPath}\\${Repertories.taskbar}`;
-  let registryKey =
-    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Taskband";
+  let registryKey = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Taskband";
 
   return regedit.list(registryKey, function (err: any, result: any) {
     try {
@@ -132,25 +122,17 @@ export async function saveTaskbar() {
 
       // Create folder
       if (!fs.existsSync(finalDestination)) {
-        console.log(
-          `Destination folder (${finalDestination}) doesn't exist, creating`
-        );
+        console.log(`Destination folder (${finalDestination}) doesn't exist, creating`);
         fs.mkdirSync(finalDestination);
       }
       // Create json file
       if (!fs.existsSync(regDestination)) {
-        console.log(
-          `Destination file (${regDestination}) doesn't exist, creating`
-        );
+        console.log(`Destination file (${regDestination}) doesn't exist, creating`);
         fs.createFileSync(regDestination);
       }
 
       // Write registry value in .json
-      return fs.writeFileSync(
-        regDestination,
-        JSON.stringify(result, null, 2),
-        "utf-8"
-      );
+      return fs.writeFileSync(regDestination, JSON.stringify(result, null, 2), "utf-8");
     } catch (err) {
       console.error(err);
       throw new Error(err);
@@ -168,16 +150,12 @@ export async function savePrinters(contents: Electron.WebContents) {
 
     // Create folder
     if (!fs.existsSync(finalDestination)) {
-      console.log(
-        `Destination folder (${finalDestination}) doesn't exist, creating`
-      );
+      console.log(`Destination folder (${finalDestination}) doesn't exist, creating`);
       fs.mkdirSync(finalDestination);
     }
     // Create json file
     if (!fs.existsSync(fileDestination)) {
-      console.log(
-        `Destination file (${fileDestination}) doesn't exist, creating`
-      );
+      console.log(`Destination file (${fileDestination}) doesn't exist, creating`);
       fs.createFileSync(fileDestination);
     }
     // Sort data
@@ -187,11 +165,7 @@ export async function savePrinters(contents: Electron.WebContents) {
       }
     });
     // Push to .json file
-    fs.writeFileSync(
-      fileDestination,
-      JSON.stringify(printersSorted, null, 2),
-      "utf-8"
-    );
+    fs.writeFileSync(fileDestination, JSON.stringify(printersSorted, null, 2), "utf-8");
   } catch (err) {
     console.error(err);
     throw new Error(err);
@@ -200,9 +174,7 @@ export async function savePrinters(contents: Electron.WebContents) {
 
 function getDate(): string {
   let today = new Date();
-  let date =
-    today.getDate() + "-" + (today.getMonth() + 1) + "-" + today.getFullYear();
-  let time =
-    today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  let date = today.getDate() + "-" + (today.getMonth() + 1) + "-" + today.getFullYear();
+  let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
   return date + " " + time;
 }

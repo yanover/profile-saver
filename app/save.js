@@ -40,10 +40,10 @@ exports.savePrinters = exports.saveTaskbar = exports.saveSignature = exports.sav
 var electron_1 = require("electron");
 var fs = require("fs-extra");
 var os = require("os");
-var configService_1 = require("./configService");
+var config_service_1 = require("./config-service");
 var regedit = require("regedit");
 // Get fullPath from configService
-var rootPath = configService_1.getFullPath();
+var rootPath = config_service_1.getFullPath();
 function userInfo() {
     return os.userInfo();
 }
@@ -86,7 +86,7 @@ function save(win) {
                     fs.appendFileSync(finalDestination, "Auteur : Yann Schoeni\n");
                     fs.appendFileSync(finalDestination, "Date de la sauvegarde : " + getDate() + "\n");
                     _a = [];
-                    for (_b in configService_1.Repertories)
+                    for (_b in config_service_1.Repertories)
                         _a.push(_b);
                     _i = 0;
                     _c.label = 2;
@@ -119,7 +119,7 @@ function saveDesktop() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    desktopPath = userInfo().homedir + "\\" + configService_1.Repertories.desktop;
+                    desktopPath = userInfo().homedir + "\\" + config_service_1.Repertories.desktop;
                     finalDestination = rootPath + "\\Desktop";
                     _a.label = 1;
                 case 1:
@@ -157,8 +157,8 @@ function saveSignature() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    signaturePath = userInfo().homedir + "\\AppData\\Roaming\\Microsoft\\" + configService_1.Repertories.signature;
-                    finalDestination = rootPath + "\\" + configService_1.Repertories.signature;
+                    signaturePath = userInfo().homedir + "\\AppData\\Roaming\\Microsoft\\" + config_service_1.Repertories.signature;
+                    finalDestination = rootPath + "\\" + config_service_1.Repertories.signature;
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
@@ -193,7 +193,7 @@ function saveTaskbar() {
     return __awaiter(this, void 0, void 0, function () {
         var finalDestination, registryKey;
         return __generator(this, function (_a) {
-            finalDestination = rootPath + "\\" + configService_1.Repertories.taskbar;
+            finalDestination = rootPath + "\\" + config_service_1.Repertories.taskbar;
             registryKey = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Taskband";
             return [2 /*return*/, regedit.list(registryKey, function (err, result) {
                     try {
@@ -225,7 +225,7 @@ function savePrinters(contents) {
         var printers, finalDestination, printersSorted, fileDestination;
         return __generator(this, function (_a) {
             printers = contents.getPrinters();
-            finalDestination = rootPath + "\\" + configService_1.Repertories.printers;
+            finalDestination = rootPath + "\\" + config_service_1.Repertories.printers;
             printersSorted = [];
             try {
                 fileDestination = finalDestination + "\\printers.json";

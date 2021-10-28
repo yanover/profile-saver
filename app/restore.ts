@@ -2,7 +2,7 @@ import { spawn, SpawnOptions } from "child_process";
 import fs = require("fs-extra");
 import os = require("os");
 
-import { Files, getFullPath, Repertories } from "./configService";
+import { Files, getFullPath, Repertories } from "./config-service";
 
 const regedit = require("regedit");
 
@@ -42,11 +42,7 @@ export async function getSave(): Promise<string> {
       let data = fs.readFileSync(infoFile).toString();
       let index = data.indexOf(pattern);
       if (index > -1) {
-        return data
-          .slice(index, data.length)
-          .split(":")
-          .slice(1, data.length)
-          .join(":");
+        return data.slice(index, data.length).split(":").slice(1, data.length).join(":");
       }
     } catch (err) {
       console.error(err);
@@ -74,9 +70,7 @@ export async function restore(): Promise<IitemToSave> {
   if (fs.existsSync(rootPath)) {
     for (let key in itemToSave) {
       let path = `${rootPath}\\${key.charAt(0).toUpperCase() + key.slice(1)}`;
-      fs.existsSync(path)
-        ? (itemToSave[key] = true)
-        : (itemToSave[key] = false);
+      fs.existsSync(path) ? (itemToSave[key] = true) : (itemToSave[key] = false);
     }
   } else {
     console.info(`File ${rootPath} not found`);
@@ -91,24 +85,18 @@ export async function restore(): Promise<IitemToSave> {
  * @throws CopyError | FileNotFoundException
  */
 export async function restoreDesktop(): Promise<void> {
-  const rootPathSource = `${
-    userInfo().homedir
-  }\\${Repertories.desktop.toLowerCase()}`;
+  const rootPathSource = `${userInfo().homedir}\\${Repertories.desktop.toLowerCase()}`;
 
   const rootPathDestination = `${rootPath}\\${Repertories.desktop}`;
 
   if (fs.existsSync(rootPathDestination)) {
     // Copy content
-    await fs
-      .copy(rootPathDestination, rootPathSource, { overwrite: false })
-      .catch((err: Error) => {
-        console.error(err);
-        throw new Error("An error occured during desktop restoration");
-      });
+    await fs.copy(rootPathDestination, rootPathSource, { overwrite: false }).catch((err: Error) => {
+      console.error(err);
+      throw new Error("An error occured during desktop restoration");
+    });
   } else {
-    console.error(
-      `Error detected in restoreDesktop, folder ${rootPathDestination} not found`
-    );
+    console.error(`Error detected in restoreDesktop, folder ${rootPathDestination} not found`);
     throw new Error("An error occured during desktop restoration");
   }
 }
@@ -119,23 +107,17 @@ export async function restoreDesktop(): Promise<void> {
  * @throws CopyError | FileNotFoundException
  */
 export async function restoreSignature(): Promise<void> {
-  const rootPathSource = `${
-    userInfo().homedir
-  }\\AppData\\Roaming\\Microsoft\\Signatures`;
+  const rootPathSource = `${userInfo().homedir}\\AppData\\Roaming\\Microsoft\\Signatures`;
   const rootPathDestination = `${rootPath}\\${Repertories.signature}`;
 
   if (fs.existsSync(rootPathDestination)) {
     // Copy content
-    await fs
-      .copy(rootPathDestination, rootPathSource, { overwrite: false })
-      .catch((err) => {
-        console.error(err);
-        throw new Error("An error occured during signature restoration");
-      });
+    await fs.copy(rootPathDestination, rootPathSource, { overwrite: false }).catch((err) => {
+      console.error(err);
+      throw new Error("An error occured during signature restoration");
+    });
   } else {
-    console.error(
-      `Error detected in restorSignatures, folder ${rootPathDestination} not found`
-    );
+    console.error(`Error detected in restorSignatures, folder ${rootPathDestination} not found`);
     throw new Error("An error occured during signature restoration");
   }
 }
@@ -146,15 +128,12 @@ export async function restoreSignature(): Promise<void> {
  * @throws CopyError | FileNotFoundException
  */
 export async function restoreTaskbar(): Promise<void> {
-  let registryName: string =
-    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Taskband";
+  let registryName: string = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Taskband";
   let rootPathDestination: string = `${rootPath}\\${Repertories.taskbar}\\${Files.taskbar}`;
 
   // Retrieve .json file
   if (fs.existsSync(rootPathDestination)) {
-    let data: registryItem = JSON.parse(
-      fs.readFileSync(rootPathDestination, "utf8")
-    );
+    let data: registryItem = JSON.parse(fs.readFileSync(rootPathDestination, "utf8"));
 
     // Use class to set proper object
     let item = new registryItem();
@@ -181,9 +160,7 @@ export async function restoreTaskbar(): Promise<void> {
       throw new Error("An error occured during signature restoration");
     }
   } else {
-    console.error(
-      `Error detected in restorTaskbar, folder ${rootPathDestination} not found`
-    );
+    console.error(`Error detected in restorTaskbar, folder ${rootPathDestination} not found`);
     throw new Error("An error occured during taskbar restoration");
   }
 }
@@ -193,9 +170,7 @@ export async function restoreTaskbar(): Promise<void> {
  * @return Promise<void>
  * @throws CopyError | FileNotFoundException
  */
-export async function restorePrinters(
-  contents: Electron.WebContents
-): Promise<void> {
+export async function restorePrinters(contents: Electron.WebContents): Promise<void> {
   let rootPathDestination: string = `${rootPath}\\${Repertories.printers}\\${Files.printers}`;
 
   let errorMessage: string = "";
@@ -206,9 +181,7 @@ export async function restorePrinters(
     // read json file && retrieve printers
     let printersSorted: Electron.PrinterInfo[] = [];
     let printersInstalled: Electron.PrinterInfo[] = contents.getPrinters();
-    let printerSaved: registryItem = JSON.parse(
-      fs.readFileSync(rootPathDestination, "utf8")
-    );
+    let printerSaved: registryItem = JSON.parse(fs.readFileSync(rootPathDestination, "utf8"));
     let count = 0;
 
     // retrieve printer to install
@@ -235,9 +208,7 @@ export async function restorePrinters(
       }
     });
   } else {
-    console.error(
-      `Error detected in restorePrinters, folder ${rootPathDestination} not found`
-    );
+    console.error(`Error detected in restorePrinters, folder ${rootPathDestination} not found`);
     throw new Error("An error occured during printers restoration");
   }
 }
