@@ -104,7 +104,6 @@ function restore() {
                     else {
                         itemToSave[key] = false;
                     }
-                    // fs.existsSync(path) ? (itemToSave[key] = true) : (itemToSave[key] = false);
                 }
             }
             else {

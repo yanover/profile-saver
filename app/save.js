@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.savePrinters = exports.saveTaskbar = exports.saveSignature = exports.saveDesktop = exports.save = void 0;
+exports.savePrinters = exports.saveTaskbar = exports.saveSignature = exports.saveDesktop = exports.initSave = void 0;
 var electron_1 = require("electron");
 var fs = require("fs-extra");
 var os = require("os");
@@ -45,7 +45,12 @@ var regedit = require("regedit");
 function userInfo() {
     return os.userInfo();
 }
-function save(win) {
+/**
+ * Check if save destination is reacheable, write to info file, destroy all data found in old save
+ * @param win main windows, used to pushed confirm windows if a save already exist and will be override
+ * @returns Promise<number>
+ */
+function initSave(win) {
     return __awaiter(this, void 0, void 0, function () {
         var response, finalDestination, _a, _b, _i, item, err_1;
         return __generator(this, function (_c) {
@@ -103,13 +108,18 @@ function save(win) {
                 case 6:
                     err_1 = _c.sent();
                     console.error(err_1);
-                    throw new Error("An error occured during restoration");
+                    throw new Error("An error occured during initSave");
                 case 7: return [2 /*return*/];
             }
         });
     });
 }
-exports.save = save;
+exports.initSave = initSave;
+/**
+ * Description : Save desktop process, copy user's current desktop on backup folder
+ * @return Promise<void>
+ * @throws CopyError | FileNotFoundException
+ */
 function saveDesktop() {
     return __awaiter(this, void 0, void 0, function () {
         var desktopPath, finalDestination, err_2;
@@ -117,7 +127,7 @@ function saveDesktop() {
             switch (_a.label) {
                 case 0:
                     desktopPath = userInfo().homedir + "\\" + config_service_1.Repertories.desktop;
-                    finalDestination = config_service_1.getFullPath() + "\\Desktop";
+                    finalDestination = config_service_1.getFullPath() + "\\" + config_service_1.Repertories.desktop;
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
@@ -126,14 +136,9 @@ function saveDesktop() {
                         console.log("Destination folder (" + finalDestination + ") doesn't exist, creating");
                         fs.mkdirSync(finalDestination);
                     }
-                    return [4 /*yield*/, fs
-                            .copy(desktopPath, finalDestination, { overwrite: true })
-                            .then(function () {
-                            return "Sucess !";
-                        })
-                            .catch(function (err) {
+                    return [4 /*yield*/, fs.copy(desktopPath, finalDestination, { overwrite: true }).catch(function (err) {
                             console.error(err);
-                            throw new Error(err);
+                            throw new Error("An error occured during desktop save");
                         })];
                 case 2: 
                 // Copy content
@@ -141,13 +146,18 @@ function saveDesktop() {
                 case 3:
                     err_2 = _a.sent();
                     console.error(err_2);
-                    throw new Error(err_2);
+                    throw new Error("An error occured during desktop save");
                 case 4: return [2 /*return*/];
             }
         });
     });
 }
 exports.saveDesktop = saveDesktop;
+/**
+ * Description : Save signature process, copy user's current signature on backup folder
+ * @return Promise<void>
+ * @throws CopyError | FileNotFoundException
+ */
 function saveSignature() {
     return __awaiter(this, void 0, void 0, function () {
         var signaturePath, finalDestination, err_3;
@@ -164,14 +174,9 @@ function saveSignature() {
                         console.log("Destination folder (" + finalDestination + ") doesn't exist, creating");
                         fs.mkdirSync(finalDestination);
                     }
-                    return [4 /*yield*/, fs
-                            .copy(signaturePath, finalDestination, { overwrite: true })
-                            .then(function () {
-                            return "Sucess !";
-                        })
-                            .catch(function (err) {
+                    return [4 /*yield*/, fs.copy(signaturePath, finalDestination, { overwrite: true }).catch(function (err) {
                             console.error(err);
-                            throw new Error("An error occured during signature restauration");
+                            throw new Error("An error occured during signature save");
                         })];
                 case 2: 
                 // Copy content
@@ -179,13 +184,18 @@ function saveSignature() {
                 case 3:
                     err_3 = _a.sent();
                     console.error(err_3);
-                    throw new Error("An error occured during signature restauration");
+                    throw new Error("An error occured during signature save");
                 case 4: return [2 /*return*/];
             }
         });
     });
 }
 exports.saveSignature = saveSignature;
+/**
+ * Description : Save taskbar process, TODO
+ * @return Promise<void>
+ * @throws CopyError | FileNotFoundException
+ */
 function saveTaskbar() {
     return __awaiter(this, void 0, void 0, function () {
         var finalDestination, registryKey;
@@ -210,7 +220,7 @@ function saveTaskbar() {
                     }
                     catch (err) {
                         console.error(err);
-                        throw new Error(err);
+                        throw new Error("An error occured during taskabr save");
                     }
                 })];
         });

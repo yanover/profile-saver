@@ -66,7 +66,7 @@ function isReacheable(path: string): boolean {
 }
 
 /**
- *
+ * Check if a folder is empty
  * @param path the path to check
  * @returns true = is empty | false = is not empty
  */

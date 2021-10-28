@@ -10,11 +10,11 @@ function userInfo() {
 }
 
 /**
- * Check if path is valid, 
- * @param win main windows, used to pushed confirm windows
- * @returns
+ * Check if save destination is reacheable, write to info file, destroy all data found in old save
+ * @param win main windows, used to pushed confirm windows if a save already exist and will be override
+ * @returns Promise<number>
  */
-export async function initSave(win: any) {
+export async function initSave(win: any): Promise<number> {
   let response: number = 0;
 
   try {
@@ -60,9 +60,14 @@ export async function initSave(win: any) {
   }
 }
 
-export async function saveDesktop(): Promise<any> {
+/**
+ * Description : Save desktop process, copy user's current desktop on backup folder
+ * @return Promise<void>
+ * @throws CopyError | FileNotFoundException
+ */
+export async function saveDesktop(): Promise<void> {
   const desktopPath = `${userInfo().homedir}\\${Repertories.desktop}`;
-  let finalDestination = `${getFullPath()}\\Desktop`;
+  let finalDestination = `${getFullPath()}\\${Repertories.desktop}`;
 
   try {
     // Create folder
@@ -72,22 +77,22 @@ export async function saveDesktop(): Promise<any> {
     }
 
     // Copy content
-    return await fs
-      .copy(desktopPath, finalDestination, { overwrite: true })
-      .then(() => {
-        return "Sucess !";
-      })
-      .catch((err) => {
-        console.error(err);
-        throw new Error(err);
-      });
+    return await fs.copy(desktopPath, finalDestination, { overwrite: true }).catch((err) => {
+      console.error(err);
+      throw new Error("An error occured during desktop save");
+    });
   } catch (err) {
     console.error(err);
-    throw new Error(err);
+    throw new Error("An error occured during desktop save");
   }
 }
 
-export async function saveSignature() {
+/**
+ * Description : Save signature process, copy user's current signature on backup folder
+ * @return Promise<void>
+ * @throws CopyError | FileNotFoundException
+ */
+export async function saveSignature(): Promise<void> {
   const signaturePath = `${userInfo().homedir}\\AppData\\Roaming\\Microsoft\\${Repertories.signature}`;
   let finalDestination = `${getFullPath()}\\${Repertories.signature}`;
 
@@ -98,28 +103,28 @@ export async function saveSignature() {
       fs.mkdirSync(finalDestination);
     }
     // Copy content
-    return await fs
-      .copy(signaturePath, finalDestination, { overwrite: true })
-      .then(() => {
-        return "Sucess !";
-      })
-      .catch((err) => {
-        console.error(err);
-        throw new Error("An error occured during signature restauration");
-      });
+    return await fs.copy(signaturePath, finalDestination, { overwrite: true }).catch((err) => {
+      console.error(err);
+      throw new Error("An error occured during signature save");
+    });
   } catch (err) {
     console.error(err);
-    throw new Error("An error occured during signature restauration");
+    throw new Error("An error occured during signature save");
   }
 }
 
+/**
+ * Description : Save taskbar process, TODO
+ * @return Promise<void>
+ * @throws CopyError | FileNotFoundException
+ */
 export async function saveTaskbar() {
   let finalDestination = `${getFullPath()}\\${Repertories.taskbar}`;
   let registryKey = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Taskband";
 
   return regedit.list(registryKey, function (err: any, result: any) {
     try {
-      let regDestination = `${finalDestination}\\regedit.json`;
+      let regDestination = `${finalDestination}\\${Files.taskbar}`;
 
       // Create folder
       if (!fs.existsSync(finalDestination)) {
@@ -136,7 +141,7 @@ export async function saveTaskbar() {
       return fs.writeFileSync(regDestination, JSON.stringify(result, null, 2), "utf-8");
     } catch (err) {
       console.error(err);
-      throw new Error(err);
+      throw new Error("An error occured during taskabr save");
     }
   });
 }
@@ -147,7 +152,7 @@ export async function savePrinters(contents: Electron.WebContents) {
   let printersSorted: Electron.PrinterInfo[] = [];
 
   try {
-    let fileDestination = `${finalDestination}\\printers.json`;
+    let fileDestination = `${finalDestination}\\${Files.printers}`;
 
     // Create folder
     if (!fs.existsSync(finalDestination)) {

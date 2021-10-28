@@ -87,7 +87,6 @@ export async function restore(): Promise<IitemToSave> {
  */
 export async function restoreDesktop(): Promise<void> {
   const rootPathSource = `${userInfo().homedir}\\${Repertories.desktop.toLowerCase()}`;
-
   const rootPathDestination = `${getFullPath()}\\${Repertories.desktop}`;
 
   if (fs.existsSync(rootPathDestination)) {
