@@ -40,7 +40,7 @@ exports.savePrinters = exports.saveTaskbar = exports.saveSignature = exports.sav
 var electron_1 = require("electron");
 var fs = require("fs-extra");
 var os = require("os");
-var config_service_1 = require("./config-service");
+var config_service_1 = require("../services/config-service");
 var regedit = require("regedit");
 function userInfo() {
     return os.userInfo();
@@ -204,7 +204,7 @@ function saveTaskbar() {
             registryKey = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Taskband";
             return [2 /*return*/, regedit.list(registryKey, function (err, result) {
                     try {
-                        var regDestination = finalDestination + "\\regedit.json";
+                        var regDestination = finalDestination + "\\" + config_service_1.Files.taskbar;
                         // Create folder
                         if (!fs.existsSync(finalDestination)) {
                             console.log("Destination folder (" + finalDestination + ") doesn't exist, creating");
@@ -227,6 +227,11 @@ function saveTaskbar() {
     });
 }
 exports.saveTaskbar = saveTaskbar;
+/**
+ * Description : Save printer process, TODO
+ * @return Promise<void>
+ * @throws CopyError | FileNotFoundException
+ */
 function savePrinters(contents) {
     return __awaiter(this, void 0, void 0, function () {
         var printers, finalDestination, printersSorted, fileDestination;
@@ -235,7 +240,7 @@ function savePrinters(contents) {
             finalDestination = config_service_1.getFullPath() + "\\" + config_service_1.Repertories.printers;
             printersSorted = [];
             try {
-                fileDestination = finalDestination + "\\printers.json";
+                fileDestination = finalDestination + "\\" + config_service_1.Files.printers;
                 // Create folder
                 if (!fs.existsSync(finalDestination)) {
                     console.log("Destination folder (" + finalDestination + ") doesn't exist, creating");
@@ -257,7 +262,7 @@ function savePrinters(contents) {
             }
             catch (err) {
                 console.error(err);
-                throw new Error(err);
+                throw new Error("An error occured during printers save");
             }
             return [2 /*return*/];
         });

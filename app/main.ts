@@ -1,11 +1,11 @@
 import { app, BrowserWindow, screen, ipcMain, dialog } from "electron";
-import { initSave, saveDesktop, savePrinters, saveSignature, saveTaskbar } from "./save";
-import { getSave, restore, restoreDesktop, restorePrinters, restoreSignature, restoreTaskbar } from "./restore";
+import { initSave, saveDesktop, savePrinters, saveSignature, saveTaskbar } from "./lib/save";
+import { getSave, restore, restoreDesktop, restorePrinters, restoreSignature, restoreTaskbar } from "./lib/restore";
+import { retrieveInfo, retrieveStorage } from "./lib/info";
+import { loadRootPath } from "./services/config-service";
 import * as path from "path";
 import * as fs from "fs";
 import * as url from "url";
-import { retrieveInfo, retrieveStorage } from "./info";
-import { loadRootPath } from "./config-service";
 
 // Initialize remote module
 require("@electron/remote/main").initialize();

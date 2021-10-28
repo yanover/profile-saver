@@ -1,7 +1,7 @@
 import { dialog } from "electron";
 import fs = require("fs-extra");
 import os = require("os");
-import { Files, getFullPath, Repertories } from "./config-service";
+import { Files, getFullPath, Repertories } from "../services/config-service";
 
 const regedit = require("regedit");
 
@@ -146,7 +146,12 @@ export async function saveTaskbar() {
   });
 }
 
-export async function savePrinters(contents: Electron.WebContents) {
+/**
+ * Description : Save printer process, TODO
+ * @return Promise<void>
+ * @throws CopyError | FileNotFoundException
+ */
+export async function savePrinters(contents: Electron.WebContents): Promise<void> {
   let printers: Electron.PrinterInfo[] = contents.getPrinters();
   let finalDestination = `${getFullPath()}\\${Repertories.printers}`;
   let printersSorted: Electron.PrinterInfo[] = [];
@@ -174,7 +179,7 @@ export async function savePrinters(contents: Electron.WebContents) {
     fs.writeFileSync(fileDestination, JSON.stringify(printersSorted, null, 2), "utf-8");
   } catch (err) {
     console.error(err);
-    throw new Error(err);
+    throw new Error("An error occured during printers save");
   }
 }
 

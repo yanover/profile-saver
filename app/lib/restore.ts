@@ -2,7 +2,8 @@ import { spawn, SpawnOptions } from "child_process";
 import fs = require("fs-extra");
 import os = require("os");
 
-import { Files, getFullPath, isEmpty, Repertories } from "./config-service";
+import { Files, getFullPath, Repertories } from "../services/config-service";
+import { isEmpty } from "../services/utils-service";
 
 const regedit = require("regedit");
 

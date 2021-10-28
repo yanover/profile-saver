@@ -40,7 +40,7 @@ exports.restorePrinters = exports.restoreTaskbar = exports.restoreSignature = ex
 var child_process_1 = require("child_process");
 var fs = require("fs-extra");
 var os = require("os");
-var config_service_1 = require("./config-service");
+var config_service_1 = require("../services/config-service");
 var regedit = require("regedit");
 var registryItem = /** @class */ (function () {
     function registryItem() {
