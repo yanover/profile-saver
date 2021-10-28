@@ -2,12 +2,9 @@ import { spawn, SpawnOptions } from "child_process";
 import fs = require("fs-extra");
 import os = require("os");
 
-import { Files, getFullPath, Repertories } from "./config-service";
+import { Files, getFullPath, isEmpty, Repertories } from "./config-service";
 
 const regedit = require("regedit");
-
-// Get fullPath from configService
-const rootPath: string = getFullPath();
 
 interface IitemToSave {
   desktop: boolean;
@@ -34,7 +31,7 @@ class registryItem {
  * @throws CopyError | FileNotFoundException
  */
 export async function getSave(): Promise<string> {
-  let infoFile = `${rootPath}\\${Files.info}`;
+  let infoFile = `${getFullPath()}\\${Files.info}`;
 
   if (fs.existsSync(infoFile)) {
     try {
@@ -55,7 +52,7 @@ export async function getSave(): Promise<string> {
 }
 
 /**
- * Description : Returns a litteral object that use IitemToSave with values that needs to be save
+ * Description : Returns a litteral object with items th
  * @return Promise<IitemToSave>
  */
 export async function restore(): Promise<IitemToSave> {
@@ -67,13 +64,17 @@ export async function restore(): Promise<IitemToSave> {
   };
 
   // We want to know how many options will be process
-  if (fs.existsSync(rootPath)) {
+  if (fs.existsSync(getFullPath())) {
     for (let key in itemToSave) {
-      let path = `${rootPath}\\${key.charAt(0).toUpperCase() + key.slice(1)}`;
-      fs.existsSync(path) ? (itemToSave[key] = true) : (itemToSave[key] = false);
+      let path = `${getFullPath()}\\${key.charAt(0).toUpperCase() + key.slice(1)}`;
+      if (fs.existsSync(path) && !isEmpty(path)) {
+        itemToSave[key] = true;
+      } else {
+        itemToSave[key] = false;
+      }
     }
   } else {
-    console.info(`File ${rootPath} not found`);
+    console.info(`File ${getFullPath()} not found`);
   }
 
   return itemToSave;
@@ -87,7 +88,7 @@ export async function restore(): Promise<IitemToSave> {
 export async function restoreDesktop(): Promise<void> {
   const rootPathSource = `${userInfo().homedir}\\${Repertories.desktop.toLowerCase()}`;
 
-  const rootPathDestination = `${rootPath}\\${Repertories.desktop}`;
+  const rootPathDestination = `${getFullPath()}\\${Repertories.desktop}`;
 
   if (fs.existsSync(rootPathDestination)) {
     // Copy content
@@ -108,7 +109,7 @@ export async function restoreDesktop(): Promise<void> {
  */
 export async function restoreSignature(): Promise<void> {
   const rootPathSource = `${userInfo().homedir}\\AppData\\Roaming\\Microsoft\\Signatures`;
-  const rootPathDestination = `${rootPath}\\${Repertories.signature}`;
+  const rootPathDestination = `${getFullPath()}\\${Repertories.signature}`;
 
   if (fs.existsSync(rootPathDestination)) {
     // Copy content
@@ -129,7 +130,7 @@ export async function restoreSignature(): Promise<void> {
  */
 export async function restoreTaskbar(): Promise<void> {
   let registryName: string = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Taskband";
-  let rootPathDestination: string = `${rootPath}\\${Repertories.taskbar}\\${Files.taskbar}`;
+  let rootPathDestination: string = `${getFullPath()}\\${Repertories.taskbar}\\${Files.taskbar}`;
 
   // Retrieve .json file
   if (fs.existsSync(rootPathDestination)) {
@@ -171,7 +172,7 @@ export async function restoreTaskbar(): Promise<void> {
  * @throws CopyError | FileNotFoundException
  */
 export async function restorePrinters(contents: Electron.WebContents): Promise<void> {
-  let rootPathDestination: string = `${rootPath}\\${Repertories.printers}\\${Files.printers}`;
+  let rootPathDestination: string = `${getFullPath()}\\${Repertories.printers}\\${Files.printers}`;
 
   let errorMessage: string = "";
   let result: boolean = true;

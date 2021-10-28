@@ -26,16 +26,20 @@ export enum Files {
  * @returns void
  * @throws Error - directory not found or permission denied
  */
-export function loadRootPath(): void {
-  // Check if default home directory is reacheable
-  if (isReacheable(Default.DIRECTORY_PATH)) {
-    console.log("Repertory founded");
-  } else if (isReacheable(`${os.userInfo().homedir}\\Documents`)) {
-    // Swap for default document folder
-    Default.DIRECTORY_PATH = `${os.userInfo().homedir}\\Documents`;
-  } else {
-    throw Error("No valid directory were found");
-  }
+export function loadRootPath(): Promise<void> {
+  return new Promise((resolve, reject) => {
+    // Check if default home directory is reacheable
+    if (isReacheable(Default.DIRECTORY_PATH)) {
+      console.log("Default repertory founded");
+      resolve();
+    } else if (isReacheable(`${os.userInfo().homedir}\\Documents`)) {
+      console.log("Default repertory not founded, swap for document folder");
+      // Swap for default document folder
+      Default.DIRECTORY_PATH = `${os.userInfo().homedir}\\Documents`;
+      resolve();
+    }
+    reject();
+  });
 }
 
 /**
@@ -52,11 +56,20 @@ export function getFullPath(): string {
  * @returns true = ok, can access, read and write | false = permission denied
  */
 function isReacheable(path: string): boolean {
-  fs.access(path, fs.constants.F_OK | fs.constants.W_OK, (err) => {
-    if (err) {
-      console.error(`${path} ${err.code === "ENOENT" ? "does not exist" : "is read-only"}`);
-      return false;
-    }
-  });
-  return true;
+  try {
+    fs.accessSync(path, fs.constants.R_OK | fs.constants.W_OK);
+    console.log(`${path} is both readable and writable`);
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
+
+/**
+ *
+ * @param path the path to check
+ * @returns true = is empty | false = is not empty
+ */
+export function isEmpty(path: string): boolean {
+  return fs.readdirSync(path).length === 0;
 }

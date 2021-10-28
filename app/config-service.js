@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getFullPath = exports.loadRootPath = exports.Files = exports.Repertories = exports.Default = void 0;
+exports.isEmpty = exports.getFullPath = exports.loadRootPath = exports.Files = exports.Repertories = exports.Default = void 0;
 var fs = require("fs-extra");
 var os = require("os");
 // Enum for managing path
@@ -28,17 +28,20 @@ var Files;
  * @throws Error - directory not found or permission denied
  */
 function loadRootPath() {
-    // Check if default home directory is reacheable
-    if (isReacheable(exports.Default.DIRECTORY_PATH)) {
-        console.log("Repertory founded");
-    }
-    else if (isReacheable(os.userInfo().homedir + "\\Documents")) {
-        // Swap for default document folder
-        exports.Default.DIRECTORY_PATH = os.userInfo().homedir + "\\Documents";
-    }
-    else {
-        throw Error("No valid directory were found");
-    }
+    return new Promise(function (resolve, reject) {
+        // Check if default home directory is reacheable
+        if (isReacheable(exports.Default.DIRECTORY_PATH)) {
+            console.log("Default repertory founded");
+            resolve();
+        }
+        else if (isReacheable(os.userInfo().homedir + "\\Documents")) {
+            console.log("Default repertory not founded, swap for document folder");
+            // Swap for default document folder
+            exports.Default.DIRECTORY_PATH = os.userInfo().homedir + "\\Documents";
+            resolve();
+        }
+        reject();
+    });
 }
 exports.loadRootPath = loadRootPath;
 /**
@@ -55,12 +58,22 @@ exports.getFullPath = getFullPath;
  * @returns true = ok, can access, read and write | false = permission denied
  */
 function isReacheable(path) {
-    fs.access(path, fs.constants.F_OK | fs.constants.W_OK, function (err) {
-        if (err) {
-            console.error(path + " " + (err.code === "ENOENT" ? "does not exist" : "is read-only"));
-            return false;
-        }
-    });
-    return true;
+    try {
+        fs.accessSync(path, fs.constants.R_OK | fs.constants.W_OK);
+        console.log(path + " is both readable and writable");
+        return true;
+    }
+    catch (err) {
+        return false;
+    }
 }
+/**
+ *
+ * @param path the path to check
+ * @returns true = is empty | false = is not empty
+ */
+function isEmpty(path) {
+    return fs.readdirSync(path).length === 0;
+}
+exports.isEmpty = isEmpty;
 //# sourceMappingURL=config-service.js.map

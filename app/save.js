@@ -42,8 +42,6 @@ var fs = require("fs-extra");
 var os = require("os");
 var config_service_1 = require("./config-service");
 var regedit = require("regedit");
-// Get fullPath from configService
-var rootPath = config_service_1.getFullPath();
 function userInfo() {
     return os.userInfo();
 }
@@ -57,18 +55,18 @@ function save(win) {
                     _c.label = 1;
                 case 1:
                     _c.trys.push([1, 6, , 7]);
-                    finalDestination = rootPath + "\\info.txt";
-                    if (!fs.existsSync(rootPath)) {
+                    finalDestination = config_service_1.getFullPath() + "\\" + config_service_1.Files.info;
+                    if (!fs.existsSync(config_service_1.getFullPath())) {
                         // Folder doesn't exist, creating
-                        fs.mkdirSync(rootPath);
+                        fs.mkdirSync(config_service_1.getFullPath());
                     }
-                    else if (fs.readdirSync(rootPath).length > 0) {
+                    else if (fs.readdirSync(config_service_1.getFullPath()).length > 0) {
                         // Carefull, there is already a save in the final destination (oui = 1)
                         response = electron_1.dialog.showMessageBoxSync(win, {
                             type: "warning",
                             buttons: ["Non", "Oui"],
                             title: "Confirmation",
-                            message: "Attention, une sauvegarde est d\u00E9j\u00E0 pr\u00E9sente au r\u00E9pertoire \"" + rootPath + "\", \u00EAtes-vous certain de vouloir \u00E9craser son contenu ?",
+                            message: "Attention, une sauvegarde est d\u00E9j\u00E0 pr\u00E9sente au r\u00E9pertoire \"" + config_service_1.getFullPath() + "\", \u00EAtes-vous certain de vouloir \u00E9craser son contenu ?",
                         });
                     }
                     else {
@@ -78,7 +76,6 @@ function save(win) {
                     if (!response) return [3 /*break*/, 5];
                     // Create info file
                     if (!fs.existsSync(finalDestination)) {
-                        console.log("Info file (" + finalDestination + ") doesn't exist, creating");
                         fs.createFileSync(finalDestination);
                     }
                     // Write content - override if exists
@@ -93,7 +90,7 @@ function save(win) {
                 case 2:
                     if (!(_i < _a.length)) return [3 /*break*/, 5];
                     item = _a[_i];
-                    return [4 /*yield*/, fs.rm(rootPath + "\\" + item, { recursive: true, force: true })];
+                    return [4 /*yield*/, fs.rm(config_service_1.getFullPath() + "\\" + item, { recursive: true, force: true })];
                 case 3:
                     _c.sent();
                     _c.label = 4;
@@ -106,7 +103,7 @@ function save(win) {
                 case 6:
                     err_1 = _c.sent();
                     console.error(err_1);
-                    throw new Error(err_1);
+                    throw new Error("An error occured during restoration");
                 case 7: return [2 /*return*/];
             }
         });
@@ -120,7 +117,7 @@ function saveDesktop() {
             switch (_a.label) {
                 case 0:
                     desktopPath = userInfo().homedir + "\\" + config_service_1.Repertories.desktop;
-                    finalDestination = rootPath + "\\Desktop";
+                    finalDestination = config_service_1.getFullPath() + "\\Desktop";
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
@@ -158,7 +155,7 @@ function saveSignature() {
             switch (_a.label) {
                 case 0:
                     signaturePath = userInfo().homedir + "\\AppData\\Roaming\\Microsoft\\" + config_service_1.Repertories.signature;
-                    finalDestination = rootPath + "\\" + config_service_1.Repertories.signature;
+                    finalDestination = config_service_1.getFullPath() + "\\" + config_service_1.Repertories.signature;
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
@@ -174,7 +171,7 @@ function saveSignature() {
                         })
                             .catch(function (err) {
                             console.error(err);
-                            throw new Error(err);
+                            throw new Error("An error occured during signature restauration");
                         })];
                 case 2: 
                 // Copy content
@@ -182,7 +179,7 @@ function saveSignature() {
                 case 3:
                     err_3 = _a.sent();
                     console.error(err_3);
-                    throw new Error(err_3);
+                    throw new Error("An error occured during signature restauration");
                 case 4: return [2 /*return*/];
             }
         });
@@ -193,7 +190,7 @@ function saveTaskbar() {
     return __awaiter(this, void 0, void 0, function () {
         var finalDestination, registryKey;
         return __generator(this, function (_a) {
-            finalDestination = rootPath + "\\" + config_service_1.Repertories.taskbar;
+            finalDestination = config_service_1.getFullPath() + "\\" + config_service_1.Repertories.taskbar;
             registryKey = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Taskband";
             return [2 /*return*/, regedit.list(registryKey, function (err, result) {
                     try {
@@ -225,7 +222,7 @@ function savePrinters(contents) {
         var printers, finalDestination, printersSorted, fileDestination;
         return __generator(this, function (_a) {
             printers = contents.getPrinters();
-            finalDestination = rootPath + "\\" + config_service_1.Repertories.printers;
+            finalDestination = config_service_1.getFullPath() + "\\" + config_service_1.Repertories.printers;
             printersSorted = [];
             try {
                 fileDestination = finalDestination + "\\printers.json";

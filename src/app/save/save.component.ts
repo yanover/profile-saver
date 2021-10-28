@@ -78,8 +78,8 @@ export class SaveComponent implements OnInit {
     }
   }
 
-  setProgressMessage(textInfo: string) {
-    this.progressMessage = textInfo;
+  setProgressMessage(text: string) {
+    this.progressMessage = text;
   }
 
   async process() {
@@ -89,23 +89,34 @@ export class SaveComponent implements OnInit {
     if (parameters > 0) {
       // Check if save already exist and create file info
       if (await this._electronService.ipcRenderer.invoke(`save`)) {
-        // Enable progressBar
-        this.progressVisibility = true;
         // Init progressBar increment
         let progressIncrement: number = 100 / parameters;
+
+        // Enable progressBar
+        this.progressVisibility = true;
+
         // Loop over each item
         for (let key in this.options) {
           if (this.options[key].isSelected) {
             // Refresh progressBar message
-            this.setProgressMessage(
-              `Saving ${key.charAt(0).toUpperCase() + key.slice(1)}`
-            );
-            // Save process
-            await this._electronService.ipcRenderer.invoke(`save-${key}`);
-            // Update progress
-            this.progress = this.progress + progressIncrement;
-            // Change option's state
-            this.options[key].isSaved = true;
+            this.progressError = false;
+            // Refresh progressBar message
+            this.setProgressMessage(`Saving ${key.charAt(0).toUpperCase() + key.slice(1)}`);
+            try {
+              // Save process
+              await this._electronService.ipcRenderer.invoke(`save-${key}`);
+              // Change option's state
+              this.options[key].isSaved = true;
+            } catch (err) {
+              // Error occured backend side
+              this.progressError = true;
+              this.setProgressMessage(err.toString().split(":")[3]);
+              await new Promise((resolve) => setTimeout(resolve, 3000));
+              continue;
+            } finally {
+              // Update progress
+              this.progress = this.progress + progressIncrement;
+            }
           }
         }
       }

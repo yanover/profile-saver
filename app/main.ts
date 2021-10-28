@@ -1,5 +1,5 @@
 import { app, BrowserWindow, screen, ipcMain, dialog } from "electron";
-import { save, saveDesktop, savePrinters, saveSignature, saveTaskbar } from "./save";
+import { initSave, saveDesktop, savePrinters, saveSignature, saveTaskbar } from "./save";
 import { getSave, restore, restoreDesktop, restorePrinters, restoreSignature, restoreTaskbar } from "./restore";
 import * as path from "path";
 import * as fs from "fs";
@@ -96,7 +96,9 @@ try {
   // throw e;
 } finally {
   // Set root path
-  loadRootPath();
+  loadRootPath().catch((err) => {
+    throw new Error(err);
+  });
 }
 
 // ========== catch event from GUI ========== //
@@ -116,7 +118,7 @@ ipcMain.handle("retrieve-storage", async () => {
 // SAVE EVENT
 
 ipcMain.handle("save", async () => {
-  return await save(win);
+  return await initSave(win);
 });
 
 ipcMain.handle("save-desktop", async () => {

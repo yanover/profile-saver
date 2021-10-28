@@ -796,9 +796,9 @@
 
 
 
-## <small>1.0.1 (2017-04-03)</small>
+## <small>1.0.4 (2021-10-28)</small>
 
-* feat/ Add electron-packager scripts ([57891dc](https://github.com/maximegris/angular-electron/commit/57891dc))
+* feat / Add electron-packager scripts ([57891dc](https://github.com/maximegris/angular-electron/commit/57891dc))
 * ref/ update README ([7fddc20](https://github.com/maximegris/angular-electron/commit/7fddc20))
 * update README ([9a983c1](https://github.com/maximegris/angular-electron/commit/9a983c1))
 * v1.0.0 ([7a21eb9](https://github.com/maximegris/angular-electron/commit/7a21eb9))

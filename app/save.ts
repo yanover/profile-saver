@@ -1,33 +1,35 @@
 import { dialog } from "electron";
 import fs = require("fs-extra");
 import os = require("os");
-import { getFullPath, Repertories } from "./config-service";
+import { Files, getFullPath, Repertories } from "./config-service";
 
 const regedit = require("regedit");
-
-// Get fullPath from configService
-const rootPath: string = getFullPath();
 
 function userInfo() {
   return os.userInfo();
 }
 
-export async function save(win: any) {
+/**
+ * Check if path is valid, 
+ * @param win main windows, used to pushed confirm windows
+ * @returns
+ */
+export async function initSave(win: any) {
   let response: number = 0;
 
   try {
-    let finalDestination = `${rootPath}\\info.txt`;
+    let finalDestination = `${getFullPath()}\\${Files.info}`;
 
-    if (!fs.existsSync(rootPath)) {
+    if (!fs.existsSync(getFullPath())) {
       // Folder doesn't exist, creating
-      fs.mkdirSync(rootPath);
-    } else if (fs.readdirSync(rootPath).length > 0) {
+      fs.mkdirSync(getFullPath());
+    } else if (fs.readdirSync(getFullPath()).length > 0) {
       // Carefull, there is already a save in the final destination (oui = 1)
       response = dialog.showMessageBoxSync(win, {
         type: "warning",
         buttons: ["Non", "Oui"],
         title: "Confirmation",
-        message: `Attention, une sauvegarde est déjà présente au répertoire "${rootPath}", êtes-vous certain de vouloir écraser son contenu ?`,
+        message: `Attention, une sauvegarde est déjà présente au répertoire "${getFullPath()}", êtes-vous certain de vouloir écraser son contenu ?`,
       });
     } else {
       // Folder exist but is empty
@@ -37,7 +39,6 @@ export async function save(win: any) {
     if (response) {
       // Create info file
       if (!fs.existsSync(finalDestination)) {
-        console.log(`Info file (${finalDestination}) doesn't exist, creating`);
         fs.createFileSync(finalDestination);
       }
       // Write content - override if exists
@@ -47,7 +48,7 @@ export async function save(win: any) {
 
       // Empty all folder
       for (let item in Repertories) {
-        await fs.rm(`${rootPath}\\${item}`, { recursive: true, force: true });
+        await fs.rm(`${getFullPath()}\\${item}`, { recursive: true, force: true });
       }
     }
 
@@ -55,13 +56,13 @@ export async function save(win: any) {
     return response;
   } catch (err) {
     console.error(err);
-    throw new Error(err);
+    throw new Error("An error occured during initSave");
   }
 }
 
 export async function saveDesktop(): Promise<any> {
   const desktopPath = `${userInfo().homedir}\\${Repertories.desktop}`;
-  let finalDestination = `${rootPath}\\Desktop`;
+  let finalDestination = `${getFullPath()}\\Desktop`;
 
   try {
     // Create folder
@@ -88,7 +89,7 @@ export async function saveDesktop(): Promise<any> {
 
 export async function saveSignature() {
   const signaturePath = `${userInfo().homedir}\\AppData\\Roaming\\Microsoft\\${Repertories.signature}`;
-  let finalDestination = `${rootPath}\\${Repertories.signature}`;
+  let finalDestination = `${getFullPath()}\\${Repertories.signature}`;
 
   try {
     // Create folder
@@ -104,16 +105,16 @@ export async function saveSignature() {
       })
       .catch((err) => {
         console.error(err);
-        throw new Error(err);
+        throw new Error("An error occured during signature restauration");
       });
   } catch (err) {
     console.error(err);
-    throw new Error(err);
+    throw new Error("An error occured during signature restauration");
   }
 }
 
 export async function saveTaskbar() {
-  let finalDestination = `${rootPath}\\${Repertories.taskbar}`;
+  let finalDestination = `${getFullPath()}\\${Repertories.taskbar}`;
   let registryKey = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Taskband";
 
   return regedit.list(registryKey, function (err: any, result: any) {
@@ -142,7 +143,7 @@ export async function saveTaskbar() {
 
 export async function savePrinters(contents: Electron.WebContents) {
   let printers: Electron.PrinterInfo[] = contents.getPrinters();
-  let finalDestination = `${rootPath}\\${Repertories.printers}`;
+  let finalDestination = `${getFullPath()}\\${Repertories.printers}`;
   let printersSorted: Electron.PrinterInfo[] = [];
 
   try {

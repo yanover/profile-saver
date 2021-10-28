@@ -42,8 +42,6 @@ var fs = require("fs-extra");
 var os = require("os");
 var config_service_1 = require("./config-service");
 var regedit = require("regedit");
-// Get fullPath from configService
-var rootPath = config_service_1.getFullPath();
 var registryItem = /** @class */ (function () {
     function registryItem() {
     }
@@ -58,7 +56,7 @@ function getSave() {
     return __awaiter(this, void 0, void 0, function () {
         var infoFile, pattern, data, index;
         return __generator(this, function (_a) {
-            infoFile = rootPath + "\\" + config_service_1.Files.info;
+            infoFile = config_service_1.getFullPath() + "\\" + config_service_1.Files.info;
             if (fs.existsSync(infoFile)) {
                 try {
                     pattern = "Date";
@@ -83,7 +81,7 @@ function getSave() {
 }
 exports.getSave = getSave;
 /**
- * Description : Returns a litteral object that use IitemToSave with values that needs to be save
+ * Description : Returns a litteral object with items th
  * @return Promise<IitemToSave>
  */
 function restore() {
@@ -97,14 +95,20 @@ function restore() {
                 taskbar: false,
             };
             // We want to know how many options will be process
-            if (fs.existsSync(rootPath)) {
+            if (fs.existsSync(config_service_1.getFullPath())) {
                 for (key in itemToSave) {
-                    path = rootPath + "\\" + (key.charAt(0).toUpperCase() + key.slice(1));
-                    fs.existsSync(path) ? (itemToSave[key] = true) : (itemToSave[key] = false);
+                    path = config_service_1.getFullPath() + "\\" + (key.charAt(0).toUpperCase() + key.slice(1));
+                    if (fs.existsSync(path) && !config_service_1.isEmpty(path)) {
+                        itemToSave[key] = true;
+                    }
+                    else {
+                        itemToSave[key] = false;
+                    }
+                    // fs.existsSync(path) ? (itemToSave[key] = true) : (itemToSave[key] = false);
                 }
             }
             else {
-                console.info("File " + rootPath + " not found");
+                console.info("File " + config_service_1.getFullPath() + " not found");
             }
             return [2 /*return*/, itemToSave];
         });
@@ -123,7 +127,7 @@ function restoreDesktop() {
             switch (_a.label) {
                 case 0:
                     rootPathSource = userInfo().homedir + "\\" + config_service_1.Repertories.desktop.toLowerCase();
-                    rootPathDestination = rootPath + "\\" + config_service_1.Repertories.desktop;
+                    rootPathDestination = config_service_1.getFullPath() + "\\" + config_service_1.Repertories.desktop;
                     if (!fs.existsSync(rootPathDestination)) return [3 /*break*/, 2];
                     // Copy content
                     return [4 /*yield*/, fs.copy(rootPathDestination, rootPathSource, { overwrite: false }).catch(function (err) {
@@ -155,7 +159,7 @@ function restoreSignature() {
             switch (_a.label) {
                 case 0:
                     rootPathSource = userInfo().homedir + "\\AppData\\Roaming\\Microsoft\\Signatures";
-                    rootPathDestination = rootPath + "\\" + config_service_1.Repertories.signature;
+                    rootPathDestination = config_service_1.getFullPath() + "\\" + config_service_1.Repertories.signature;
                     if (!fs.existsSync(rootPathDestination)) return [3 /*break*/, 2];
                     // Copy content
                     return [4 /*yield*/, fs.copy(rootPathDestination, rootPathSource, { overwrite: false }).catch(function (err) {
@@ -186,7 +190,7 @@ function restoreTaskbar() {
         var _a, _b;
         return __generator(this, function (_c) {
             registryName = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Taskband";
-            rootPathDestination = rootPath + "\\" + config_service_1.Repertories.taskbar + "\\" + config_service_1.Files.taskbar;
+            rootPathDestination = config_service_1.getFullPath() + "\\" + config_service_1.Repertories.taskbar + "\\" + config_service_1.Files.taskbar;
             // Retrieve .json file
             if (fs.existsSync(rootPathDestination)) {
                 data = JSON.parse(fs.readFileSync(rootPathDestination, "utf8"));
@@ -231,7 +235,7 @@ function restorePrinters(contents) {
     return __awaiter(this, void 0, void 0, function () {
         var rootPathDestination, errorMessage, result, printersSorted, printersInstalled, printerSaved, count, i, j;
         return __generator(this, function (_a) {
-            rootPathDestination = rootPath + "\\" + config_service_1.Repertories.printers + "\\" + config_service_1.Files.printers;
+            rootPathDestination = config_service_1.getFullPath() + "\\" + config_service_1.Repertories.printers + "\\" + config_service_1.Files.printers;
             errorMessage = "";
             result = true;
             // Retrieve .json file
