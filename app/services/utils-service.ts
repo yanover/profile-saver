@@ -23,3 +23,14 @@ export function isReacheable(path: string): boolean {
 export function isEmpty(path: string): boolean {
   return fs.readdirSync(path).length === 0;
 }
+
+/**
+ * Retourne la date et l'heure courante au format : jj-mm-aaaa : hh:mm:ss (29-10-2021 : 12:23:33)
+ * @returns string
+ */
+export function getDateTime(): string {
+  let today = new Date();
+  let date = today.getDate() + "-" + (today.getMonth() + 1) + "-" + today.getFullYear();
+  let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  return date + " " + time;
+}

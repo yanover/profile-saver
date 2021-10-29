@@ -2,13 +2,13 @@ import fs = require("fs-extra");
 import os = require("os");
 import { isReacheable } from "./utils-service";
 
-// Enum for managing path
+// Enum for managing paths name
 export const Default = {
   DIRECTORY_PATH: "m:\\",
   DIRECTORY_NAME: "Profil-Saver",
 };
 
-// Enum for managing folder name
+// Enum for managing folders name
 export enum Repertories {
   desktop = "Desktop",
   signature = "Signatures",
@@ -16,6 +16,7 @@ export enum Repertories {
   printers = "Printers",
 }
 
+// Enum for managing files name
 export enum Files {
   info = "info.txt",
   printers = "printers.json",

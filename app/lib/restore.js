@@ -41,6 +41,7 @@ var child_process_1 = require("child_process");
 var fs = require("fs-extra");
 var os = require("os");
 var config_service_1 = require("../services/config-service");
+var utils_service_1 = require("../services/utils-service");
 var regedit = require("regedit");
 var registryItem = /** @class */ (function () {
     function registryItem() {
@@ -98,7 +99,7 @@ function restore() {
             if (fs.existsSync(config_service_1.getFullPath())) {
                 for (key in itemToSave) {
                     path = config_service_1.getFullPath() + "\\" + (key.charAt(0).toUpperCase() + key.slice(1));
-                    if (fs.existsSync(path) && !config_service_1.isEmpty(path)) {
+                    if (fs.existsSync(path) && !utils_service_1.isEmpty(path)) {
                         itemToSave[key] = true;
                     }
                     else {

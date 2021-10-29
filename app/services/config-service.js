@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isEmpty = exports.getFullPath = exports.loadRootPath = exports.Files = exports.Repertories = exports.Default = void 0;
-var fs = require("fs-extra");
+exports.getFullPath = exports.loadRootPath = exports.Files = exports.Repertories = exports.Default = void 0;
 var os = require("os");
+var utils_service_1 = require("./utils-service");
 // Enum for managing path
 exports.Default = {
     DIRECTORY_PATH: "m:\\",
@@ -30,11 +30,11 @@ var Files;
 function loadRootPath() {
     return new Promise(function (resolve, reject) {
         // Check if default home directory is reacheable
-        if (isReacheable(exports.Default.DIRECTORY_PATH)) {
+        if (utils_service_1.isReacheable(exports.Default.DIRECTORY_PATH)) {
             console.log("Default repertory founded");
             resolve();
         }
-        else if (isReacheable(os.userInfo().homedir + "\\Documents")) {
+        else if (utils_service_1.isReacheable(os.userInfo().homedir + "\\Documents")) {
             console.log("Default repertory not founded, swap for document folder");
             // Swap for default document folder
             exports.Default.DIRECTORY_PATH = os.userInfo().homedir + "\\Documents";
@@ -52,28 +52,4 @@ function getFullPath() {
     return exports.Default.DIRECTORY_PATH + exports.Default.DIRECTORY_NAME;
 }
 exports.getFullPath = getFullPath;
-/**
- * Define if the path passed in argument is accessible and writeable
- * @param path The file or directory to check
- * @returns true = ok, can access, read and write | false = permission denied
- */
-function isReacheable(path) {
-    try {
-        fs.accessSync(path, fs.constants.R_OK | fs.constants.W_OK);
-        console.log(path + " is both readable and writable");
-        return true;
-    }
-    catch (err) {
-        return false;
-    }
-}
-/**
- * Check if a folder is empty
- * @param path the path to check
- * @returns true = is empty | false = is not empty
- */
-function isEmpty(path) {
-    return fs.readdirSync(path).length === 0;
-}
-exports.isEmpty = isEmpty;
 //# sourceMappingURL=config-service.js.map

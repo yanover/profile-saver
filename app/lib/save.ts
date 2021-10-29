@@ -2,6 +2,7 @@ import { dialog } from "electron";
 import fs = require("fs-extra");
 import os = require("os");
 import { Files, getFullPath, Repertories } from "../services/config-service";
+import { getDateTime } from "../services/utils-service";
 
 const regedit = require("regedit");
 
@@ -44,7 +45,7 @@ export async function initSave(win: any): Promise<number> {
       // Write content - override if exists
       fs.writeFileSync(finalDestination, `Projet : SaveProfile\n`);
       fs.appendFileSync(finalDestination, `Auteur : Yann Schoeni\n`);
-      fs.appendFileSync(finalDestination, `Date de la sauvegarde : ${getDate()}\n`);
+      fs.appendFileSync(finalDestination, `Date de la sauvegarde : ${getDateTime()}\n`);
 
       // Empty all folder
       for (let item in Repertories) {
@@ -181,11 +182,4 @@ export async function savePrinters(contents: Electron.WebContents): Promise<void
     console.error(err);
     throw new Error("An error occured during printers save");
   }
-}
-
-function getDate(): string {
-  let today = new Date();
-  let date = today.getDate() + "-" + (today.getMonth() + 1) + "-" + today.getFullYear();
-  let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-  return date + " " + time;
 }
