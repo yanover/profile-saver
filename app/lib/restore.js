@@ -186,20 +186,24 @@ exports.restoreSignature = restoreSignature;
  */
 function restoreTaskbar() {
     return __awaiter(this, void 0, void 0, function () {
-        var registryName, rootPathDestination, data, item, key, registryValue;
+        var registryKey, finalDestination, taskbarPath, regDestination, contentDestination, data, item, key, registryValue;
         var _a, _b;
         return __generator(this, function (_c) {
-            registryName = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Taskband";
-            rootPathDestination = config_service_1.getFullPath() + "\\" + config_service_1.Repertories.taskbar + "\\" + config_service_1.Files.taskbar;
+            registryKey = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Taskband";
+            finalDestination = config_service_1.getFullPath() + "\\" + config_service_1.Repertories.taskbar;
+            taskbarPath = userInfo().homedir + "\\AppData\\Roaming\\Microsoft\\Internet Explorer\\Quick Launch\\User Pinned\\TaskBar";
             // Retrieve .json file
-            if (fs.existsSync(rootPathDestination)) {
-                data = JSON.parse(fs.readFileSync(rootPathDestination, "utf8"));
+            if (fs.existsSync(finalDestination)) {
+                regDestination = finalDestination + "\\" + config_service_1.Files.taskbar;
+                contentDestination = finalDestination + "\\content";
+                data = JSON.parse(fs.readFileSync(regDestination, "utf8"));
                 item = new registryItem();
-                item.values = data[registryName]["values"];
+                item.values = data[registryKey]["values"];
                 try {
+                    // Push new registry item
                     for (key in item.values) {
                         registryValue = (_a = {},
-                            _a[registryName] = (_b = {},
+                            _a[registryKey] = (_b = {},
                                 _b[key] = {
                                     value: item.values[key]["value"],
                                     type: item.values[key]["type"],
@@ -212,13 +216,17 @@ function restoreTaskbar() {
                             }
                         });
                     }
+                    // Copy shotcuts
+                    if (fs.existsSync(contentDestination)) {
+                        fs.copySync(contentDestination, taskbarPath, { overwrite: true });
+                    }
                 }
                 catch (err) {
-                    throw new Error("An error occured during signature restoration");
+                    throw new Error("An error occured during taskbar restoration");
                 }
             }
             else {
-                console.error("Error detected in restorTaskbar, folder " + rootPathDestination + " not found");
+                console.error("Error detected in restorTaskbar, folder " + finalDestination + " not found");
                 throw new Error("An error occured during taskbar restoration");
             }
             return [2 /*return*/];

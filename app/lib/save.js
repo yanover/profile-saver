@@ -53,33 +53,29 @@ function userInfo() {
  */
 function initSave(win) {
     return __awaiter(this, void 0, void 0, function () {
-        var response, finalDestination, _a, _b, _i, item, err_1;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
-                case 0:
-                    response = 0;
-                    _c.label = 1;
-                case 1:
-                    _c.trys.push([1, 6, , 7]);
-                    finalDestination = config_service_1.getFullPath() + "\\" + config_service_1.Files.info;
-                    if (!fs.existsSync(config_service_1.getFullPath())) {
-                        // Folder doesn't exist, creating
-                        fs.mkdirSync(config_service_1.getFullPath());
-                    }
-                    else if (fs.readdirSync(config_service_1.getFullPath()).length > 0) {
-                        // Carefull, there is already a save in the final destination (oui = 1)
-                        response = electron_1.dialog.showMessageBoxSync(win, {
-                            type: "warning",
-                            buttons: ["Non", "Oui"],
-                            title: "Confirmation",
-                            message: "Attention, une sauvegarde est d\u00E9j\u00E0 pr\u00E9sente au r\u00E9pertoire \"" + config_service_1.getFullPath() + "\", \u00EAtes-vous certain de vouloir \u00E9craser son contenu ?",
-                        });
-                    }
-                    else {
-                        // Folder exist but is empty
-                        response = 1;
-                    }
-                    if (!response) return [3 /*break*/, 5];
+        var response, finalDestination, stmt;
+        return __generator(this, function (_a) {
+            response = 0;
+            try {
+                finalDestination = config_service_1.getFullPath() + "\\" + config_service_1.Files.info;
+                if (!fs.existsSync(config_service_1.getFullPath())) {
+                    // Folder doesn't exist, creating
+                    fs.mkdirSync(config_service_1.getFullPath());
+                }
+                else if (fs.readdirSync(config_service_1.getFullPath()).length > 0) {
+                    // Carefull, there is already a save in the final destination (oui = 1)
+                    response = electron_1.dialog.showMessageBoxSync(win, {
+                        type: "warning",
+                        buttons: ["Non", "Oui"],
+                        title: "Confirmation",
+                        message: "Attention, une sauvegarde est d\u00E9j\u00E0 pr\u00E9sente au r\u00E9pertoire \"" + config_service_1.getFullPath() + "\", \u00EAtes-vous certain de vouloir \u00E9craser son contenu ?",
+                    });
+                }
+                else {
+                    // Folder exist but is empty
+                    response = 1;
+                }
+                if (response) {
                     // Create info file
                     if (!fs.existsSync(finalDestination)) {
                         fs.createFileSync(finalDestination);
@@ -88,30 +84,23 @@ function initSave(win) {
                     fs.writeFileSync(finalDestination, "Projet : SaveProfile\n");
                     fs.appendFileSync(finalDestination, "Auteur : Yann Schoeni\n");
                     fs.appendFileSync(finalDestination, "Date de la sauvegarde : " + utils_service_1.getDateTime() + "\n");
-                    _a = [];
-                    for (_b in config_service_1.Repertories)
-                        _a.push(_b);
-                    _i = 0;
-                    _c.label = 2;
-                case 2:
-                    if (!(_i < _a.length)) return [3 /*break*/, 5];
-                    item = _a[_i];
-                    return [4 /*yield*/, fs.rm(config_service_1.getFullPath() + "\\" + item, { recursive: true, force: true })];
-                case 3:
-                    _c.sent();
-                    _c.label = 4;
-                case 4:
-                    _i++;
-                    return [3 /*break*/, 2];
-                case 5: 
+                    // Empty all folder
+                    Object.keys(config_service_1.Repertories).map(function (key) {
+                        fs.rmSync(config_service_1.getFullPath() + "\\" + config_service_1.Repertories[key], { recursive: true, force: true });
+                    });
+                    // TODO --> recursive true not working for now
+                    console.log(config_service_1.getFullPath() + "\\" + config_service_1.Repertories.taskbar + "\\content");
+                    stmt = fs.rmSync(config_service_1.getFullPath() + "\\" + config_service_1.Repertories.taskbar + "\\content", { recursive: true });
+                    console.log(stmt);
+                }
                 // Return result
                 return [2 /*return*/, response];
-                case 6:
-                    err_1 = _c.sent();
-                    console.error(err_1);
-                    throw new Error("An error occured during initSave");
-                case 7: return [2 /*return*/];
             }
+            catch (err) {
+                console.error(err);
+                throw new Error("An error occured during initSave");
+            }
+            return [2 /*return*/];
         });
     });
 }
@@ -123,7 +112,7 @@ exports.initSave = initSave;
  */
 function saveDesktop() {
     return __awaiter(this, void 0, void 0, function () {
-        var desktopPath, finalDestination, err_2;
+        var desktopPath, finalDestination, err_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -145,8 +134,8 @@ function saveDesktop() {
                 // Copy content
                 return [2 /*return*/, _a.sent()];
                 case 3:
-                    err_2 = _a.sent();
-                    console.error(err_2);
+                    err_1 = _a.sent();
+                    console.error(err_1);
                     throw new Error("An error occured during desktop save");
                 case 4: return [2 /*return*/];
             }
@@ -161,7 +150,7 @@ exports.saveDesktop = saveDesktop;
  */
 function saveSignature() {
     return __awaiter(this, void 0, void 0, function () {
-        var signaturePath, finalDestination, err_3;
+        var signaturePath, finalDestination, err_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -183,8 +172,8 @@ function saveSignature() {
                 // Copy content
                 return [2 /*return*/, _a.sent()];
                 case 3:
-                    err_3 = _a.sent();
-                    console.error(err_3);
+                    err_2 = _a.sent();
+                    console.error(err_2);
                     throw new Error("An error occured during signature save");
                 case 4: return [2 /*return*/];
             }
@@ -199,31 +188,41 @@ exports.saveSignature = saveSignature;
  */
 function saveTaskbar() {
     return __awaiter(this, void 0, void 0, function () {
-        var finalDestination, registryKey;
+        var finalDestination, registryKey, taskbarPath;
         return __generator(this, function (_a) {
             finalDestination = config_service_1.getFullPath() + "\\" + config_service_1.Repertories.taskbar;
             registryKey = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Taskband";
-            return [2 /*return*/, regedit.list(registryKey, function (err, result) {
-                    try {
-                        var regDestination = finalDestination + "\\" + config_service_1.Files.taskbar;
-                        // Create folder
-                        if (!fs.existsSync(finalDestination)) {
-                            console.log("Destination folder (" + finalDestination + ") doesn't exist, creating");
-                            fs.mkdirSync(finalDestination);
-                        }
-                        // Create json file
-                        if (!fs.existsSync(regDestination)) {
-                            console.log("Destination file (" + regDestination + ") doesn't exist, creating");
-                            fs.createFileSync(regDestination);
-                        }
-                        // Write registry value in .json
-                        return fs.writeFileSync(regDestination, JSON.stringify(result, null, 2), "utf-8");
+            taskbarPath = userInfo().homedir + "\\AppData\\Roaming\\Microsoft\\Internet Explorer\\Quick Launch\\User Pinned\\TaskBar";
+            regedit.list(registryKey, function (err, result) {
+                if (err) {
+                    console.error(err);
+                    throw new Error("An error occured during taskabr save");
+                }
+                try {
+                    var regDestination = finalDestination + "\\" + config_service_1.Files.taskbar;
+                    var contentDestination = finalDestination + "\\content";
+                    // Create folder
+                    if (!fs.existsSync(finalDestination)) {
+                        console.log("Destination folder (" + finalDestination + ") doesn't exist, creating");
+                        fs.mkdirSync(finalDestination);
                     }
-                    catch (err) {
-                        console.error(err);
-                        throw new Error("An error occured during taskabr save");
+                    // Create json file
+                    if (!fs.existsSync(regDestination) || !fs.existsSync(contentDestination)) {
+                        console.log("Destination file (" + regDestination + ") doesn't exist, creating");
+                        fs.createFileSync(regDestination);
                     }
-                })];
+                    // Copy appData content
+                    fs.copySync(taskbarPath, contentDestination, { overwrite: true });
+                    // Write registry value in .json
+                    fs.writeFileSync(regDestination, JSON.stringify(result, null, 2), "utf-8");
+                    // Copy passte
+                }
+                catch (err) {
+                    console.error(err);
+                    throw new Error("An error occured during taskabr save");
+                }
+            });
+            return [2 /*return*/];
         });
     });
 }

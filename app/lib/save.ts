@@ -48,9 +48,12 @@ export async function initSave(win: any): Promise<number> {
       fs.appendFileSync(finalDestination, `Date de la sauvegarde : ${getDateTime()}\n`);
 
       // Empty all folder
-      for (let item in Repertories) {
-        await fs.rm(`${getFullPath()}\\${item}`, { recursive: true, force: true });
-      }
+      Object.keys(Repertories).map((key) => {
+        fs.rmSync(`${getFullPath()}\\${Repertories[key]}`, { recursive: true, force: true });
+      });
+
+      // TODO --> recursive true not working for now
+      fs.rmSync(`${getFullPath()}\\${Repertories.taskbar}\\content`, { recursive: true });
     }
 
     // Return result
@@ -119,13 +122,21 @@ export async function saveSignature(): Promise<void> {
  * @return Promise<void>
  * @throws CopyError | FileNotFoundException
  */
-export async function saveTaskbar() {
+export async function saveTaskbar(): Promise<void> {
   let finalDestination = `${getFullPath()}\\${Repertories.taskbar}`;
-  let registryKey = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Taskband";
+  const registryKey = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Taskband";
+  const taskbarPath = `${
+    userInfo().homedir
+  }\\AppData\\Roaming\\Microsoft\\Internet Explorer\\Quick Launch\\User Pinned\\TaskBar`;
 
-  return regedit.list(registryKey, function (err: any, result: any) {
+  regedit.list(registryKey, (err: any, result: any) => {
+    if (err) {
+      console.error(err);
+      throw new Error("An error occured during taskabr save");
+    }
     try {
       let regDestination = `${finalDestination}\\${Files.taskbar}`;
+      let contentDestination = `${finalDestination}\\content`;
 
       // Create folder
       if (!fs.existsSync(finalDestination)) {
@@ -133,13 +144,18 @@ export async function saveTaskbar() {
         fs.mkdirSync(finalDestination);
       }
       // Create json file
-      if (!fs.existsSync(regDestination)) {
+      if (!fs.existsSync(regDestination) || !fs.existsSync(contentDestination)) {
         console.log(`Destination file (${regDestination}) doesn't exist, creating`);
         fs.createFileSync(regDestination);
       }
 
+      // Copy appData content
+      fs.copySync(taskbarPath, contentDestination, { overwrite: true });
+
       // Write registry value in .json
-      return fs.writeFileSync(regDestination, JSON.stringify(result, null, 2), "utf-8");
+      fs.writeFileSync(regDestination, JSON.stringify(result, null, 2), "utf-8");
+
+      // Copy passte
     } catch (err) {
       console.error(err);
       throw new Error("An error occured during taskabr save");

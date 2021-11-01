@@ -129,39 +129,48 @@ export async function restoreSignature(): Promise<void> {
  * @throws CopyError | FileNotFoundException
  */
 export async function restoreTaskbar(): Promise<void> {
-  let registryName: string = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Taskband";
-  let rootPathDestination: string = `${getFullPath()}\\${Repertories.taskbar}\\${Files.taskbar}`;
+  const registryKey: string = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Taskband";
+  let finalDestination: string = `${getFullPath()}\\${Repertories.taskbar}`;
+  const taskbarPath = `${
+    userInfo().homedir
+  }\\AppData\\Roaming\\Microsoft\\Internet Explorer\\Quick Launch\\User Pinned\\TaskBar`;
 
   // Retrieve .json file
-  if (fs.existsSync(rootPathDestination)) {
-    let data: registryItem = JSON.parse(fs.readFileSync(rootPathDestination, "utf8"));
+  if (fs.existsSync(finalDestination)) {
+    let regDestination = `${finalDestination}\\${Files.taskbar}`;
+    let contentDestination = `${finalDestination}\\content`;
+    let data: registryItem = JSON.parse(fs.readFileSync(regDestination, "utf8"));
 
     // Use class to set proper object
     let item = new registryItem();
-    item.values = data[registryName]["values"];
+    item.values = data[registryKey]["values"];
 
     try {
+      // Push new registry item
       for (let key in item.values) {
         const registryValue = {
-          [registryName]: {
+          [registryKey]: {
             [key]: {
               value: item.values[key]["value"],
               type: item.values[key]["type"],
             },
           },
         };
-
         regedit.putValue(registryValue, (err: Error) => {
           if (err) {
             throw new Error("An error occured during signature restoration");
           }
         });
       }
+      // Copy shotcuts
+      if (fs.existsSync(contentDestination)) {
+        fs.copySync(contentDestination, taskbarPath, { overwrite: true });
+      }
     } catch (err) {
-      throw new Error("An error occured during signature restoration");
+      throw new Error("An error occured during taskbar restoration");
     }
   } else {
-    console.error(`Error detected in restorTaskbar, folder ${rootPathDestination} not found`);
+    console.error(`Error detected in restorTaskbar, folder ${finalDestination} not found`);
     throw new Error("An error occured during taskbar restoration");
   }
 }
