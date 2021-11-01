@@ -37,7 +37,7 @@ export function loadRootPath(): Promise<void> {
     } else if (isReacheable(`${os.userInfo().homedir}\\Documents`)) {
       console.log("Default repertory not founded, swap for document folder");
       // Swap for default document folder
-      Default.DIRECTORY_PATH = `${os.userInfo().homedir}\\Documents`;
+      Default.DIRECTORY_PATH = `${os.userInfo().homedir}\\Documents\\`;
       resolve();
     }
     reject();

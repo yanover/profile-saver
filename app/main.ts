@@ -16,7 +16,7 @@ const args = process.argv.slice(1),
 
 function createWindow(): BrowserWindow {
   const electronScreen = screen;
-  const iconPath = "src/assets/icons/castor.png";
+  const iconPath = "src/assets/icons/favicon.png";
 
   // Create the browser window.
   win = new BrowserWindow({

@@ -41,6 +41,7 @@ var electron_1 = require("electron");
 var fs = require("fs-extra");
 var os = require("os");
 var config_service_1 = require("../services/config-service");
+var utils_service_1 = require("../services/utils-service");
 var regedit = require("regedit");
 function userInfo() {
     return os.userInfo();
@@ -86,7 +87,7 @@ function initSave(win) {
                     // Write content - override if exists
                     fs.writeFileSync(finalDestination, "Projet : SaveProfile\n");
                     fs.appendFileSync(finalDestination, "Auteur : Yann Schoeni\n");
-                    fs.appendFileSync(finalDestination, "Date de la sauvegarde : " + getDate() + "\n");
+                    fs.appendFileSync(finalDestination, "Date de la sauvegarde : " + utils_service_1.getDateTime() + "\n");
                     _a = [];
                     for (_b in config_service_1.Repertories)
                         _a.push(_b);
@@ -269,10 +270,4 @@ function savePrinters(contents) {
     });
 }
 exports.savePrinters = savePrinters;
-function getDate() {
-    var today = new Date();
-    var date = today.getDate() + "-" + (today.getMonth() + 1) + "-" + today.getFullYear();
-    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    return date + " " + time;
-}
 //# sourceMappingURL=save.js.map

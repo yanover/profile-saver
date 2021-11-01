@@ -3,12 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getFullPath = exports.loadRootPath = exports.Files = exports.Repertories = exports.Default = void 0;
 var os = require("os");
 var utils_service_1 = require("./utils-service");
-// Enum for managing path
+// Enum for managing paths name
 exports.Default = {
     DIRECTORY_PATH: "m:\\",
     DIRECTORY_NAME: "Profil-Saver",
 };
-// Enum for managing folder name
+// Enum for managing folders name
 var Repertories;
 (function (Repertories) {
     Repertories["desktop"] = "Desktop";
@@ -16,6 +16,7 @@ var Repertories;
     Repertories["taskbar"] = "Taskbar";
     Repertories["printers"] = "Printers";
 })(Repertories = exports.Repertories || (exports.Repertories = {}));
+// Enum for managing files name
 var Files;
 (function (Files) {
     Files["info"] = "info.txt";
@@ -37,7 +38,7 @@ function loadRootPath() {
         else if (utils_service_1.isReacheable(os.userInfo().homedir + "\\Documents")) {
             console.log("Default repertory not founded, swap for document folder");
             // Swap for default document folder
-            exports.Default.DIRECTORY_PATH = os.userInfo().homedir + "\\Documents";
+            exports.Default.DIRECTORY_PATH = os.userInfo().homedir + "\\Documents\\";
             resolve();
         }
         reject();

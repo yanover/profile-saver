@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isEmpty = exports.isReacheable = void 0;
+exports.getDateTime = exports.isEmpty = exports.isReacheable = void 0;
 var fs = require("fs-extra");
 /**
  * Define if the path passed in argument is accessible and writeable
@@ -27,4 +27,15 @@ function isEmpty(path) {
     return fs.readdirSync(path).length === 0;
 }
 exports.isEmpty = isEmpty;
+/**
+ * Retourne la date et l'heure courante au format : jj-mm-aaaa : hh:mm:ss (29-10-2021 : 12:23:33)
+ * @returns string
+ */
+function getDateTime() {
+    var today = new Date();
+    var date = today.getDate() + "-" + (today.getMonth() + 1) + "-" + today.getFullYear();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    return date + " " + time;
+}
+exports.getDateTime = getDateTime;
 //# sourceMappingURL=utils-service.js.map
