@@ -162,15 +162,3 @@ ipcMain.handle("restore-taskbar", async () => {
 ipcMain.handle("restore-printers", async () => {
   return await restorePrinters(win.webContents);
 });
-
-// OTHER EVENT
-
-ipcMain.on("selectDirectory", async () => {
-  ipcMain.on("selectDirectory", async () => {
-    const result = await dialog.showOpenDialog(win, {
-      properties: ["openDirectory"],
-    });
-
-    console.log("directories selected", result.filePaths);
-  });
-});
