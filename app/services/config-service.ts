@@ -5,7 +5,7 @@ import { isReacheable } from "./utils-service";
 // Enum for managing paths name
 export const Default = {
   DIRECTORY_PATH: "m:\\",
-  DIRECTORY_NAME: "Profil-Saver",
+  DIRECTORY_NAME: "Profile-Saver",
 };
 
 // Enum for managing folders name
