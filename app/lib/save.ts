@@ -2,7 +2,7 @@ import { dialog } from "electron";
 import fs = require("fs-extra");
 import os = require("os");
 import { Files, getFullPath, Repertories } from "../services/config-service";
-import { getDateTime } from "../services/utils-service";
+import { getDateTime, deleteFolderRecursive } from "../services/utils-service";
 
 const regedit = require("regedit");
 
@@ -52,8 +52,7 @@ export async function initSave(win: any): Promise<number> {
         fs.rmSync(`${getFullPath()}\\${Repertories[key]}`, { recursive: true, force: true });
       });
 
-      // TODO --> recursive true not working for now
-      fs.rmSync(`${getFullPath()}\\${Repertories.taskbar}\\content`, { recursive: true });
+      // TODO --> remove content folder
     }
 
     // Return result

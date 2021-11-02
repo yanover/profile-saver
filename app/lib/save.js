@@ -53,7 +53,7 @@ function userInfo() {
  */
 function initSave(win) {
     return __awaiter(this, void 0, void 0, function () {
-        var response, finalDestination, stmt;
+        var response, finalDestination;
         return __generator(this, function (_a) {
             response = 0;
             try {
@@ -88,10 +88,7 @@ function initSave(win) {
                     Object.keys(config_service_1.Repertories).map(function (key) {
                         fs.rmSync(config_service_1.getFullPath() + "\\" + config_service_1.Repertories[key], { recursive: true, force: true });
                     });
-                    // TODO --> recursive true not working for now
-                    console.log(config_service_1.getFullPath() + "\\" + config_service_1.Repertories.taskbar + "\\content");
-                    stmt = fs.rmSync(config_service_1.getFullPath() + "\\" + config_service_1.Repertories.taskbar + "\\content", { recursive: true });
-                    console.log(stmt);
+                    // TODO --> remove content folder
                 }
                 // Return result
                 return [2 /*return*/, response];

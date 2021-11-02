@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDateTime = exports.isEmpty = exports.isReacheable = void 0;
+exports.deleteFolderRecursive = exports.getDateTime = exports.isEmpty = exports.isReacheable = void 0;
 var fs = require("fs-extra");
 /**
  * Define if the path passed in argument is accessible and writeable
@@ -38,4 +38,29 @@ function getDateTime() {
     return date + " " + time;
 }
 exports.getDateTime = getDateTime;
+function deleteFolderRecursive(path) {
+    return new Promise(function (resolve, reject) {
+        try {
+            if (fs.existsSync(path)) {
+                fs.readdirSync(path).forEach(function (file, index) {
+                    var curPath = path + "/" + file;
+                    if (fs.lstatSync(curPath).isDirectory()) {
+                        // recurse
+                        deleteFolderRecursive(curPath);
+                    }
+                    else {
+                        // delete file
+                        fs.unlinkSync(curPath);
+                    }
+                });
+                fs.rmdirSync(path);
+            }
+        }
+        catch (err) {
+            reject(err);
+        }
+        resolve();
+    });
+}
+exports.deleteFolderRecursive = deleteFolderRecursive;
 //# sourceMappingURL=utils-service.js.map
