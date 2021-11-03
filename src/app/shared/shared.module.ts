@@ -2,26 +2,17 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 
 import { TranslateModule } from "@ngx-translate/core";
-
-import { PageNotFoundComponent } from "./components/";
-import { WebviewDirective } from "./directives/";
 import { FormsModule } from "@angular/forms";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { NgProgressModule } from "ngx-progressbar";
-import { LoadingComponent } from "./components/loading/loading.component";
-import { LoadingDotComponent } from "./components/loading-dot/loading-dot.component";
+import { WebviewDirective } from "./directives/";
+
+// Components
+import { LoadingComponent } from "./components/";
+import { LoadingDotComponent } from "./components/";
 
 @NgModule({
-  declarations: [PageNotFoundComponent, WebviewDirective, LoadingComponent, LoadingDotComponent],
+  declarations: [WebviewDirective, LoadingComponent, LoadingDotComponent],
   imports: [CommonModule, TranslateModule, FormsModule],
-  exports: [
-    TranslateModule,
-    WebviewDirective,
-    FormsModule,
-    FontAwesomeModule,
-    NgProgressModule,
-    LoadingComponent,
-    LoadingDotComponent,
-  ],
+  exports: [TranslateModule, WebviewDirective, FormsModule, FontAwesomeModule, LoadingComponent, LoadingDotComponent],
 })
 export class SharedModule {}

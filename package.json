@@ -38,7 +38,6 @@
     "lint": "ng lint"
   },
   "dependencies": {
-    "@angular/animations": "12.2.11",
     "@angular/common": "12.1.2",
     "@angular/compiler": "12.1.2",
     "@angular/core": "12.1.2",
@@ -54,7 +53,6 @@
     "@fortawesome/free-regular-svg-icons": "^5.15.3",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "ngx-electron": "2.2.0",
-    "ngx-progressbar": "6.1.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.1.0",
     "zone.js": "~0.11.4"
