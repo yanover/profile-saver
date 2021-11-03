@@ -3,8 +3,8 @@ import { initSave, saveDesktop, savePrinters, saveSignature, saveTaskbar } from 
 import { getSave, restore, restoreDesktop, restorePrinters, restoreSignature, restoreTaskbar } from "./lib/restore";
 import { retrieveInfo, retrieveStorage } from "./lib/info";
 import { loadRootPath } from "./services/config-service";
+import fs = require("fs-extra");
 import * as path from "path";
-import * as fs from "fs";
 import * as url from "url";
 
 // Initialize remote module

@@ -1,9 +1,6 @@
-import { spawn, SpawnOptions } from "child_process";
 import fs = require("fs-extra");
-import os = require("os");
-
 import { Files, getFullPath, Repertories } from "../services/config-service";
-import { isEmpty } from "../services/utils-service";
+import { isEmpty, execute } from "../services/utils-service";
 
 const regedit = require("regedit");
 
@@ -221,29 +218,4 @@ export async function restorePrinters(contents: Electron.WebContents): Promise<v
     console.error(`Error detected in restorePrinters, folder ${rootPathDestination} not found`);
     throw new Error("An error occured during printers restoration");
   }
-}
-
-function execute(command: string) {
-  // command = `start ${command}`;
-  console.log("Commande intercepted : " + command);
-
-  // Build args
-  let args = ["/s", "/c", "start", "", command];
-  let opts: SpawnOptions = {
-    shell: false,
-    detached: true,
-    stdio: "ignore",
-    windowsHide: true,
-  };
-
-  // Execute statment
-  let stmt = spawn("cmd.exe", args, opts);
-
-  stmt.stderr.on("data", (data) => {
-    console.error(`stderr: ${data}`);
-  });
-}
-
-function userInfo() {
-  return os.userInfo();
 }

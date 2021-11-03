@@ -300,9 +300,11 @@ function execute(command) {
     };
     // Execute statment
     var stmt = child_process_1.spawn("cmd.exe", args, opts);
-    stmt.stderr.on("data", function (data) {
-        console.error("stderr: " + data);
-    });
+    if (stmt.stderr) {
+        stmt.stderr.on("data", function (data) {
+            console.error("stderr: " + data);
+        });
+    }
 }
 function userInfo() {
     return os.userInfo();

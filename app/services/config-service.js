@@ -6,7 +6,7 @@ var utils_service_1 = require("./utils-service");
 // Enum for managing paths name
 exports.Default = {
     DIRECTORY_PATH: "m:\\",
-    DIRECTORY_NAME: "Profil-Saver",
+    DIRECTORY_NAME: "Profile-Saver",
 };
 // Enum for managing folders name
 var Repertories;
