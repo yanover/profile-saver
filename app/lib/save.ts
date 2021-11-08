@@ -1,7 +1,7 @@
 import { dialog } from "electron";
 import fs = require("fs-extra");
 import { WarningException } from "../common";
-import { Files, getFullPath, Repertories } from "../services/config-service";
+import { Files, getFullPath, Repertories, Default } from "../services/config-service";
 import { getDateTime, userInfo } from "../services/utils-service";
 
 const regedit = require("regedit");
@@ -189,7 +189,7 @@ export async function savePrinters(contents: Electron.WebContents): Promise<void
     }
     // Sort data
     printers.forEach((printer: Electron.PrinterInfo) => {
-      if (printer.name.includes("s2lprint3")) {
+      if (printer.name.includes(Default.PRINT_SERVER)) {
         printersSorted.push(printer);
       }
     });
