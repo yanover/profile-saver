@@ -39,13 +39,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.savePrinters = exports.saveTaskbar = exports.saveSignature = exports.saveDesktop = exports.initSave = void 0;
 var electron_1 = require("electron");
 var fs = require("fs-extra");
-var os = require("os");
+var common_1 = require("../common");
 var config_service_1 = require("../services/config-service");
 var utils_service_1 = require("../services/utils-service");
 var regedit = require("regedit");
-function userInfo() {
-    return os.userInfo();
-}
 /**
  * Check if save destination is reacheable, write to info file, destroy all data found in old save
  * @param win main windows, used to pushed confirm windows if a save already exist and will be override
@@ -113,7 +110,7 @@ function saveDesktop() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    desktopPath = userInfo().homedir + "\\" + config_service_1.Repertories.desktop;
+                    desktopPath = utils_service_1.userInfo().homedir + "\\" + config_service_1.Repertories.desktop;
                     finalDestination = config_service_1.getFullPath() + "\\" + config_service_1.Repertories.desktop;
                     _a.label = 1;
                 case 1:
@@ -151,11 +148,12 @@ function saveSignature() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    signaturePath = userInfo().homedir + "\\AppData\\Roaming\\Microsoft\\" + config_service_1.Repertories.signature;
+                    signaturePath = utils_service_1.userInfo().homedir + "\\AppData\\Roaming\\Microsoft\\" + config_service_1.Repertories.signature;
                     finalDestination = config_service_1.getFullPath() + "\\" + config_service_1.Repertories.signature;
                     _a.label = 1;
                 case 1:
-                    _a.trys.push([1, 3, , 4]);
+                    _a.trys.push([1, 5, , 6]);
+                    if (!fs.existsSync(signaturePath)) return [3 /*break*/, 3];
                     // Create folder
                     if (!fs.existsSync(finalDestination)) {
                         console.log("Destination folder (" + finalDestination + ") doesn't exist, creating");
@@ -168,11 +166,15 @@ function saveSignature() {
                 case 2: 
                 // Copy content
                 return [2 /*return*/, _a.sent()];
-                case 3:
+                case 3: 
+                // TODO --> Throw warning error
+                throw new common_1.WarningException("Le répertoire de signatures n'existe pas !");
+                case 4: return [3 /*break*/, 6];
+                case 5:
                     err_2 = _a.sent();
                     console.error(err_2);
-                    throw new Error("An error occured during signature save");
-                case 4: return [2 /*return*/];
+                    throw new Error(err_2);
+                case 6: return [2 /*return*/];
             }
         });
     });
@@ -189,7 +191,7 @@ function saveTaskbar() {
         return __generator(this, function (_a) {
             finalDestination = config_service_1.getFullPath() + "\\" + config_service_1.Repertories.taskbar;
             registryKey = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Taskband";
-            taskbarPath = userInfo().homedir + "\\AppData\\Roaming\\Microsoft\\Internet Explorer\\Quick Launch\\User Pinned\\TaskBar";
+            taskbarPath = utils_service_1.userInfo().homedir + "\\AppData\\Roaming\\Microsoft\\Internet Explorer\\Quick Launch\\User Pinned\\TaskBar";
             regedit.list(registryKey, function (err, result) {
                 if (err) {
                     console.error(err);

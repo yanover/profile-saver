@@ -1,4 +1,5 @@
 import fs = require("fs-extra");
+import os = require("os");
 import { spawn, SpawnOptions } from "child_process";
 
 /**
@@ -81,4 +82,8 @@ export function deleteFolderRecursive(path): Promise<void> {
     }
     resolve();
   });
+}
+
+export function userInfo(): os.UserInfo<string> {
+  return os.userInfo();
 }

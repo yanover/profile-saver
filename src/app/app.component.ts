@@ -1,5 +1,4 @@
 import { Component } from "@angular/core";
-import { RouterOutlet } from "@angular/router";
 import { ElectronService } from "./core/services";
 import { TranslateService } from "@ngx-translate/core";
 import { APP_CONFIG } from "../environments/environment";

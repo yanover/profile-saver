@@ -39,7 +39,8 @@
     </button>
     <div class="container-progress" *ngIf="progressVisibility">
       <nav class="progress-info">
-        <p class="progress-text" [ngStyle]="{ color: progressError ? 'red' : '#363636' }">
+        <!-- <p class="progress-text" [ngStyle]="{ color: progressError ? 'red' : '#363636' }"> -->
+        <p class="progress-text" [ngStyle]="{color: getProgressErrorColor()}">
           {{ progressMessage }}
         </p>
       </nav>

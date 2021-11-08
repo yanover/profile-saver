@@ -27,7 +27,7 @@ export class SaveComponent implements OnInit {
 
   progressVisibility: boolean;
   progressMessage: string;
-  progressError: boolean;
+  progressError: string | boolean;
   color: string;
 
   options: {
@@ -99,8 +99,6 @@ export class SaveComponent implements OnInit {
         for (let key in this.options) {
           if (this.options[key].isSelected) {
             // Refresh progressBar message
-            this.progressError = false;
-            // Refresh progressBar message
             this.setProgressMessage(`Saving ${key.charAt(0).toUpperCase() + key.slice(1)}`);
             try {
               // Save process
@@ -109,13 +107,22 @@ export class SaveComponent implements OnInit {
               this.options[key].isSaved = true;
             } catch (err) {
               // Error occured backend side
-              this.progressError = true;
-              this.setProgressMessage(err.toString().split(":")[3]);
+              if (err.toString().indexOf("WarningException") >= 0) {
+                this.progressError = "warning";
+                this.setProgressMessage(err.toString().split(":")[4]);
+              } else {
+                this.progressError = true;
+                this.setProgressMessage(err.toString().split(":")[3]);
+              }
+              // Wait 3 secondes
               await new Promise((resolve) => setTimeout(resolve, 3000));
+              // Jump to next iteration
               continue;
             } finally {
               // Update progress
               this.progress = this.progress + progressIncrement;
+              // Set progressError to default value
+              this.progressError = false;
             }
           }
         }
@@ -148,5 +155,18 @@ export class SaveComponent implements OnInit {
       this.options[key].isSelected ? (count = count + 1) : null;
     }
     return count;
+  }
+
+  getProgressErrorColor(): string {
+    if (!this.progressError) {
+      // No error
+      return "#363636";
+    } else if (this.progressError == "warning") {
+      // Warning exception
+      return "#ffb300";
+    } else {
+      // All errors
+      return "#d84315";
+    }
   }
 }

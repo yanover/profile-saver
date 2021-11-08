@@ -10,7 +10,6 @@ main.js
 src/**/*.js
 !src/karma.conf.js
 *.js.map
-/app/
 
 # dependencies
 node_modules

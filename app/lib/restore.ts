@@ -1,6 +1,6 @@
 import fs = require("fs-extra");
 import { Files, getFullPath, Repertories } from "../services/config-service";
-import { isEmpty, execute } from "../services/utils-service";
+import { isEmpty, execute, userInfo } from "../services/utils-service";
 
 const regedit = require("regedit");
 

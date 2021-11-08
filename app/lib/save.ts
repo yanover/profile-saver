@@ -1,14 +1,10 @@
 import { dialog } from "electron";
 import fs = require("fs-extra");
-import os = require("os");
+import { WarningException } from "../common";
 import { Files, getFullPath, Repertories } from "../services/config-service";
-import { getDateTime, deleteFolderRecursive } from "../services/utils-service";
+import { getDateTime, userInfo } from "../services/utils-service";
 
 const regedit = require("regedit");
-
-function userInfo() {
-  return os.userInfo();
-}
 
 /**
  * Check if save destination is reacheable, write to info file, destroy all data found in old save
@@ -100,19 +96,25 @@ export async function saveSignature(): Promise<void> {
   let finalDestination = `${getFullPath()}\\${Repertories.signature}`;
 
   try {
-    // Create folder
-    if (!fs.existsSync(finalDestination)) {
-      console.log(`Destination folder (${finalDestination}) doesn't exist, creating`);
-      fs.mkdirSync(finalDestination);
+    // Check if signature path exist on the computer
+    if (fs.existsSync(signaturePath)) {
+      // Create folder
+      if (!fs.existsSync(finalDestination)) {
+        console.log(`Destination folder (${finalDestination}) doesn't exist, creating`);
+        fs.mkdirSync(finalDestination);
+      }
+      // Copy content
+      return await fs.copy(signaturePath, finalDestination, { overwrite: true }).catch((err) => {
+        console.error(err);
+        throw new Error("An error occured during signature save");
+      });
+    } else {
+      // TODO --> Throw warning error
+      throw new WarningException("Le répertoire de signatures n'existe pas !");
     }
-    // Copy content
-    return await fs.copy(signaturePath, finalDestination, { overwrite: true }).catch((err) => {
-      console.error(err);
-      throw new Error("An error occured during signature save");
-    });
   } catch (err) {
     console.error(err);
-    throw new Error("An error occured during signature save");
+    throw new Error(err);
   }
 }
 

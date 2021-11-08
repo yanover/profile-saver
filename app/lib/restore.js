@@ -37,9 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.restorePrinters = exports.restoreTaskbar = exports.restoreSignature = exports.restoreDesktop = exports.restore = exports.getSave = void 0;
-var child_process_1 = require("child_process");
 var fs = require("fs-extra");
-var os = require("os");
 var config_service_1 = require("../services/config-service");
 var utils_service_1 = require("../services/utils-service");
 var regedit = require("regedit");
@@ -126,7 +124,7 @@ function restoreDesktop() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    rootPathSource = userInfo().homedir + "\\" + config_service_1.Repertories.desktop.toLowerCase();
+                    rootPathSource = utils_service_1.userInfo().homedir + "\\" + config_service_1.Repertories.desktop.toLowerCase();
                     rootPathDestination = config_service_1.getFullPath() + "\\" + config_service_1.Repertories.desktop;
                     if (!fs.existsSync(rootPathDestination)) return [3 /*break*/, 2];
                     // Copy content
@@ -158,7 +156,7 @@ function restoreSignature() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    rootPathSource = userInfo().homedir + "\\AppData\\Roaming\\Microsoft\\Signatures";
+                    rootPathSource = utils_service_1.userInfo().homedir + "\\AppData\\Roaming\\Microsoft\\Signatures";
                     rootPathDestination = config_service_1.getFullPath() + "\\" + config_service_1.Repertories.signature;
                     if (!fs.existsSync(rootPathDestination)) return [3 /*break*/, 2];
                     // Copy content
@@ -191,7 +189,7 @@ function restoreTaskbar() {
         return __generator(this, function (_c) {
             registryKey = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Taskband";
             finalDestination = config_service_1.getFullPath() + "\\" + config_service_1.Repertories.taskbar;
-            taskbarPath = userInfo().homedir + "\\AppData\\Roaming\\Microsoft\\Internet Explorer\\Quick Launch\\User Pinned\\TaskBar";
+            taskbarPath = utils_service_1.userInfo().homedir + "\\AppData\\Roaming\\Microsoft\\Internet Explorer\\Quick Launch\\User Pinned\\TaskBar";
             // Retrieve .json file
             if (fs.existsSync(finalDestination)) {
                 regDestination = finalDestination + "\\" + config_service_1.Files.taskbar;
@@ -270,7 +268,7 @@ function restorePrinters(contents) {
                 // Launch child_process execute function
                 printersSorted.forEach(function (printer) {
                     try {
-                        execute(printer["name"]);
+                        utils_service_1.execute(printer["name"]);
                     }
                     catch (err) {
                         console.error(err);
@@ -287,26 +285,4 @@ function restorePrinters(contents) {
     });
 }
 exports.restorePrinters = restorePrinters;
-function execute(command) {
-    // command = `start ${command}`;
-    console.log("Commande intercepted : " + command);
-    // Build args
-    var args = ["/s", "/c", "start", "", command];
-    var opts = {
-        shell: false,
-        detached: true,
-        stdio: "ignore",
-        windowsHide: true,
-    };
-    // Execute statment
-    var stmt = child_process_1.spawn("cmd.exe", args, opts);
-    if (stmt.stderr) {
-        stmt.stderr.on("data", function (data) {
-            console.error("stderr: " + data);
-        });
-    }
-}
-function userInfo() {
-    return os.userInfo();
-}
 //# sourceMappingURL=restore.js.map
