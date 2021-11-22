@@ -15,6 +15,7 @@ export enum Repertories {
   signature = "Signatures",
   taskbar = "Taskbar",
   printers = "Printers",
+  browser = "Browser"
 }
 
 // Enum for managing files name

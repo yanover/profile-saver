@@ -1,8 +1,9 @@
+import { log } from "console";
 import { dialog } from "electron";
 import fs = require("fs-extra");
 import { WarningException } from "../common";
 import { Files, getFullPath, Repertories, Default } from "../services/config-service";
-import { getDateTime, userInfo } from "../services/utils-service";
+import { execute, getDateTime, userInfo } from "../services/utils-service";
 
 const regedit = require("regedit");
 
@@ -159,7 +160,7 @@ export async function saveTaskbar(): Promise<void> {
       // Copy passte
     } catch (err) {
       console.error(err);
-      throw new Error("An error occured during taskabr save");
+      throw new Error("An error occured during taskbar save");
     }
   });
 }
@@ -198,5 +199,41 @@ export async function savePrinters(contents: Electron.WebContents): Promise<void
   } catch (err) {
     console.error(err);
     throw new Error("An error occured during printers save");
+  }
+}
+
+/**
+ * Description : Save browser process, TODO
+ * @return Promise<void>
+ * @throws CopyError | FileNotFoundException
+ */
+export async function saveBrowser(): Promise<void> {
+  let finalDestination = `${getFullPath()}\\${Repertories.browser}`;
+  const bookmarksPath = `C:\\Users\\schoeniy\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Bookmarks`;
+
+  try {
+    // Any bookmarks to save ?
+    if (fs.existsSync(bookmarksPath)) {
+      
+      if (!fs.existsSync(finalDestination)) {
+        console.log(`Destination folder (${finalDestination}) doesn't exist, creating`);
+        fs.mkdirSync(finalDestination);
+      }
+      // Copy edge bookmarks
+      // await fs.copyFile(bookmarksPath, finalDestination);
+
+      let cmd = `copy "${bookmarksPath}" ${finalDestination}`;
+      console.log(cmd)
+
+      try {
+        execute(cmd);
+      } catch (err) {
+        console.error(err);
+        // Swallow
+      }
+    }
+  } catch (err) {
+    console.error(err);
+    throw new Error("An error occured during browser save");
   }
 }

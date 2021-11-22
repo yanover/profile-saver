@@ -16,6 +16,7 @@ var Repertories;
     Repertories["signature"] = "Signatures";
     Repertories["taskbar"] = "Taskbar";
     Repertories["printers"] = "Printers";
+    Repertories["browser"] = "Browser";
 })(Repertories = exports.Repertories || (exports.Repertories = {}));
 // Enum for managing files name
 var Files;

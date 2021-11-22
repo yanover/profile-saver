@@ -44,20 +44,29 @@ exports.getDateTime = getDateTime;
  * Execute the command passed in parameter throught cmd.exe
  * @param command the command that needs to be executed
  */
-function execute(command) {
-    // Build args
-    var args = ["/s", "/c", "start", "", command];
-    var opts = {
-        shell: false,
-        detached: true,
-        stdio: "ignore",
-        windowsHide: true,
-    };
-    // Execute statment
-    var stmt = child_process_1.spawn("cmd.exe", args, opts);
-    if (stmt.stderr) {
-        stmt.stderr.on("data", function (data) {
-            console.error("stderr: " + data);
+function execute(command, mode) {
+    if (mode === "spawn") {
+        // Build args
+        var args = ["/s", "/c", "start", "", command];
+        var opts = {
+            shell: false,
+            detached: true,
+            stdio: "ignore",
+            windowsHide: true,
+        };
+        // Execute statment
+        var stmt = child_process_1.spawn("cmd.exe", args, opts);
+        if (stmt.stderr) {
+            stmt.stderr.on("data", function (data) {
+                console.error("stderr: " + data);
+            });
+        }
+    }
+    else {
+        child_process_1.exec(command, function (error, stdout, stderr) {
+            if (error) {
+                // TODO
+            }
         });
     }
 }

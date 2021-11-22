@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.savePrinters = exports.saveTaskbar = exports.saveSignature = exports.saveDesktop = exports.initSave = void 0;
+exports.saveBrowser = exports.savePrinters = exports.saveTaskbar = exports.saveSignature = exports.saveDesktop = exports.initSave = void 0;
 var electron_1 = require("electron");
 var fs = require("fs-extra");
 var common_1 = require("../common");
@@ -218,7 +218,7 @@ function saveTaskbar() {
                 }
                 catch (err) {
                     console.error(err);
-                    throw new Error("An error occured during taskabr save");
+                    throw new Error("An error occured during taskbar save");
                 }
             });
             return [2 /*return*/];
@@ -268,4 +268,42 @@ function savePrinters(contents) {
     });
 }
 exports.savePrinters = savePrinters;
+/**
+ * Description : Save browser process, TODO
+ * @return Promise<void>
+ * @throws CopyError | FileNotFoundException
+ */
+function saveBrowser() {
+    return __awaiter(this, void 0, void 0, function () {
+        var finalDestination, bookmarksPath, cmd;
+        return __generator(this, function (_a) {
+            finalDestination = config_service_1.getFullPath() + "\\" + config_service_1.Repertories.browser;
+            bookmarksPath = "C:\\Users\\schoeniy\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Bookmarks";
+            try {
+                // Any bookmarks to save ?
+                if (fs.existsSync(bookmarksPath)) {
+                    if (!fs.existsSync(finalDestination)) {
+                        console.log("Destination folder (" + finalDestination + ") doesn't exist, creating");
+                        fs.mkdirSync(finalDestination);
+                    }
+                    cmd = "copy \"" + bookmarksPath + "\" " + finalDestination;
+                    console.log(cmd);
+                    try {
+                        utils_service_1.execute(cmd);
+                    }
+                    catch (err) {
+                        console.error(err);
+                        // Swallow
+                    }
+                }
+            }
+            catch (err) {
+                console.error(err);
+                throw new Error("An error occured during browser save");
+            }
+            return [2 /*return*/];
+        });
+    });
+}
+exports.saveBrowser = saveBrowser;
 //# sourceMappingURL=save.js.map

@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.restorePrinters = exports.restoreTaskbar = exports.restoreSignature = exports.restoreDesktop = exports.restore = exports.getSave = void 0;
+exports.restoreBrowser = exports.restorePrinters = exports.restoreTaskbar = exports.restoreSignature = exports.restoreDesktop = exports.restore = exports.getSave = void 0;
 var fs = require("fs-extra");
 var config_service_1 = require("../services/config-service");
 var utils_service_1 = require("../services/utils-service");
@@ -92,6 +92,7 @@ function restore() {
                 printers: false,
                 signatures: false,
                 taskbar: false,
+                browser: false,
             };
             // We want to know how many options will be process
             if (fs.existsSync(config_service_1.getFullPath())) {
@@ -210,11 +211,11 @@ function restoreTaskbar() {
                             _a);
                         regedit.putValue(registryValue, function (err) {
                             if (err) {
-                                throw new Error("An error occured during signature restoration");
+                                throw new Error("An error occured during taskbar restoration");
                             }
                         });
                     }
-                    // Copy shotcuts
+                    // Copy shortcuts
                     if (fs.existsSync(contentDestination)) {
                         fs.copySync(contentDestination, taskbarPath, { overwrite: true });
                     }
@@ -239,11 +240,9 @@ exports.restoreTaskbar = restoreTaskbar;
  */
 function restorePrinters(contents) {
     return __awaiter(this, void 0, void 0, function () {
-        var rootPathDestination, errorMessage, result, printersSorted, printersInstalled, printerSaved, count, i, j;
+        var rootPathDestination, printersSorted, printersInstalled, printerSaved, count, i, j;
         return __generator(this, function (_a) {
             rootPathDestination = config_service_1.getFullPath() + "\\" + config_service_1.Repertories.printers + "\\" + config_service_1.Files.printers;
-            errorMessage = "";
-            result = true;
             // Retrieve .json file
             if (fs.existsSync(rootPathDestination)) {
                 printersSorted = [];
@@ -268,7 +267,7 @@ function restorePrinters(contents) {
                 // Launch child_process execute function
                 printersSorted.forEach(function (printer) {
                     try {
-                        utils_service_1.execute(printer["name"]);
+                        utils_service_1.execute(printer["name"], "spawn");
                     }
                     catch (err) {
                         console.error(err);
@@ -285,4 +284,30 @@ function restorePrinters(contents) {
     });
 }
 exports.restorePrinters = restorePrinters;
+/**
+ * Description : Restore browser process, copy registry item and edge's folder
+ *               This process is only available with edge chromium
+ * @return Promise<void>
+ * @throws
+ */
+function restoreBrowser() {
+    return __awaiter(this, void 0, void 0, function () {
+        var registryKey, finalDestination, browserPath;
+        return __generator(this, function (_a) {
+            registryKey = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Taskband";
+            finalDestination = config_service_1.getFullPath() + "\\" + config_service_1.Repertories.browser;
+            browserPath = utils_service_1.userInfo().homedir + "\\AppData\\Local\\Microsoft\\Edge";
+            // Retrieve .json file
+            if (fs.existsSync(finalDestination)) {
+                /* fs.copySync(contentDestination, taskbarPath, { overwrite: true }); */
+            }
+            else {
+                console.error("Error detected in restorBrowser, folder " + finalDestination + " not found");
+                throw new Error("An error occured during browser restoration");
+            }
+            return [2 /*return*/];
+        });
+    });
+}
+exports.restoreBrowser = restoreBrowser;
 //# sourceMappingURL=restore.js.map

@@ -32,18 +32,27 @@ export class SaveComponent implements OnInit {
 
   options: {
     desktop: {
+      description: string;
       isSelected: boolean;
       isSaved: boolean;
     };
     printers: {
+      description: string;
       isSelected: boolean;
       isSaved: boolean;
     };
     signature: {
+      description: string;
       isSelected: boolean;
       isSaved: boolean;
     };
     taskbar: {
+      description: string;
+      isSelected: boolean;
+      isSaved: boolean;
+    };
+    browser: {
+      description: string;
       isSelected: boolean;
       isSaved: boolean;
     };
@@ -53,10 +62,11 @@ export class SaveComponent implements OnInit {
 
   ngOnInit(): void {
     this.options = {
-      desktop: { isSaved: false, isSelected: true },
-      taskbar: { isSaved: false, isSelected: true },
-      signature: { isSaved: false, isSelected: true },
-      printers: { isSaved: false, isSelected: true },
+      desktop: { description: "Bureau", isSaved: false, isSelected: true },
+      taskbar: { description: "Barre des tâches", isSaved: false, isSelected: true },
+      signature: { description: "Signature(s) Outlook", isSaved: false, isSelected: true },
+      printers: { description: "Imprimantes réseaux", isSaved: false, isSelected: true },
+      browser: { description: "Navigateur (Edge)", isSaved: false, isSelected: true },
     };
     this.progressMessage = "";
     this.progressError = false;

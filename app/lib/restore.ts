@@ -9,6 +9,7 @@ interface IitemToSave {
   signatures: boolean;
   taskbar: boolean;
   printers: boolean;
+  browser: boolean;
 }
 
 class registryItem {
@@ -59,6 +60,7 @@ export async function restore(): Promise<IitemToSave> {
     printers: false,
     signatures: false,
     taskbar: false,
+    browser: false,
   };
 
   // We want to know how many options will be process
@@ -155,11 +157,11 @@ export async function restoreTaskbar(): Promise<void> {
         };
         regedit.putValue(registryValue, (err: Error) => {
           if (err) {
-            throw new Error("An error occured during signature restoration");
+            throw new Error("An error occured during taskbar restoration");
           }
         });
       }
-      // Copy shotcuts
+      // Copy shortcuts
       if (fs.existsSync(contentDestination)) {
         fs.copySync(contentDestination, taskbarPath, { overwrite: true });
       }
@@ -179,9 +181,6 @@ export async function restoreTaskbar(): Promise<void> {
  */
 export async function restorePrinters(contents: Electron.WebContents): Promise<void> {
   let rootPathDestination: string = `${getFullPath()}\\${Repertories.printers}\\${Files.printers}`;
-
-  let errorMessage: string = "";
-  let result: boolean = true;
 
   // Retrieve .json file
   if (fs.existsSync(rootPathDestination)) {
@@ -208,7 +207,7 @@ export async function restorePrinters(contents: Electron.WebContents): Promise<v
     // Launch child_process execute function
     printersSorted.forEach((printer) => {
       try {
-        execute(printer["name"]);
+        execute(printer["name"], "spawn");
       } catch (err) {
         console.error(err);
         // Swallow
@@ -217,5 +216,26 @@ export async function restorePrinters(contents: Electron.WebContents): Promise<v
   } else {
     console.error(`Error detected in restorePrinters, folder ${rootPathDestination} not found`);
     throw new Error("An error occured during printers restoration");
+  }
+}
+
+/**
+ * Description : Restore browser process, copy registry item and edge's folder
+ *               This process is only available with edge chromium
+ * @return Promise<void>
+ * @throws
+ */
+export async function restoreBrowser(): Promise<void> {
+  const registryKey: string = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Taskband";
+
+  let finalDestination: string = `${getFullPath()}\\${Repertories.browser}`;
+  const browserPath = `${userInfo().homedir}\\AppData\\Local\\Microsoft\\Edge`;
+
+  // Retrieve .json file
+  if (fs.existsSync(finalDestination)) {
+    /* fs.copySync(contentDestination, taskbarPath, { overwrite: true }); */
+  } else {
+    console.error(`Error detected in restorBrowser, folder ${finalDestination} not found`);
+    throw new Error("An error occured during browser restoration");
   }
 }

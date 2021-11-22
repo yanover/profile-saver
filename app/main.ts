@@ -1,6 +1,14 @@
 import { app, BrowserWindow, screen, ipcMain, dialog } from "electron";
-import { initSave, saveDesktop, savePrinters, saveSignature, saveTaskbar } from "./lib/save";
-import { getSave, restore, restoreDesktop, restorePrinters, restoreSignature, restoreTaskbar } from "./lib/restore";
+import { initSave, saveDesktop, savePrinters, saveSignature, saveTaskbar, saveBrowser } from "./lib/save";
+import {
+  getSave,
+  restore,
+  restoreDesktop,
+  restorePrinters,
+  restoreSignature,
+  restoreTaskbar,
+  restoreBrowser,
+} from "./lib/restore";
 import { retrieveInfo, retrieveStorage } from "./lib/info";
 import { loadRootPath } from "./services/config-service";
 import fs = require("fs-extra");
@@ -137,6 +145,10 @@ ipcMain.handle("save-printers", async () => {
   return await savePrinters(win.webContents);
 });
 
+ipcMain.handle("save-browser", async () => {
+  return await saveBrowser();
+});
+
 // RESTORE EVENTS
 
 ipcMain.handle("get-save", async () => {
@@ -161,4 +173,8 @@ ipcMain.handle("restore-taskbar", async () => {
 
 ipcMain.handle("restore-printers", async () => {
   return await restorePrinters(win.webContents);
+});
+
+ipcMain.handle("restore-browser", async () => {
+  return await restoreBrowser();
 });

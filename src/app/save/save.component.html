@@ -15,7 +15,7 @@
           [ngClass]="{ active: getOption(option.key, 'isSelected') }"
         >
           <input type="checkbox" [id]="option.key" [name]="option.key" (click)="toggleOption(option.key)" />
-          <label [for]="option.key">{{ option.key | titlecase }}</label>
+          <label [for]="option.key">{{ getOption(option.key, "description") }}</label>
           <!-- SELECTED BUT NOT SAVED -->
           <ng-container *ngIf="getOption(option.key, 'isSelected') && !getOption(option.key, 'isSaved')">
             <fa-icon class="isSelected" [icon]="faCheck"></fa-icon>
@@ -40,7 +40,7 @@
     <div class="container-progress" *ngIf="progressVisibility">
       <nav class="progress-info">
         <!-- <p class="progress-text" [ngStyle]="{ color: progressError ? 'red' : '#363636' }"> -->
-        <p class="progress-text" [ngStyle]="{color: getProgressErrorColor()}">
+        <p class="progress-text" [ngStyle]="{ color: getProgressErrorColor() }">
           {{ progressMessage }}
         </p>
       </nav>

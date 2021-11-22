@@ -1,6 +1,6 @@
 import fs = require("fs-extra");
 import os = require("os");
-import { spawn, SpawnOptions } from "child_process";
+import { exec, spawn, SpawnOptions } from "child_process";
 
 /**
  * Define if the path passed in argument is accessible and writeable
@@ -41,22 +41,30 @@ export function getDateTime(): string {
  * Execute the command passed in parameter throught cmd.exe
  * @param command the command that needs to be executed
  */
-export function execute(command: string): void {
-  // Build args
-  let args = ["/s", "/c", "start", "", command];
-  let opts: SpawnOptions = {
-    shell: false,
-    detached: true,
-    stdio: "ignore",
-    windowsHide: true,
-  };
+export function execute(command: string, mode?: string): void {
+  if (mode === "spawn") {
+    // Build args
+    let args = ["/s", "/c", "start", "", command];
+    let opts: SpawnOptions = {
+      shell: false,
+      detached: true,
+      stdio: "ignore",
+      windowsHide: true,
+    };
 
-  // Execute statment
-  let stmt = spawn("cmd.exe", args, opts);
+    // Execute statment
+    let stmt = spawn("cmd.exe", args, opts);
 
-  if (stmt.stderr) {
-    stmt.stderr.on("data", (data) => {
-      console.error(`stderr: ${data}`);
+    if (stmt.stderr) {
+      stmt.stderr.on("data", (data) => {
+        console.error(`stderr: ${data}`);
+      });
+    }
+  } else {
+    exec(command, (error, stdout, stderr) => {
+      if (error) {
+        // TODO
+      }
     });
   }
 }
