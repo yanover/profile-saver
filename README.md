@@ -62,6 +62,11 @@ To run the application in development mode :
 To build a portable executable :  
 ``$ npm run electron:build``
 
+## Testing
+Test are implemented using MOCHA. Test files are located under /e2e/.
+
+To run test  :  
+``$ npm run e2e``
 
 ## Technologies
 I wanted to challenge myself and use something that I'm not confortable with. **Electron** is the server side technology, that's my first try with the framework. As I already know **Angular**, I used that technology in the render side. I know it's not obviously the best choice, angular is a big part and a raw html/css file could have done the job too. However, I like the way Angular make things modular and I thought it cool be cool to pack it with Electron.

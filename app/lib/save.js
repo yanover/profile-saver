@@ -122,7 +122,7 @@ function saveDesktop() {
                     }
                     return [4 /*yield*/, fs.copy(desktopPath, finalDestination, { overwrite: true }).catch(function (err) {
                             console.error(err);
-                            throw new Error("An error occured during desktop save");
+                            throw err;
                         })];
                 case 2: 
                 // Copy content
@@ -161,7 +161,7 @@ function saveSignature() {
                     }
                     return [4 /*yield*/, fs.copy(signaturePath, finalDestination, { overwrite: true }).catch(function (err) {
                             console.error(err);
-                            throw new Error("An error occured during signature save");
+                            throw err;
                         })];
                 case 2: 
                 // Copy content
@@ -252,7 +252,7 @@ function savePrinters(contents) {
                 }
                 // Sort data
                 printers.forEach(function (printer) {
-                    if (printer.name.includes("s2lprint3")) {
+                    if (printer.name.includes(config_service_1.Default.PRINT_SERVER)) {
                         printersSorted.push(printer);
                     }
                 });

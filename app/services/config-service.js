@@ -7,6 +7,7 @@ var utils_service_1 = require("./utils-service");
 exports.Default = {
     DIRECTORY_PATH: "m:\\",
     DIRECTORY_NAME: "Profile-Saver",
+    PRINT_SERVER: "s2lprint3"
 };
 // Enum for managing folders name
 var Repertories;

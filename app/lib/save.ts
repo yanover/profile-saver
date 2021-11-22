@@ -78,7 +78,7 @@ export async function saveDesktop(): Promise<void> {
     // Copy content
     return await fs.copy(desktopPath, finalDestination, { overwrite: true }).catch((err) => {
       console.error(err);
-      throw new Error("An error occured during desktop save");
+      throw err;
     });
   } catch (err) {
     console.error(err);
@@ -106,7 +106,7 @@ export async function saveSignature(): Promise<void> {
       // Copy content
       return await fs.copy(signaturePath, finalDestination, { overwrite: true }).catch((err) => {
         console.error(err);
-        throw new Error("An error occured during signature save");
+        throw err;
       });
     } else {
       // TODO --> Throw warning error
