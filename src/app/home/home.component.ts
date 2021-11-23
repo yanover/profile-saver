@@ -1,6 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { faSync } from "@fortawesome/free-solid-svg-icons";
 import { ElectronService } from "ngx-electron";
+import { Observable, Subscription } from "rxjs";
 import { IComputerInfo } from "../shared/models/IComputerInfo";
 import { DataService } from "../shared/services/data.service";
 
@@ -9,23 +10,28 @@ import { DataService } from "../shared/services/data.service";
   templateUrl: "./home.component.html",
   styleUrls: ["./home.component.scss"],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   faSync = faSync;
 
   info: IComputerInfo;
+  subscription: Subscription;
 
   constructor(private _electronService: ElectronService, private dataService: DataService) {}
 
   ngOnInit(): void {
     this.resetInfo();
 
-    this.dataService.getData().subscribe(async (computerInfo: IComputerInfo) => {
+    this.subscription = this.dataService.getData().subscribe(async (computerInfo: IComputerInfo) => {
       this.info = computerInfo;
       if (computerInfo == undefined) {
         console.log("Subject is empty");
         await this.process();
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   async process(): Promise<void> {
