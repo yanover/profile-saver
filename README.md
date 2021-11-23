@@ -1,6 +1,19 @@
-# Introduction
+<p align="center">
+  <img src="https://i.postimg.cc/8k95M69T/favicon-256x256.png" width="120" alt="Nest Logo" />
+</p>
 
-Profile-saver is an application that let you backup and restore current user profil. If you face a corrupted profil and need to remove it and recreated it directly behind, it's always
+<p align="center">A simple <a href="https://www.electronjs.org/" target="_blank">Electron</a> application to backup and restore a Windows profile</p>
+<p align="center">
+    <a href="https://angular.io/"target="_blank"><img src="https://img.shields.io/badge/angular-v12.1.2-red" alt="Angular" /></a>
+    <a href="https://www.electronjs.org/" target="_blank"><img src="https://img.shields.io/badge/electron-v13.1.7-blue" alt="Electron" /></a>
+    <a href="https://fr.wikipedia.org/wiki/Licence_MIT" target="_blank"><img src="https://img.shields.io/badge/license-MIT-green" alt="Licence" /></a>
+</p>
+
+
+
+# Description
+
+Profil-saver is an application that let you backup and restore current user profil. If you face a corrupted profil and need to remove it and recreated it directly behind, it's always
 useful to be able to create a backup of the current profil and restore it when the fresh profil has been created.
 
 Profil-saver will by default search a local drive with the M:\ path, If this location is not found, it will user document folder. Once the save location is determined, there is two features, save or restore the profile from an existing backup.
@@ -48,7 +61,7 @@ profile-saver > app > services > config-service.js
 - save network printers
 - save taskbar
 - save Outlook signature
-- save Edge's bookmarks
+- save Edge's bookmarks (Chromium only)
 
 #### Restore from save
 
