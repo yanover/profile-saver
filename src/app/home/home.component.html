@@ -67,11 +67,10 @@
   </div>
 
   <div class="main-logo">
-    <img *ngIf="info.loaded; else notLoaded" src="assets/icons/favicon.png" />
+    <img *ngIf="info.loaded; else notLoaded" src="assets/icons/favicon.png" (click)="process()" />
     <ng-template #notLoaded>
       <app-loading></app-loading>
     </ng-template>
-    <div class="logo-ground"></div>
   </div>
 
   <div class="bottom-box">

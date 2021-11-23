@@ -250,7 +250,7 @@ function savePrinters(contents) {
                     console.log("Destination file (" + fileDestination + ") doesn't exist, creating");
                     fs.createFileSync(fileDestination);
                 }
-                // Sort data
+                // Sort data depending print server name
                 printers.forEach(function (printer) {
                     if (printer.name.includes(config_service_1.Default.PRINT_SERVER)) {
                         printersSorted.push(printer);
@@ -278,7 +278,7 @@ function saveBrowser() {
         var finalDestination, bookmarksPath, cmd;
         return __generator(this, function (_a) {
             finalDestination = config_service_1.getFullPath() + "\\" + config_service_1.Repertories.browser;
-            bookmarksPath = "C:\\Users\\schoeniy\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Bookmarks";
+            bookmarksPath = utils_service_1.userInfo().homedir + "\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Bookmarks";
             try {
                 // Any bookmarks to save ?
                 if (fs.existsSync(bookmarksPath)) {
@@ -287,19 +287,23 @@ function saveBrowser() {
                         fs.mkdirSync(finalDestination);
                     }
                     cmd = "copy \"" + bookmarksPath + "\" " + finalDestination;
-                    console.log(cmd);
+                    // Run builded command
                     try {
                         utils_service_1.execute(cmd);
                     }
                     catch (err) {
-                        console.error(err);
-                        // Swallow
+                        throw err;
                     }
+                }
+                else {
+                    // TODO --> Throw warning error
+                    // TODO --> This error is propagated to the next try catch stmt, that make no possibility to make a custom message in the last try catch
+                    throw new common_1.WarningException("Le fichier de favoris est introuvable !");
                 }
             }
             catch (err) {
                 console.error(err);
-                throw new Error("An error occured during browser save");
+                throw new Error(err);
             }
             return [2 /*return*/];
         });

@@ -288,21 +288,26 @@ exports.restorePrinters = restorePrinters;
  * Description : Restore browser process, copy registry item and edge's folder
  *               This process is only available with edge chromium
  * @return Promise<void>
- * @throws
+ * @throws TODO
  */
 function restoreBrowser() {
     return __awaiter(this, void 0, void 0, function () {
-        var registryKey, finalDestination, browserPath;
+        var rootPathSource, rootPathDestination, cmd;
         return __generator(this, function (_a) {
-            registryKey = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Taskband";
-            finalDestination = config_service_1.getFullPath() + "\\" + config_service_1.Repertories.browser;
-            browserPath = utils_service_1.userInfo().homedir + "\\AppData\\Local\\Microsoft\\Edge";
-            // Retrieve .json file
-            if (fs.existsSync(finalDestination)) {
-                /* fs.copySync(contentDestination, taskbarPath, { overwrite: true }); */
+            rootPathSource = utils_service_1.userInfo().homedir + "\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default";
+            rootPathDestination = config_service_1.getFullPath() + "\\" + config_service_1.Repertories.browser;
+            if (fs.existsSync(rootPathDestination)) {
+                cmd = "xcopy /Y " + rootPathDestination + "\\Bookmarks \"" + rootPathSource + "\"";
+                // Run builded command
+                try {
+                    utils_service_1.execute(cmd);
+                }
+                catch (err) {
+                    throw err;
+                }
             }
             else {
-                console.error("Error detected in restorBrowser, folder " + finalDestination + " not found");
+                console.error("Error detected in restoreBrowser, folder " + rootPathDestination + " not found");
                 throw new Error("An error occured during browser restoration");
             }
             return [2 /*return*/];

@@ -188,7 +188,7 @@ export async function savePrinters(contents: Electron.WebContents): Promise<void
       console.log(`Destination file (${fileDestination}) doesn't exist, creating`);
       fs.createFileSync(fileDestination);
     }
-    // Sort data
+    // Sort data depending print server name
     printers.forEach((printer: Electron.PrinterInfo) => {
       if (printer.name.includes(Default.PRINT_SERVER)) {
         printersSorted.push(printer);
@@ -209,31 +209,30 @@ export async function savePrinters(contents: Electron.WebContents): Promise<void
  */
 export async function saveBrowser(): Promise<void> {
   let finalDestination = `${getFullPath()}\\${Repertories.browser}`;
-  const bookmarksPath = `C:\\Users\\schoeniy\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Bookmarks`;
+  const bookmarksPath = `${userInfo().homedir}\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Bookmarks`;
 
   try {
     // Any bookmarks to save ?
     if (fs.existsSync(bookmarksPath)) {
-      
       if (!fs.existsSync(finalDestination)) {
         console.log(`Destination folder (${finalDestination}) doesn't exist, creating`);
         fs.mkdirSync(finalDestination);
       }
-      // Copy edge bookmarks
-      // await fs.copyFile(bookmarksPath, finalDestination);
-
+      //  Build command
       let cmd = `copy "${bookmarksPath}" ${finalDestination}`;
-      console.log(cmd)
-
+      // Run builded command
       try {
         execute(cmd);
       } catch (err) {
-        console.error(err);
-        // Swallow
+        throw err;
       }
+    } else {
+      // TODO --> Throw warning error
+      // TODO --> This error is propagated to the next try catch stmt, that make no possibility to make a custom message in the last try catch
+      throw new WarningException("Le fichier de favoris est introuvable !");
     }
   } catch (err) {
     console.error(err);
-    throw new Error("An error occured during browser save");
+    throw new Error(err);
   }
 }

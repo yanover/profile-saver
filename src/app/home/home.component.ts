@@ -1,6 +1,8 @@
 import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
+import { faSync } from "@fortawesome/free-solid-svg-icons";
 import { ElectronService } from "ngx-electron";
+import { IComputerInfo } from "../shared/models/IComputerInfo";
+import { DataService } from "../shared/services/data.service";
 
 @Component({
   selector: "app-home",
@@ -8,25 +10,42 @@ import { ElectronService } from "ngx-electron";
   styleUrls: ["./home.component.scss"],
 })
 export class HomeComponent implements OnInit {
-  info: {
-    username: string;
-    os: string;
-    version: string;
-    homedir: string;
-    architecture: string;
-    memory: number;
-    loaded: boolean;
-    storage: {
-      desktop: number;
-      downloads: number;
-      documents: number;
-      total: number;
-    };
-  };
+  faSync = faSync;
 
-  constructor(private _electronService: ElectronService) {}
+  info: IComputerInfo;
+
+  constructor(private _electronService: ElectronService, private dataService: DataService) {}
 
   ngOnInit(): void {
+    this.resetInfo();
+
+    this.dataService.getData().subscribe(async (computerInfo: IComputerInfo) => {
+      this.info = computerInfo;
+      if (computerInfo == undefined) {
+        console.log("Subject is empty");
+        await this.process();
+      }
+    });
+  }
+
+  async process(): Promise<void> {
+    this.info = await this._electronService.ipcRenderer.invoke("retrieve-info");
+    this.info.storage = await this._electronService.ipcRenderer.invoke("retrieve-storage");
+    this.calcTotal();
+    this.info.loaded = true;
+    this.dataService.setData(this.info);
+  }
+
+  calcTotal(): void {
+    this.info.storage.total = 0;
+    for (let key in this.info.storage) {
+      if (key != "total") {
+        this.info.storage.total = +((Math.round(this.info.storage.total + this.info.storage[key]) * 100) / 100);
+      }
+    }
+  }
+
+  resetInfo(): void {
     this.info = {
       username: "",
       os: "",
@@ -37,27 +56,5 @@ export class HomeComponent implements OnInit {
       loaded: false,
       storage: { desktop: 0, downloads: 0, documents: 0, total: 0 },
     };
-    this.process();
-  }
-
-  async process() {
-    this.info = await this._electronService.ipcRenderer.invoke("retrieve-info");
-    this.info.storage = await this._electronService.ipcRenderer.invoke(
-      "retrieve-storage"
-    );
-    this.calcTotal();
-    this.info.loaded = true;
-  }
-
-  calcTotal() {
-    this.info.storage.total = 0;
-    for (let key in this.info.storage) {
-      if (key != "total") {
-        this.info.storage.total = +(
-          (Math.round(this.info.storage.total + this.info.storage[key]) * 100) /
-          100
-        );
-      }
-    }
   }
 }

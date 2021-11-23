@@ -10,9 +10,20 @@ import { WebviewDirective } from "./directives/";
 import { LoadingComponent } from "./components/";
 import { LoadingDotComponent } from "./components/";
 
+// Services
+import { DataService } from "./services/data.service";
+
 @NgModule({
   declarations: [WebviewDirective, LoadingComponent, LoadingDotComponent],
   imports: [CommonModule, TranslateModule, FormsModule],
-  exports: [TranslateModule, WebviewDirective, FormsModule, FontAwesomeModule, LoadingComponent, LoadingDotComponent],
+  exports: [
+    TranslateModule,
+    WebviewDirective,
+    FormsModule,
+    FontAwesomeModule,
+    LoadingComponent,
+    LoadingDotComponent,
+    DataService,
+  ],
 })
 export class SharedModule {}

@@ -223,19 +223,23 @@ export async function restorePrinters(contents: Electron.WebContents): Promise<v
  * Description : Restore browser process, copy registry item and edge's folder
  *               This process is only available with edge chromium
  * @return Promise<void>
- * @throws
+ * @throws TODO
  */
 export async function restoreBrowser(): Promise<void> {
-  const registryKey: string = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Taskband";
+  const rootPathSource = `${userInfo().homedir}\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default`;
+  const rootPathDestination = `${getFullPath()}\\${Repertories.browser}`;
 
-  let finalDestination: string = `${getFullPath()}\\${Repertories.browser}`;
-  const browserPath = `${userInfo().homedir}\\AppData\\Local\\Microsoft\\Edge`;
-
-  // Retrieve .json file
-  if (fs.existsSync(finalDestination)) {
-    /* fs.copySync(contentDestination, taskbarPath, { overwrite: true }); */
+  if (fs.existsSync(rootPathDestination)) {
+    //  Build command
+    let cmd = `xcopy /Y ${rootPathDestination}\\Bookmarks "${rootPathSource}"`;
+    // Run builded command
+    try {
+      execute(cmd);
+    } catch (err) {
+      throw err;
+    }
   } else {
-    console.error(`Error detected in restorBrowser, folder ${finalDestination} not found`);
+    console.error(`Error detected in restoreBrowser, folder ${rootPathDestination} not found`);
     throw new Error("An error occured during browser restoration");
   }
 }

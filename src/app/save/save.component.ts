@@ -117,6 +117,8 @@ export class SaveComponent implements OnInit {
               this.options[key].isSaved = true;
             } catch (err) {
               // Error occured backend side
+              console.log(err);
+
               if (err.toString().indexOf("WarningException") >= 0) {
                 this.progressError = "warning";
                 this.setProgressMessage(err.toString().split(":")[4]);

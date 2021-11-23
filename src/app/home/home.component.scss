@@ -114,20 +114,11 @@
       top: 30px;
       left: 25px;
       position: absolute;
-    }
 
- /*    .beaver-ground {
-      display: block;
-      position: absolute;
-      width: 131px;
-      height: 35px;
-      bottom: -5px;
-      left: 10px;
-      background-color: #80c5a0;
-      border-radius: 45% / 110%;
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
-    } */
+      &:hover {
+        cursor: pointer;
+      }
+    }
   }
 
   .bottom-box {
