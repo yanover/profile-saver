@@ -1,15 +1,29 @@
-<p align="center">
+<!-- <p align="center">
+
   <img src="https://i.postimg.cc/8k95M69T/favicon-256x256.png" width="120" alt="Nest Logo" />
 </p>
 
-<p align="center">A simple <a href="https://www.electronjs.org/" target="_blank">Electron</a> application to backup and restore a Windows profile</p>
+<p align="center">A simple
+
+    <a href="https://www.electronjs.org/" target="_blank">Electron</a> application to backup and restore a Windows profile
+</p>
 <p align="center">
+
     <a href="https://angular.io/"target="_blank"><img src="https://img.shields.io/badge/angular-v12.1.2-red" alt="Angular" /></a>
     <a href="https://www.electronjs.org/" target="_blank"><img src="https://img.shields.io/badge/electron-v13.1.7-blue" alt="Electron" /></a>
     <a href="https://fr.wikipedia.org/wiki/Licence_MIT" target="_blank"><img src="https://img.shields.io/badge/license-MIT-green" alt="Licence" /></a>
-</p>
+</p> -->
+
+<table align="center"><tr><td align="center" width="9999">
+<img src="https://i.postimg.cc/8k95M69T/favicon-256x256.png" align="center" width="150" alt="Project icon">
 
 
+# Profil Saver
+
+<a href="https://angular.io/" target="_blank"><img src="https://img.shields.io/badge/angular-v12.1.2-red" alt="Angular" /></a>
+<a href="https://www.electronjs.org/" target="_blank"><img src="https://img.shields.io/badge/electron-v13.1.7-blue" alt="Electron" /></a>
+<a href="https://fr.wikipedia.org/wiki/Licence_MIT" target="_blank"><img src="https://img.shields.io/badge/license-MIT-green" alt="Licence" /></a>
+</td></tr></table>
 
 # Description
 
