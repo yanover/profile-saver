@@ -48,7 +48,7 @@ export class RestoreComponent implements OnInit {
 
   ngOnInit(): void {
     this.saveLoaded = false;
-    this.options = { annuaire: { isSelected: true, isSaved: false } };
+    this.options = { annuaire: { isSelected: false, isSaved: false } };
     this.itemToRestore = {
       desktop: false,
       printers: false,

@@ -32,10 +32,10 @@
         <div
           class="selection-group"
           *ngFor="let option of options | keyvalue"
-          (click)="toggleOption(option.key)"
+          
           [ngClass]="{ active: getOption(option.key, 'isSelected') }"
-        >
-          <input type="checkbox" [id]="option.key" [name]="option.key" (click)="toggleOption(option.key)" />
+        > <!-- (click)="toggleOption(option.key)" -->
+          <input type="checkbox" [id]="option.key" [name]="option.key"  /> <!-- (click)="toggleOption(option.key)" -->
           <label [for]="option.key">{{ option.key | titlecase }}</label>
           <!-- SELECTED BUT NOT SAVED -->
           <ng-container *ngIf="getOption(option.key, 'isSelected') && !getOption(option.key, 'isSaved')">
