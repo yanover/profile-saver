@@ -16,14 +16,7 @@ import { DataService } from "./services/data.service";
 @NgModule({
   declarations: [WebviewDirective, LoadingComponent, LoadingDotComponent],
   imports: [CommonModule, TranslateModule, FormsModule],
-  exports: [
-    TranslateModule,
-    WebviewDirective,
-    FormsModule,
-    FontAwesomeModule,
-    LoadingComponent,
-    LoadingDotComponent,
-    DataService,
-  ],
+  exports: [TranslateModule, WebviewDirective, FormsModule, FontAwesomeModule, LoadingComponent, LoadingDotComponent],
+  providers: [DataService],
 })
 export class SharedModule {}

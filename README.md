@@ -3,6 +3,7 @@
 
 # Profil Saver
 
+<a href="https://angular.io/" target="_blank"><img src="https://img.shields.io/badge/maintained-yes-brightgreen" alt="Maintained" /></a>
 <a href="https://angular.io/" target="_blank"><img src="https://img.shields.io/badge/angular-v12.1.2-red" alt="Angular" /></a>
 <a href="https://www.electronjs.org/" target="_blank"><img src="https://img.shields.io/badge/electron-v13.1.7-blue" alt="Electron" /></a>
 <a href="https://fr.wikipedia.org/wiki/Licence_MIT" target="_blank"><img src="https://img.shields.io/badge/license-MIT-green" alt="Licence" /></a>
@@ -74,7 +75,13 @@ profile-saver > app > services > config-service.js
 
 ## Development
 
-To run the application in development mode :  
+To run the application in development mode, you will need the right tools installed in your local machine.
+
+- Install nodejs
+- Install npm
+- Install angular cli
+
+`$ npm install`  
 `$ npm start`
 
 ## Production

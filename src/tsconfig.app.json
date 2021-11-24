@@ -3,6 +3,7 @@
   "compilerOptions": {
     "outDir": "../out-tsc/app",
     "module": "es2015",
+    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "baseUrl": "",
     "types": []
@@ -19,6 +20,7 @@
     "preserveWhitespaces": true,
     "skipMetadataEmit": false,
     "disableTypeScriptVersionCheck": true,
+    "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   }
 }
