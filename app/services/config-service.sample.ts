@@ -3,9 +3,9 @@ import { isReacheable } from "./utils-service";
 
 // Enum for managing paths name
 export const Default = {
-  DIRECTORY_PATH: "m:\\",
+  DIRECTORY_PATH: "m:\\", // Make sure this location is reachable if you change it
   DIRECTORY_NAME: "Profile-Saver",
-  PRINT_SERVER: "printserver",
+  PRINT_SERVER: "printserver", // Adapte this value to you needs
 };
 
 // Enum for managing folders name
@@ -26,6 +26,7 @@ export enum Files {
 
 /**
  * This function is load during boot process, define the final directory for storing backup
+ * If the directory defined in Default.DIRECTORY_PATH is unreachable, default location will be user's document folder
  * @returns void
  * @throws Error - directory not found or permission denied
  */
