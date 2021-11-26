@@ -13,6 +13,8 @@ src/**/*.js
 app/**/*.js
 !app/tests/*.js
 
+# Config
+!app/services/config-service.sample.ts
 
 # dependencies
 node_modules
