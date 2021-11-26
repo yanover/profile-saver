@@ -24,7 +24,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.subscription = this.dataService.getData().subscribe(async (computerInfo: IComputerInfo) => {
       this.info = computerInfo;
       if (computerInfo == undefined) {
-        console.log("Subject is empty");
         await this.process();
       }
     });
