@@ -14,6 +14,21 @@ src/**/*.js
 # dependencies
 node_modules
 
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+testem.log
+/typings
+.env
+
+# e2e
+/e2e/*.js
+!/e2e/protractor.conf.js
+/e2e/*.map
+
 # IDEs and editors
 .idea
 .project
@@ -29,21 +44,6 @@ node_modules
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-
-# misc
-/.sass-cache
-/connect.lock
-/coverage
-/libpeerconnection.log
-npm-debug.log
-testem.log
-/typings
-.env
-
-# e2e
-/e2e/*.js
-!/e2e/protractor.conf.js
-/e2e/*.map
 
 # System Files
 .DS_Store

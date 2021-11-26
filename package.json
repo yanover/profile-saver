@@ -14,8 +14,8 @@
     "typescript",
     "sass",
     "windows",
-    "linux",
-    "profil"
+    "profil",
+    "backup"
   ],
   "main": "app/main.js",
   "private": true,
