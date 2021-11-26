@@ -41,6 +41,7 @@ profile-saver > app > services > config-service.js
     };
 
 # Screenshot
+
 <img src="https://i.postimg.cc/d31CWZKJ/screen01.jpg" width="720"/>
 
 # Features
@@ -91,7 +92,17 @@ To build a portable executable :
 
 ## Testing
 
-Test are implemented using MOCHA. Test files are located under /e2e/.
+### Unit and integration tests
+
+Unit test and integration tests are limplemented using jest. The test files are located under /app/tests
+
+To run test :  
+`$ cd /app/`  
+`$ npm test`
+
+### End to end tests
+
+Test e2e are implemented using MOCHA. Test files are located under /e2e/.
 
 To run test :  
 `$ npm run e2e`

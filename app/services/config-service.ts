@@ -1,4 +1,3 @@
-import fs = require("fs-extra");
 import os = require("os");
 import { isReacheable } from "./utils-service";
 

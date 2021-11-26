@@ -5,6 +5,9 @@
   "private": true,
   "description": "TODO",
   "author": "Yann Schoeni",
+  "scripts": {
+    "test": "jest --verbose"
+  },
   "dependencies": {
     "@electron/remote": "1.2.0",
     "fast-folder-size": "^1.4.0",
@@ -12,6 +15,7 @@
     "regedit": "^5.0.0"
   },
   "devDependencies": {
-    "@types/node": "^16.7.10"
+    "@types/node": "^16.7.10",
+    "jest": "^27.3.1"
   }
 }

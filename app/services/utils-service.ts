@@ -8,13 +8,17 @@ import { exec, spawn, SpawnOptions } from "child_process";
  * @returns true = ok, can access, read and write | false = permission denied
  */
 export function isReacheable(path: string): boolean {
-  try {
-    fs.accessSync(path, fs.constants.R_OK | fs.constants.W_OK);
-    console.log(`${path} is both readable and writable`);
-    return true;
-  } catch (err) {
-    return false;
+  if (fs.existsSync(path)) {
+    try {
+      fs.accessSync(path, fs.constants.W_OK);
+      console.log(`Path : ${path} is reacheable`);
+      return true;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
   }
+  return false;
 }
 
 /**
