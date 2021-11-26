@@ -5,7 +5,7 @@ import { isReacheable } from "./utils-service";
 export const Default = {
   DIRECTORY_PATH: "m:\\",
   DIRECTORY_NAME: "Profile-Saver",
-  PRINT_SERVER: "s2lprint3",
+  PRINT_SERVER: "printserver",
 };
 
 // Enum for managing folders name

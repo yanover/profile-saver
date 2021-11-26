@@ -32,6 +32,8 @@ Currently runs with:
 
 If you need to change default save location, there is for now no simple way. I tried to use dotenv but it didn't work as expected so I decided to put my configuration variable directly in the configuration service. If you need to change something there, you gonna have to repack the application.
 
+Before repacking the application, remove the sample word in the filename (app > services > config-service.sample.js)
+
 profile-saver > app > services > config-service.js
 
     export const Default = {
