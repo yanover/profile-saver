@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { faSync } from "@fortawesome/free-solid-svg-icons";
+import { faCog } from "@fortawesome/free-solid-svg-icons";
 import { ElectronService } from "ngx-electron";
-import { Observable, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 import { IComputerInfo } from "../shared/models/IComputerInfo";
 import { DataService } from "../shared/services/data.service";
 
@@ -11,7 +11,7 @@ import { DataService } from "../shared/services/data.service";
   styleUrls: ["./home.component.scss"],
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  faSync = faSync;
+  faCog = faCog;
 
   info: IComputerInfo;
   subscription: Subscription;

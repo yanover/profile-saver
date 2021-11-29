@@ -13,14 +13,13 @@ const regedit = require("regedit");
  * @returns Promise<number>
  */
 export async function initSave(win: any): Promise<number> {
-  let response: number = 0;
+  let response: number = 1;
 
   try {
-    let finalDestination = `${getFullPath()}\\${Files.info}`;
-
     if (!fs.existsSync(getFullPath())) {
       // Folder doesn't exist, creating
       fs.mkdirSync(getFullPath());
+      console.log(`Creating folder at : ${getFullPath()}`);
     } else if (fs.readdirSync(getFullPath()).length > 0) {
       // Carefull, there is already a save in the final destination (oui = 1)
       response = dialog.showMessageBoxSync(win, {
@@ -29,12 +28,11 @@ export async function initSave(win: any): Promise<number> {
         title: "Confirmation",
         message: `Attention, une sauvegarde est déjà présente au répertoire "${getFullPath()}", êtes-vous certain de vouloir écraser son contenu ?`,
       });
-    } else {
-      // Folder exist but is empty
-      response = 1;
     }
 
     if (response) {
+      // Build full path to information file
+      let finalDestination = `${getFullPath()}\\${Files.info}`;
       // Create info file
       if (!fs.existsSync(finalDestination)) {
         fs.createFileSync(finalDestination);

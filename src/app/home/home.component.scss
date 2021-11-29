@@ -6,6 +6,17 @@
     height: 65%;
     display: flex;
 
+    .settings {
+      position: absolute;
+      right: 1rem;
+      top: 1rem;
+      cursor: pointer;
+
+      fa-icon {
+        color: #363636;
+      }
+    }
+
     .main-title {
       width: 100%;
       margin: 5% 0 0 0;
