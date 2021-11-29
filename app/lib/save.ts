@@ -44,10 +44,8 @@ export async function initSave(win: any): Promise<number> {
 
       // Empty all folder
       Object.keys(Repertories).map((key) => {
-        fs.rmSync(`${getFullPath()}\\${Repertories[key]}`, { recursive: true, force: true });
+        fs.rmdirSync(`${getFullPath()}\\${Repertories[key]}`, { recursive: true });
       });
-
-      // TODO --> remove content folder
     }
 
     // Return result

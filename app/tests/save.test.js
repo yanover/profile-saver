@@ -1,4 +1,4 @@
-const { setDirectoryPath } = require("../services/config-service");
+const { setDirectoryPath, Files, getFullPath } = require("../services/config-service");
 const fs = require("fs-extra");
 const path = require('path');
 const { randomUUID } = require("crypto");
@@ -15,14 +15,20 @@ beforeAll(() => {
 });
 
 afterAll(() => {
+    // Remove test folder at the end
     fs.rmdirSync(TEST_PATH, { recursive: true })
 })
 
 // TODO
 test("Test initSave()", async () => {
-
-    await initSave();
-
+    // Execute initSave with default parameters
+    let test = await initSave();
+    console.log(`InitSave Result : ${test}`)
+    // Check if info file has been created
+    let r = fs.existsSync(getFullPath() + '\\' + Files.info)
+    console.log(r);
+    
+    expect(r).toBe(true)
 });
 
 

@@ -14,6 +14,7 @@ beforeAll(() => {
 
 afterAll(() => {
   try {
+    // Remove test folder at the end
     fs.rmdirSync(TEST_PATH)
   } catch (err) {
     // Swallow
