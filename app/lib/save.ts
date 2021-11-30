@@ -1,9 +1,8 @@
-import { log } from "console";
 import { dialog } from "electron";
 import fs = require("fs-extra");
 import { WarningException } from "../common";
 import { Files, getFullPath, Repertories, Default } from "../services/config-service";
-import { deleteFolderRecursive, execute, getDateTime, userInfo } from "../services/utils-service";
+import { execute, getDateTime, userInfo } from "../services/utils-service";
 
 const regedit = require("regedit");
 

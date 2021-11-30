@@ -1,7 +1,6 @@
 import os = require("os");
 
 const fastFolderSize = require("fast-folder-size");
-const childProcess = require("child_process");
 
 let info: {
   username: string;
