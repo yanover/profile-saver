@@ -35,28 +35,6 @@ test("Test if test drive is empty", () => {
   expect(resultTrue).toBe(true);
 });
 
-test("Test if deleteFolderRecursive() works", async () => {
-  // Create folders & files tree 
-  const folders = ["content", "config", "public"];
-  const files = ["test.txt", "config.inc", "index.html"]
-
-  folders.forEach((folder, idx) => {
-    fs.mkdirSync(`${TEST_PATH}\\${folder}`)
-    fs.createFileSync(`${TEST_PATH}\\${folder}\\${files[idx]}`)
-  })
-
-  // remove folder
-  deleteFolderRecursive(TEST_PATH)
-
-  // Check if folder still exist
-  const result = fs.existsSync(TEST_PATH);
-  expect(result).toBe(false);
-})
-
-test("Test if deleteFolderRecursive() throw an error in case of unreachable folder", async () => {
-  expect(() => { deleteFolderRecursive(UNREACHABLE_PATH) }).toThrow(`An error occured while trying to remove ${UNREACHABLE_PATH} recusively`);
-})
-
 // TODO, test access (writable or not)
 test("Test if isReacheable() return false if the drive is not accessible", () => {
   // Try to access unreachable drive

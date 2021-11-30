@@ -2,6 +2,7 @@ import fs = require("fs-extra");
 import os = require("os");
 import path = require("path");
 import { exec, spawn, SpawnOptions } from "child_process";
+import { getFullPath } from "./config-service";
 
 /**
  * Define if the path passed in argument is accessible and writeable
@@ -71,33 +72,6 @@ export function execute(command: string, mode?: string): void {
         // TODO
       }
     });
-  }
-}
-
-/**
- * Remove recursively all the content (files + directories) present in path
- * @param path The path to the folder that needs to be remove
- * @returns
- */
-export function deleteFolderRecursive(directoryPath: string): void {
-  try {
-    if (fs.existsSync(directoryPath)) {
-      fs.readdirSync(directoryPath).forEach((item) => {
-        const curPath = path.join(directoryPath, item);
-        if (fs.lstatSync(curPath).isDirectory()) {
-          // recurse
-          deleteFolderRecursive(curPath);
-        } else {
-          // delete file
-          fs.unlinkSync(curPath);
-        }
-      });
-      fs.rmdirSync(directoryPath);
-    } else {
-      throw new Error(`An error occured while trying to remove ${directoryPath} recusively`);
-    }
-  } catch (err) {
-    throw err;
   }
 }
 

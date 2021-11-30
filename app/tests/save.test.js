@@ -16,7 +16,7 @@ beforeAll(() => {
 
 afterAll(() => {
     // Remove test folder at the end
-    /* fs.rmdirSync(TEST_PATH, { recursive: true }) */
+    fs.rmdirSync(TEST_PATH, { recursive: true })
 })
 
 // TODO
@@ -31,6 +31,3 @@ test("Test initSave()", async () => {
     let infoFile = fs.existsSync(getFullPath() + '\\' + Files.info)
     expect(infoFile).toBe(true)
 });
-
-
-

@@ -32,17 +32,21 @@ export async function initSave(win: any): Promise<number> {
     }
 
     if (response) {
-      // remove all content
-      deleteFolderRecursive(rootPath);
-
       // Build full path to information file
       let finalDestination = `${rootPath}\\${Files.info}`;
       // Create info file
-      fs.createFileSync(finalDestination);
+      if (!fs.existsSync(finalDestination)) {
+        fs.createFileSync(finalDestination);
+      }
       // Write content - override if exists
       fs.writeFileSync(finalDestination, `Projet : SaveProfile\n`);
       fs.appendFileSync(finalDestination, `Auteur : Yann Schoeni\n`);
       fs.appendFileSync(finalDestination, `Date de la sauvegarde : ${getDateTime()}\n`);
+
+      // Remove all content
+      Object.keys(Repertories).map((key) => {
+        fs.rmdirSync(`${rootPath}\\${Repertories[key]}`, { recursive: true });
+      });
     }
 
     // Return result
@@ -138,8 +142,13 @@ export async function saveTaskbar(): Promise<void> {
         console.log(`Destination folder (${finalDestination}) doesn't exist, creating`);
         fs.mkdirSync(finalDestination);
       }
+      // Create content folder
+      if (!fs.existsSync(contentDestination)) {
+        console.log(`Destination folder (${contentDestination}) doesn't exist, creating`);
+        fs.mkdirSync(contentDestination);
+      }
       // Create json file
-      if (!fs.existsSync(regDestination) || !fs.existsSync(contentDestination)) {
+      if (!fs.existsSync(regDestination)) {
         console.log(`Destination file (${regDestination}) doesn't exist, creating`);
         fs.createFileSync(regDestination);
       }
