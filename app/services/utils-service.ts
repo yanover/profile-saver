@@ -1,5 +1,6 @@
 import fs = require("fs-extra");
 import os = require("os");
+import path = require("path");
 import { exec, spawn, SpawnOptions } from "child_process";
 
 /**
@@ -73,27 +74,31 @@ export function execute(command: string, mode?: string): void {
   }
 }
 
-export function deleteFolderRecursive(path): Promise<void> {
-  return new Promise((resolve, reject) => {
-    try {
-      if (fs.existsSync(path)) {
-        fs.readdirSync(path).forEach(function (file, index) {
-          var curPath = path + "/" + file;
-          if (fs.lstatSync(curPath).isDirectory()) {
-            // recurse
-            deleteFolderRecursive(curPath);
-          } else {
-            // delete file
-            fs.unlinkSync(curPath);
-          }
-        });
-        fs.rmdirSync(path);
-      }
-    } catch (err) {
-      reject(err);
+/**
+ * Remove recursively all the content (files + directories) present in path
+ * @param path The path to the folder that needs to be remove
+ * @returns
+ */
+export function deleteFolderRecursive(directoryPath: string): void {
+  try {
+    if (fs.existsSync(directoryPath)) {
+      fs.readdirSync(directoryPath).forEach((item) => {
+        const curPath = path.join(directoryPath, item);
+        if (fs.lstatSync(curPath).isDirectory()) {
+          // recurse
+          deleteFolderRecursive(curPath);
+        } else {
+          // delete file
+          fs.unlinkSync(curPath);
+        }
+      });
+      fs.rmdirSync(directoryPath);
+    } else {
+      throw new Error(`An error occured while trying to remove ${directoryPath} recusively`);
     }
-    resolve();
-  });
+  } catch (err) {
+    throw err;
+  }
 }
 
 export function userInfo(): os.UserInfo<string> {

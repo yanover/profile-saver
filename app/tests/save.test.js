@@ -16,7 +16,7 @@ beforeAll(() => {
 
 afterAll(() => {
     // Remove test folder at the end
-    fs.rmdirSync(TEST_PATH, { recursive: true })
+    /* fs.rmdirSync(TEST_PATH, { recursive: true }) */
 })
 
 // TODO
@@ -24,11 +24,12 @@ test("Test initSave()", async () => {
     // Execute initSave with default parameters
     let test = await initSave();
     console.log(`InitSave Result : ${test}`)
+    // Check if only info.txt has been created
+    let content = fs.readdirSync(getFullPath());
+    expect(["info.txt"]).toEqual(content);
     // Check if info file has been created
-    let r = fs.existsSync(getFullPath() + '\\' + Files.info)
-    console.log(r);
-    
-    expect(r).toBe(true)
+    let infoFile = fs.existsSync(getFullPath() + '\\' + Files.info)
+    expect(infoFile).toBe(true)
 });
 
 

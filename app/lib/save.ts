@@ -3,7 +3,7 @@ import { dialog } from "electron";
 import fs = require("fs-extra");
 import { WarningException } from "../common";
 import { Files, getFullPath, Repertories, Default } from "../services/config-service";
-import { execute, getDateTime, userInfo } from "../services/utils-service";
+import { deleteFolderRecursive, execute, getDateTime, userInfo } from "../services/utils-service";
 
 const regedit = require("regedit");
 
@@ -14,38 +14,35 @@ const regedit = require("regedit");
  */
 export async function initSave(win: any): Promise<number> {
   let response: number = 1;
+  const rootPath = getFullPath();
 
   try {
-    if (!fs.existsSync(getFullPath())) {
+    if (!fs.existsSync(rootPath)) {
       // Folder doesn't exist, creating
-      fs.mkdirSync(getFullPath());
-      console.log(`Creating folder at : ${getFullPath()}`);
-    } else if (fs.readdirSync(getFullPath()).length > 0) {
+      fs.mkdirSync(rootPath);
+      console.log(`Creating folder at : ${rootPath}`);
+    } else if (fs.readdirSync(rootPath).length > 0) {
       // Carefull, there is already a save in the final destination (oui = 1)
       response = dialog.showMessageBoxSync(win, {
         type: "warning",
         buttons: ["Non", "Oui"],
         title: "Confirmation",
-        message: `Attention, une sauvegarde est déjà présente au répertoire "${getFullPath()}", êtes-vous certain de vouloir écraser son contenu ?`,
+        message: `Attention, une sauvegarde est déjà présente au répertoire "${rootPath}", êtes-vous certain de vouloir écraser son contenu ?`,
       });
     }
 
     if (response) {
+      // remove all content
+      deleteFolderRecursive(rootPath);
+
       // Build full path to information file
-      let finalDestination = `${getFullPath()}\\${Files.info}`;
+      let finalDestination = `${rootPath}\\${Files.info}`;
       // Create info file
-      if (!fs.existsSync(finalDestination)) {
-        fs.createFileSync(finalDestination);
-      }
+      fs.createFileSync(finalDestination);
       // Write content - override if exists
       fs.writeFileSync(finalDestination, `Projet : SaveProfile\n`);
       fs.appendFileSync(finalDestination, `Auteur : Yann Schoeni\n`);
       fs.appendFileSync(finalDestination, `Date de la sauvegarde : ${getDateTime()}\n`);
-
-      // Empty all folder
-      Object.keys(Repertories).map((key) => {
-        fs.rmdirSync(`${getFullPath()}\\${Repertories[key]}`, { recursive: true });
-      });
     }
 
     // Return result

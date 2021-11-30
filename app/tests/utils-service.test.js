@@ -1,10 +1,11 @@
-const { isReacheable, isEmpty } = require("../services/utils-service");
+const { isReacheable, isEmpty, deleteFolderRecursive } = require("../services/utils-service");
 const fs = require("fs-extra");
 const path = require('path');
 const { randomUUID } = require("crypto");
 
-// Test folder path
+// Static variables
 const TEST_PATH = path.join(__dirname, `_testFolder__${randomUUID()}`)
+const UNREACHABLE_PATH = "I'm an unreacheable path";
 
 
 beforeAll(() => {
@@ -34,14 +35,32 @@ test("Test if test drive is empty", () => {
   expect(resultTrue).toBe(true);
 });
 
+test("Test if deleteFolderRecursive() works", async () => {
+  // Create folders & files tree 
+  const folders = ["content", "config", "public"];
+  const files = ["test.txt", "config.inc", "index.html"]
+
+  folders.forEach((folder, idx) => {
+    fs.mkdirSync(`${TEST_PATH}\\${folder}`)
+    fs.createFileSync(`${TEST_PATH}\\${folder}\\${files[idx]}`)
+  })
+
+  // remove folder
+  deleteFolderRecursive(TEST_PATH)
+
+  // Check if folder still exist
+  const result = fs.existsSync(TEST_PATH);
+  expect(result).toBe(false);
+})
+
+test("Test if deleteFolderRecursive() throw an error in case of unreachable folder", async () => {
+  expect(() => { deleteFolderRecursive(UNREACHABLE_PATH) }).toThrow(`An error occured while trying to remove ${UNREACHABLE_PATH} recusively`);
+})
+
 // TODO, test access (writable or not)
-test("Test if local drive is unreacheable", () => {
-  // Remove test directoryw
-  fs.rmdirSync(TEST_PATH);
-  // Test access again
-  const d = TEST_PATH
-  const resultFalse = isReacheable(d);
-  // Folder has been deleted, it should not be reacheable
+test("Test if isReacheable() return false if the drive is not accessible", () => {
+  // Try to access unreachable drive
+  const resultFalse = isReacheable(UNREACHABLE_PATH);
   expect(resultFalse).toBe(false);
 });
 
