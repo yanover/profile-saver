@@ -10,11 +10,12 @@ import {
   restoreBrowser,
 } from "./lib/restore";
 import { retrieveInfo, retrieveStorage } from "./lib/info";
-import { loadRootPath, getDirectoryPath, setDirectoryPath } from "./services/config-service";
+import { loadRootPath, getDirectoryPath, setDirectoryPath, Repertories } from "./services/config-service";
 import fs = require("fs-extra");
 import * as path from "path";
 import * as url from "url";
-import { directoryPicker } from "./services/utils-service";
+import { directoryPicker, userInfo } from "./services/utils-service";
+import { changeDefaultLocation } from "./lib/settings";
 
 // Initialize remote module
 require("@electron/remote/main").initialize();
@@ -27,6 +28,7 @@ function createWindow(): BrowserWindow {
   const electronScreen = screen;
   const iconPath = "src/assets/icons/favicon.png";
 
+  
   // Create the browser window.
   win = new BrowserWindow({
     width: 960,
@@ -187,10 +189,5 @@ ipcMain.handle("get-default-location", () => {
 });
 
 ipcMain.handle("set-default-location", async () => {
-  try {
-    let folder = await directoryPicker(win);
-    setDirectoryPath(folder);
-  } catch (err) {
-    throw err;
-  }
+  return await changeDefaultLocation(win);
 });

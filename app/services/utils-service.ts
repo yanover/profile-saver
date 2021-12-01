@@ -2,6 +2,7 @@ import fs = require("fs-extra");
 import os = require("os");
 import { exec, spawn, SpawnOptions } from "child_process";
 import { BrowserWindow, dialog } from "electron";
+import { WarningException } from "../common";
 
 /**
  * Define if the path passed in argument is accessible and writeable
@@ -82,5 +83,10 @@ export async function directoryPicker(win: BrowserWindow) {
   let file = await dialog.showOpenDialog(win, {
     properties: ["openDirectory"],
   });
+
+  if (file.canceled) {
+    throw new WarningException("Folder picked closed");
+  }
+
   return file.filePaths[0];
 }
