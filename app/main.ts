@@ -1,4 +1,4 @@
-import { app, BrowserWindow, screen, ipcMain, dialog } from "electron";
+import { app, BrowserWindow, screen, ipcMain } from "electron";
 import { initSave, saveDesktop, savePrinters, saveSignature, saveTaskbar, saveBrowser } from "./lib/save";
 import {
   getSave,
@@ -10,7 +10,7 @@ import {
   restoreBrowser,
 } from "./lib/restore";
 import { retrieveInfo, retrieveStorage } from "./lib/info";
-import { loadRootPath } from "./services/config-service";
+import { loadRootPath, getDirectoryPath } from "./services/config-service";
 import fs = require("fs-extra");
 import * as path from "path";
 import * as url from "url";
@@ -30,7 +30,7 @@ function createWindow(): BrowserWindow {
   win = new BrowserWindow({
     width: 960,
     height: 540,
-    autoHideMenuBar: true,
+    autoHideMenuBar: false,
     icon: iconPath,
     resizable: false,
     webPreferences: {
@@ -177,4 +177,10 @@ ipcMain.handle("restore-printers", async () => {
 
 ipcMain.handle("restore-browser", async () => {
   return await restoreBrowser();
+});
+
+// SETTINGS EVENTS
+
+ipcMain.handle("get-default-location", async () => {
+  return getDirectoryPath();
 });

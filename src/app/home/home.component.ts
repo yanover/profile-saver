@@ -11,8 +11,6 @@ import { DataService } from "../shared/services/data.service";
   styleUrls: ["./home.component.scss"],
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  faCog = faCog;
-
   info: IComputerInfo;
   subscription: Subscription;
 

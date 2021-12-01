@@ -1,0 +1,23 @@
+<div class="container">
+  <!-- TOP BOX -->
+  <div class="top-box">
+    <div class="main-title">
+      <h3>Paramètres</h3>
+    </div>
+  </div>
+  <!-- BOTTOM BOX -->
+  <div class="center-box">
+    <div class="center-box__input-group">
+      <label for="defaultDestination">Destination</label>
+      <input type="text" [value]="defaultLocation" name="defaultDestination" id="defaultDestination" disabled />
+      <input type="file" webkitdirectory (change)="fileChangeEvent($event)" />
+    </div>
+  </div>
+
+  <!-- BOTTOM BOX -->
+  <div class="bottom-box">
+    <button class="left-btn" [routerLink]="['/']">
+      <fa-icon [icon]="faArrowLeft"></fa-icon>
+    </button>
+  </div>
+</div>
