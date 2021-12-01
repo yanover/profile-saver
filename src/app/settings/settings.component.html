@@ -9,8 +9,10 @@
   <div class="center-box">
     <div class="center-box__input-group">
       <label for="defaultDestination">Destination</label>
-      <input type="text" [value]="defaultLocation" name="defaultDestination" id="defaultDestination" disabled />
-      <input type="file" webkitdirectory (change)="fileChangeEvent($event)" />
+      <button name="defaultDestination" id="defaultDestination" (click)="setDefaultDirectory()">
+        {{ defaultLocation }}
+      </button>
+      <!-- <input type="file" webkitdirectory (change)="fileChangeEvent($event)" /> -->
     </div>
   </div>
 

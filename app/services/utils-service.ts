@@ -1,8 +1,7 @@
 import fs = require("fs-extra");
 import os = require("os");
-import path = require("path");
 import { exec, spawn, SpawnOptions } from "child_process";
-import { getFullPath } from "./config-service";
+import { BrowserWindow, dialog } from "electron";
 
 /**
  * Define if the path passed in argument is accessible and writeable
@@ -77,4 +76,11 @@ export function execute(command: string, mode?: string): void {
 
 export function userInfo(): os.UserInfo<string> {
   return os.userInfo();
+}
+
+export async function directoryPicker(win: BrowserWindow) {
+  let file = await dialog.showOpenDialog(win, {
+    properties: ["openDirectory"],
+  });
+  return file.filePaths[0];
 }

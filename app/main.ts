@@ -10,10 +10,11 @@ import {
   restoreBrowser,
 } from "./lib/restore";
 import { retrieveInfo, retrieveStorage } from "./lib/info";
-import { loadRootPath, getDirectoryPath } from "./services/config-service";
+import { loadRootPath, getDirectoryPath, setDirectoryPath } from "./services/config-service";
 import fs = require("fs-extra");
 import * as path from "path";
 import * as url from "url";
+import { directoryPicker } from "./services/utils-service";
 
 // Initialize remote module
 require("@electron/remote/main").initialize();
@@ -181,6 +182,15 @@ ipcMain.handle("restore-browser", async () => {
 
 // SETTINGS EVENTS
 
-ipcMain.handle("get-default-location", async () => {
+ipcMain.handle("get-default-location", () => {
   return getDirectoryPath();
+});
+
+ipcMain.handle("set-default-location", async () => {
+  try {
+    let folder = await directoryPicker(win);
+    setDirectoryPath(folder);
+  } catch (err) {
+    throw err;
+  }
 });

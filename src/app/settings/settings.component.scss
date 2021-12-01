@@ -37,27 +37,12 @@
         color: #363636;
       }
 
-      input[type="text"] {
-        z-index: auto;
-        left: 50%;
-        transform: translate(-50%, 0);
+      button {
+        cursor: pointer;
         text-align: center;
         font-size: 1.3rem;
+        width: 10rem;
         color: black;
-        position: absolute;
-      }
-
-      input[type="file"] {
-        cursor: pointer;
-        z-index: 1000;
-        width: 16.3125rem;
-        height: 1.875rem;
-        opacity: 0;
-      }
-
-      input[type="file"],
-      input[type="file"]::-webkit-file-upload-button {
-        cursor: pointer;
       }
     }
   }
