@@ -1,7 +1,7 @@
 <table align="center"><tr><td align="center" width="9999">
 <img src="https://i.postimg.cc/8k95M69T/favicon-256x256.png" align="center" width="150" alt="Project icon">
 
-# Profil Saver
+# Profile Saver
 
 <a href="https://angular.io/" target="_blank"><img src="https://img.shields.io/badge/maintained-yes-brightgreen" alt="Maintained" /></a>
 <a href="https://angular.io/" target="_blank"><img src="https://img.shields.io/badge/angular-v12.1.2-red" alt="Angular" /></a>
@@ -12,10 +12,10 @@
 
 # Description
 
-Profil-saver is an application that let you backup and restore current user profil. If you face a corrupted profil and need to remove it and recreated it directly behind, it's always
-useful to be able to create a backup of the current profil and restore it when the fresh profil has been created.
+Profile-saver is an application that let you backup and restore current user profile. If you face a corrupted profile and need to remove it and recreated it directly behind, it's always
+useful to be able to create a backup of the current profile and restore it when the fresh profil has been created.
 
-Profil-saver will by default search a local drive with the M:\ path, If this location is not found, it will user document folder. Once the save location is determined, there is two features, save or restore the profile from an existing backup.
+Profile-saver will by default search a local drive with the M:\ path, If this location is not found, it will user document folder. Once the save location is determined, there is two features, save or restore the profile from an existing backup.
 
 When you save the profile that needs to be recreated, the application will create a folder called "Profile-Saver" in the location specified before. The process will generate a specific tree structure to store the backup.
 
@@ -53,7 +53,7 @@ profile-saver > app > services > config-service.js
 - Download folder
 - Document folder
 - Desktop folder
-- Total profil space
+- Total profile space
 - OS type
 - OS Version
 - Architecture
