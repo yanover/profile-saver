@@ -1,7 +1,12 @@
 <div id="main">
+  <!-- INFO -->
+  <div class="info">
+    <fa-icon [icon]="faQuestionCircle" (click)="openDialog()"></fa-icon>
+  </div>
+  <!-- SETTINGS -->
   <div class="settings">
     <fa-icon [icon]="faCog" routerLink="/settings"></fa-icon>
   </div>
-
+  <!-- CONTENT -->
   <router-outlet></router-outlet>
 </div>

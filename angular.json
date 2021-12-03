@@ -24,7 +24,7 @@
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
-            "assets": ["src/favicon.ico", "src/assets"],
+            "assets": ["src/assets/icons/favicon.ico", "src/assets"],
             "styles": ["src/styles.scss"],
             "scripts": [],
             "customWebpackConfig": {

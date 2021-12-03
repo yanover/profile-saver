@@ -17,7 +17,6 @@ import { AppComponent } from "./app.component";
 import { HomeModule } from "./home/home.module";
 import { RestoreModule } from "./restore/restore.module";
 import { SaveModule } from "./save/save.module";
-import { SettingsComponent } from "./settings/settings.component";
 import { SettingsModule } from "./settings/settings.module";
 
 // AoT requires an exported function for factories

@@ -58,15 +58,23 @@ body {
     }
   }
 
-  .settings {
+  .settings,
+  .info {
     position: absolute;
     z-index: 1;
-    right: 1rem;
     top: 1rem;
     cursor: pointer;
 
     fa-icon {
       color: #363636;
     }
+  }
+
+  .settings {
+    right: 1rem;
+  }
+
+  .info {
+    left: 1rem;
   }
 }

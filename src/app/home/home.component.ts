@@ -17,12 +17,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(private _electronService: ElectronService, private dataService: DataService) {}
 
   ngOnInit(): void {
-    this.resetInfo();
-
     this.subscription = this.dataService.getData().subscribe(async (computerInfo: IComputerInfo) => {
-      this.info = computerInfo;
       if (computerInfo == undefined) {
+        this.resetInfo();
         await this.process();
+      } else {
+        this.info = computerInfo;
       }
     });
   }
@@ -32,10 +32,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   async process(): Promise<void> {
+    // Retrieve informations
     this.info = await this._electronService.ipcRenderer.invoke("retrieve-info");
     this.info.storage = await this._electronService.ipcRenderer.invoke("retrieve-storage");
+    console.log(this.info);
+    // Process total storage
     this.calcTotal();
     this.info.loaded = true;
+    // Update subject
     this.dataService.setData(this.info);
   }
 
@@ -49,15 +53,22 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   resetInfo(): void {
+    console.log("CREATE EMPTY SHIT");
     this.info = {
       username: "",
+      architecture: "",
+      homedir: "",
       os: "",
       version: "",
-      homedir: "",
-      architecture: "",
       memory: 0,
       loaded: false,
-      storage: { desktop: 0, downloads: 0, documents: 0, total: 0 },
+      storage: {
+        desktop: 0,
+        documents: 0,
+        downloads: 0,
+        total: 0,
+      },
     };
+    console.log(this.info);
   }
 }

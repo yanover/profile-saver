@@ -46,10 +46,8 @@
       </nav>
       <div class="progress-bar" [ngStyle]="{ width: progress + '%' }"></div>
     </div>
-
     <button class="right-btn start-btn" (click)="process()" [disabled]="progressVisibility || getOptionLength() < 1">
       <nav *ngIf="!progressVisibility; else inProgress"><fa-icon [icon]="faRocket"></fa-icon> Start</nav>
-
       <ng-template #inProgress>
         <app-loading-dot></app-loading-dot>
       </ng-template>

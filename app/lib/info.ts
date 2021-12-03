@@ -1,31 +1,13 @@
 import os = require("os");
+import { IComputerInfo } from "../models/IComputerInfo";
 
 const fastFolderSize = require("fast-folder-size");
 
-let info: {
-  username: string;
-  os: string;
-  version: string;
-  homedir: string;
-  architecture: string;
-  memory: number;
-  storage: {
-    desktop: number;
-    downloads: number;
-    documents: number;
-  };
-};
+let info: IComputerInfo;
 
 export async function retrieveInfo() {
-  info = {
-    username: "",
-    os: "",
-    version: "",
-    homedir: "",
-    architecture: "",
-    memory: 0,
-    storage: { desktop: 0, downloads: 0, documents: 0 },
-  };
+  // Initialize default object
+  info = {} as IComputerInfo;
 
   // Get general informations
   info.username = os.userInfo().username;
@@ -38,23 +20,17 @@ export async function retrieveInfo() {
   return info;
 }
 
-export function retrieveStorage(): Promise<any> {
-  info = {
-    username: "",
-    os: "",
-    version: "",
-    homedir: "",
-    architecture: "",
-    memory: 0,
-    storage: { desktop: 0, downloads: 0, documents: 0 },
-  };
+export async function retrieveStorage(): Promise<any> {
+  // Initialize default object
+  info = {} as IComputerInfo;
+  info.storage = { desktop: 0, documents: 0, downloads: 0 };
 
   info.homedir = os.userInfo().homedir;
 
   let promises = new Array<Promise<any>>();
 
   for (let key in info.storage) {
-    /* console.log(`Checking size of : ${info.homedir}\\${key}`); */
+    console.log(`Checking size of : ${info.homedir}\\${key}`);
     promises.push(
       new Promise((resolve, reject) => {
         fastFolderSize(`${info.homedir}\\${key}`, (err: any, bytes: number) => {

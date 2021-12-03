@@ -5,7 +5,7 @@ import { directoryPicker, userInfo } from "../services/utils-service";
 /**
  * Open folder picker function and set the new location choose as default for backup
  * @param win main windows, used to pushed folder picker
- * @returns Promise<number>
+ * @returns Promise<void>
  */
 export async function changeDefaultLocation(win: BrowserWindow): Promise<void> {
   try {
