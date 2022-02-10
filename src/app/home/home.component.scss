@@ -129,6 +129,7 @@
 
     button {
       position: absolute;
+      bottom: 5%;
       height: 45px;
       width: 190px;
       border-radius: 0.6em;
@@ -138,12 +139,17 @@
       font-weight: bold;
 
       &.left-btn {
-        bottom: 5%;
         left: 10%;
       }
 
+      &.center-btn {
+        width: 95px;
+        left: 50%;
+        -webkit-transform: translateX(-50%);
+        transform: translateX(-50%);
+      }
+
       &.right-btn {
-        bottom: 5%;
         right: 10%;
       }
 

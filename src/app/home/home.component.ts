@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { faCog } from "@fortawesome/free-solid-svg-icons";
+import { faTools } from "@fortawesome/free-solid-svg-icons";
 import { ElectronService } from "ngx-electron";
 import { Subscription } from "rxjs";
 import { IComputerInfo } from "../shared/models/IComputerInfo";
@@ -11,6 +11,8 @@ import { DataService } from "../shared/services/data.service";
   styleUrls: ["./home.component.scss"],
 })
 export class HomeComponent implements OnInit, OnDestroy {
+  faTools = faTools;
+
   info: IComputerInfo;
   subscription: Subscription;
 

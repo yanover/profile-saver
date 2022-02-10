@@ -3,6 +3,9 @@
   background: white;
 
   .top-box {
+    height: 20%;
+    display: flex;
+
     .main-title {
       display: box;
       width: 100%;
@@ -17,23 +20,19 @@
 
   .center-box {
     display: flex;
-    width: 50%;
-    height: 60%;
+    height: 45%;
     margin: auto;
-    align-items: center;
-    justify-content: center;
-    border-radius: 1.25rem;
-    background: #363636;
     text-align: center;
 
     &__input-group {
       width: 100%;
+      margin: 2rem 0;
 
       label {
         display: block;
         margin: 0 0 1rem 0;
         padding: 0.3rem;
-        background: white;
+        background-color: #e0e0e0;
         color: #363636;
       }
 
@@ -42,7 +41,7 @@
         text-align: center;
         font-size: 1.3rem;
         min-width: 10rem;
-        max-width: 20rem;
+        max-width: 80%;
         color: black;
         word-wrap: break-word;
       }
@@ -50,19 +49,30 @@
   }
 
   .bottom-box {
+    width: 100%;
+    background: #363636;
+    height: 35%;
+    display: flex;
+
     button {
       position: absolute;
-      display: block;
-      bottom: 2rem;
-      left: 2rem;
       height: 45px;
-      width: 45px;
+      width: 190px;
       border-radius: 0.6em;
       background: rgba(216, 226, 245, 1);
       border: 3px solid white;
       font-size: 1em;
       font-weight: bold;
-      color: #363636;
+
+      &.left-btn {
+        bottom: 5%;
+        left: 10%;
+      }
+
+      &.right-btn {
+        bottom: 5%;
+        right: 10%;
+      }
 
       &:hover {
         transition: 0.4s;
