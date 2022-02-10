@@ -3,7 +3,7 @@ import { isReacheable } from "./utils-service";
 
 // Enum for managing paths name
 export const Default = {
-  DIRECTORY_PATH: "m:\\", // Make sure this location is reachable if you change it
+  DIRECTORY_PATH: "m:", // Make sure this location is reachable if you change it
   DIRECTORY_NAME: "Profile-Saver",
   PRINT_SERVER: "printserver", // Adapte this value to you needs
 };
@@ -39,7 +39,7 @@ export function loadRootPath(): Promise<void> {
     } else if (isReacheable(`${os.userInfo().homedir}\\Documents`)) {
       console.log("Default repertory not founded, swap for document folder");
       // Swap for default document folder
-      Default.DIRECTORY_PATH = `${os.userInfo().homedir}\\Documents\\`;
+      setDirectoryPath(`${os.userInfo().homedir}\\Documents`);
       resolve();
     }
     reject();
@@ -50,6 +50,25 @@ export function loadRootPath(): Promise<void> {
  * Return the full builded path
  * @returns string
  */
-export function getFullPath(): string {
-  return Default.DIRECTORY_PATH + Default.DIRECTORY_NAME;
+ export function getFullPath(): string {
+  return Default.DIRECTORY_PATH + "\\" + Default.DIRECTORY_NAME;
+}
+
+/**
+ * Set a new Default location for backup
+ */
+export function setDirectoryPath(path: string): void {
+  if (isReacheable(path)) {
+    Default.DIRECTORY_PATH = path;
+  } else {
+    throw new Error("Default directory provided is unreachable");
+  }
+}
+
+/**
+ * Return the current location for backup
+ * @returns string
+ */
+export function getDirectoryPath(): string {
+  return Default.DIRECTORY_PATH;
 }
