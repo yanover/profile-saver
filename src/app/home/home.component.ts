@@ -37,7 +37,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     // Retrieve informations
     this.info = await this._electronService.ipcRenderer.invoke("retrieve-info");
     this.info.storage = await this._electronService.ipcRenderer.invoke("retrieve-storage");
-    console.log(this.info);
     // Process total storage
     this.calcTotal();
     this.info.loaded = true;

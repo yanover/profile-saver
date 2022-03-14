@@ -12,8 +12,7 @@ export async function changeDefaultLocation(win: BrowserWindow): Promise<void> {
     // Invoke folder picker
     let folder = await directoryPicker(win);
     // Folder cannot be desktop
-    let desktopPath = `${userInfo().homedir}\\${Repertories.desktop}`;
-    if (folder.includes(desktopPath)) {
+    if (folder.includes(`${userInfo().homedir}\\${Repertories.desktop}`)) {
       throw new Error("Desktop is not allowed as a backup location");
     }
     // Set new location

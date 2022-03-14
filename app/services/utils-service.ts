@@ -3,6 +3,7 @@ import os = require("os");
 import { exec, spawn, SpawnOptions } from "child_process";
 import { BrowserWindow, dialog } from "electron";
 import { WarningException } from "../common";
+const fastFolderSize = require("fast-folder-size");
 
 /**
  * Define if the path passed in argument is accessible and writeable
@@ -89,4 +90,40 @@ export async function directoryPicker(win: BrowserWindow) {
   }
 
   return file.filePaths[0];
+}
+
+/**
+ * Return the size used by a folder in the filesystem
+ * @param path the path that needs to be inspected
+ * @param format format must be a string ["KB", "MB", "GB"], default is MB
+ */
+export async function getFolderSize(path: string, format: string = "MB"): Promise<number> {
+  let factor: number = 100;
+
+  switch (format) {
+    case "KB": {
+      factor = 0.0001;
+      break;
+    }
+    case "MB": {
+      factor = 0.1;
+      break;
+    }
+    case "GB": {
+      factor = 100;
+      break;
+    }
+    default: {
+      console.log(`Invalid format supply : ${format}`);
+      break;
+    }
+  }
+
+  console.log("Final format is : " + format);
+
+  return new Promise((res, rej) => {
+    fastFolderSize(path, (err: any, bytes: number) => {
+      res(Math.round((bytes / 1024 / 1024) * 100) / factor);
+    });
+  });
 }
