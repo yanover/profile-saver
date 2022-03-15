@@ -2,7 +2,7 @@ import { dialog } from "electron";
 import fs = require("fs-extra");
 import { WarningException } from "../common";
 import { Files, getFullPath, Repertories, Default } from "../services/config-service";
-import { execute, getDateTime, userInfo } from "../services/utils-service";
+import { spawn_cmd, getDateTime, userInfo } from "../services/utils-service";
 
 const regedit = require("regedit");
 
@@ -223,7 +223,7 @@ export async function saveBrowser(): Promise<void> {
       let cmd = `copy "${bookmarksPath}" ${finalDestination}`;
       // Run builded command
       try {
-        execute(cmd);
+        spawn_cmd(cmd);
       } catch (err) {
         throw err;
       }

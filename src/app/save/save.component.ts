@@ -8,6 +8,9 @@ import {
   faRocket,
   faTimesCircle,
 } from "@fortawesome/free-solid-svg-icons";
+import { Subscription } from "rxjs";
+import { IComputerInfo } from "../shared/models/IComputerInfo";
+import { DataService } from "../shared/services/data.service";
 
 @Component({
   selector: "app-save",
@@ -29,6 +32,14 @@ export class SaveComponent implements OnInit {
   progressMessage: string;
   progressError: string | boolean;
   color: string;
+
+  subscription: Subscription;
+  info: IComputerInfo;
+
+  defaultLocation: {
+    name: string;
+    size: number;
+  };
 
   options: {
     desktop: {
@@ -58,7 +69,7 @@ export class SaveComponent implements OnInit {
     };
   };
 
-  constructor(private _electronService: ElectronService) {}
+  constructor(private _electronService: ElectronService, private dataService: DataService) {}
 
   ngOnInit(): void {
     this.options = {
@@ -71,6 +82,18 @@ export class SaveComponent implements OnInit {
     this.progressMessage = "";
     this.progressError = false;
     this.progressVisibility = false;
+
+    // Retrieve profile size
+    this.subscription = this.dataService.getComputerInfo().subscribe(async (computerInfo: IComputerInfo) => {
+      if (computerInfo == undefined) {
+        // TODO
+      } else {
+        this.info = computerInfo;
+      }
+    });
+    // Retrieve destination info
+    this.loadCurrentDirectory();
+
     //if we don't have progress, set it to 0.
     if (!this.progress) {
       this.progress = 0;
@@ -105,6 +128,8 @@ export class SaveComponent implements OnInit {
         // Enable progressBar
         this.progressVisibility = true;
 
+        // Check if destination is big enough
+
         // Loop over each item
         for (let key in this.options) {
           if (this.options[key].isSelected) {
@@ -117,8 +142,6 @@ export class SaveComponent implements OnInit {
               this.options[key].isSaved = true;
             } catch (err) {
               // Error occured backend side
-              console.log(err);
-
               if (err.toString().indexOf("WarningException") >= 0) {
                 this.progressError = "warning";
                 this.setProgressMessage(err.toString().split(":")[4]);
@@ -180,5 +203,21 @@ export class SaveComponent implements OnInit {
       // All errors
       return "#d84315";
     }
+  }
+
+  loadCurrentDirectory() {
+    this._electronService.ipcRenderer
+      .invoke(`get-default-location`)
+      .then((result) => {
+        if (result) {
+          console.log(result);
+          this.defaultLocation = result;
+        }
+      })
+      .catch((error) => {
+        console.log();
+        
+        console.error(error);
+      });
   }
 }

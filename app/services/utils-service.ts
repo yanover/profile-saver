@@ -48,32 +48,41 @@ export function getDateTime(): string {
  * Execute the command passed in parameter throught cmd.exe
  * @param command the command that needs to be executed
  */
-export function execute(command: string, mode?: string): void {
-  if (mode === "spawn") {
-    // Build args
-    let args = ["/s", "/c", "start", "", command];
-    let opts: SpawnOptions = {
-      shell: false,
-      detached: true,
-      stdio: "ignore",
-      windowsHide: true,
-    };
+export function spawn_cmd(command: string): void {
+  // Build args
+  let args = ["/s", "/c", "start", "", command];
+  let opts: SpawnOptions = {
+    shell: false,
+    detached: true,
+    stdio: "ignore",
+    windowsHide: true,
+  };
 
-    // Execute statment
-    let stmt = spawn("cmd.exe", args, opts);
+  // Execute statment
+  let stmt = spawn("cmd.exe", args, opts);
 
-    if (stmt.stderr) {
-      stmt.stderr.on("data", (data) => {
-        console.error(`stderr: ${data}`);
-      });
-    }
-  } else {
-    exec(command, (error, stdout, stderr) => {
-      if (error) {
-        // TODO
-      }
+  if (stmt.stderr) {
+    stmt.stderr.on("data", (data) => {
+      console.error(`stderr: ${data}`);
     });
   }
+}
+
+/**
+ * Execute the command passed in parameter throught cmd.exe
+ * @param command the command that needs to be executed
+ */
+export async function exec_cmd(command: string): Promise<any> {
+  return new Promise(function (resolve, reject) {
+    exec(command, (error, stdout, stderr) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      // Return result
+      resolve(stdout.trim());
+    });
+  });
 }
 
 export function userInfo(): os.UserInfo<string> {
@@ -98,6 +107,47 @@ export async function directoryPicker(win: BrowserWindow) {
  * @param format format must be a string ["KB", "MB", "GB"], default is MB
  */
 export async function getFolderSize(path: string, format: string = "MB"): Promise<number> {
+  return new Promise((res, rej) => {
+    fastFolderSize(path, (err: any, bytes: number) => {
+      res(Math.round((bytes / 1024 / 1024) * 100) / getFormat(format));
+    });
+  });
+}
+
+/**
+ * Return the free space available on the location specified
+ * @param path the path that needs to be inspected
+ * @param format format must be a string ["KB", "MB", "GB"], default is MB
+ */
+export async function getFolderSpace(path: string): Promise<string> {
+  return new Promise((res, rej) => {
+    exec_cmd(`dir ${path}`)
+      .then((result) => {
+        var regex = /\n.*$/;
+        let match = regex.exec(result);
+        let size = match[0]
+          .slice(1)
+          .split(" ")
+          .filter((i) => i)[2]
+          .split("'")
+          .join("");
+
+        let sizeMB: number = Math.round(parseInt(size) / 1024 / 1024);
+        let freeSpace: string = sizeMB > 1000 ? `${(sizeMB / 1024).toFixed(2).toString()} GB` : `${sizeMB.toFixed(2).toString()} GB`;
+
+        if (freeSpace) {
+          res(freeSpace);
+        } else {
+          rej("Impossible de déterminer l'espace disponible");
+        }
+      })
+      .catch((error) => {
+        rej(error);
+      });
+  });
+}
+
+function getFormat(format: string): number {
   let factor: number = 100;
 
   switch (format) {
@@ -118,12 +168,5 @@ export async function getFolderSize(path: string, format: string = "MB"): Promis
       break;
     }
   }
-
-  console.log("Final format is : " + format);
-
-  return new Promise((res, rej) => {
-    fastFolderSize(path, (err: any, bytes: number) => {
-      res(Math.round((bytes / 1024 / 1024) * 100) / factor);
-    });
-  });
+  return factor;
 }

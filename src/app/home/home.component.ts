@@ -19,7 +19,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(private _electronService: ElectronService, private dataService: DataService) {}
 
   ngOnInit(): void {
-    this.subscription = this.dataService.getData().subscribe(async (computerInfo: IComputerInfo) => {
+    this.subscription = this.dataService.getComputerInfo().subscribe(async (computerInfo: IComputerInfo) => {
       if (computerInfo == undefined) {
         this.resetInfo();
         await this.process();
@@ -41,7 +41,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.calcTotal();
     this.info.loaded = true;
     // Update subject
-    this.dataService.setData(this.info);
+    this.dataService.setComputerInfo(this.info);
   }
 
   calcTotal(): void {

@@ -1,4 +1,4 @@
-const { isReacheable, isEmpty, getFolderSize } = require("../services/utils-service");
+const { isReacheable, isEmpty, getFolderSize, getFolderSpace } = require("../services/utils-service");
 const fs = require("fs-extra");
 const path = require('path');
 const { randomUUID } = require("crypto");
@@ -44,7 +44,7 @@ test("Test if test drive is not empty", () => {
   expect(resultFalse).toBe(false);
 });
 
-test("Test if size is correct", async () => {
+test("Test if getFolderSize() return a correct value", async () => {
   // Create random file to have a size to check
   file = fs.openSync(TEST_FILE, 'w')
   // Write 100ko to the file
@@ -63,4 +63,7 @@ test("Test if isReacheable() return false if the drive is not accessible", () =>
   expect(resultFalse).toBe(false);
 });
 
-// TODO --> test execute stuff
+test("Test if getFolderSpace() return a number", async () => {
+  let result = await getFolderSpace("M:");
+  expect(typeof result).toBe('string')
+});
