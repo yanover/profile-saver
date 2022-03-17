@@ -11,6 +11,7 @@ import {
 import { Subscription } from "rxjs";
 import { IComputerInfo } from "../shared/models/IComputerInfo";
 import { DataService } from "../shared/services/data.service";
+import { IFolderInfo } from "../shared/models/IFolderInfo";
 
 @Component({
   selector: "app-save",
@@ -36,10 +37,7 @@ export class SaveComponent implements OnInit {
   subscription: Subscription;
   info: IComputerInfo;
 
-  defaultLocation: {
-    name: string;
-    size: number;
-  };
+  defaultLocation: IFolderInfo;
 
   options: {
     desktop: {
@@ -206,18 +204,8 @@ export class SaveComponent implements OnInit {
   }
 
   loadCurrentDirectory() {
-    this._electronService.ipcRenderer
-      .invoke(`get-default-location`)
-      .then((result) => {
-        if (result) {
-          console.log(result);
-          this.defaultLocation = result;
-        }
-      })
-      .catch((error) => {
-        console.log();
-        
-        console.error(error);
-      });
+    this.dataService.getDestinationInfo().subscribe((data: IFolderInfo) => {
+      this.defaultLocation = data;
+    });
   }
 }

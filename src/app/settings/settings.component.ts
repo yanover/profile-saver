@@ -29,10 +29,10 @@ export class SettingsComponent implements OnInit {
   async setDefaultDirectory() {
     this._electronService.ipcRenderer
       .invoke("set-default-location")
-      .then((l) => {
-        console.log(l);
-        // return something from that shit
-        this.loadCurrentDirectory();
+      .then(() => {
+        this._electronService.ipcRenderer.invoke("get-default-location").then((data) => {
+          this.dataService.setDestinationInfo(data as IFolderInfo);
+        });
       })
       .catch((err) => {
         console.error(err);
