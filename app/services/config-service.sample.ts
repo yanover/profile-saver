@@ -1,5 +1,6 @@
 import os = require("os");
-import { isReacheable } from "./utils-service";
+import { getFolderSpace, isReacheable } from "./utils-service";
+import { IFolderInfo } from "../models/IFolderInfo";
 
 // Enum for managing paths name
 export const Default = {
@@ -50,16 +51,17 @@ export function loadRootPath(): Promise<void> {
  * Return the full builded path
  * @returns string
  */
- export function getFullPath(): string {
+export function getFullPath(): string {
   return Default.DIRECTORY_PATH + "\\" + Default.DIRECTORY_NAME;
 }
 
 /**
  * Set a new Default location for backup
  */
-export function setDirectoryPath(path: string): void {
+export function setDirectoryPath(path: string): string {
   if (isReacheable(path)) {
     Default.DIRECTORY_PATH = path;
+    return path;
   } else {
     throw new Error("Default directory provided is unreachable");
   }
@@ -69,6 +71,9 @@ export function setDirectoryPath(path: string): void {
  * Return the current location for backup
  * @returns string
  */
-export function getDirectoryPath(): string {
-  return Default.DIRECTORY_PATH;
+ export async function getDirectoryPath(): Promise<IFolderInfo> {
+  return {
+    name: Default.DIRECTORY_PATH,
+    size: await getFolderSpace(Default.DIRECTORY_PATH),
+  };
 }

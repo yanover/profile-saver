@@ -30,9 +30,11 @@ function createWindow(): BrowserWindow {
 
   // Create the browser window.
   win = new BrowserWindow({
-    width: 960,
-    height: 540,
-    autoHideMenuBar: true,
+    /* width: 960,
+    height: 540, */
+    width: 1920,
+    height: 1080,
+    autoHideMenuBar: false,
     icon: iconPath,
     resizable: false,
     webPreferences: {
@@ -52,7 +54,7 @@ function createWindow(): BrowserWindow {
   } else {
     // Path when running electron executable
     let pathIndex = "./index.html";
-
+    
     if (fs.existsSync(path.join(__dirname, "../dist/index.html"))) {
       // Path when running electron in local folder
       pathIndex = "../dist/index.html";
@@ -183,8 +185,8 @@ ipcMain.handle("restore-browser", async () => {
 
 // SETTINGS EVENTS
 
-ipcMain.handle("get-default-location", () => {
-  return getDirectoryPath();
+ipcMain.handle("get-default-location", async () => {
+  return await getDirectoryPath();
 });
 
 ipcMain.handle("set-default-location", async () => {

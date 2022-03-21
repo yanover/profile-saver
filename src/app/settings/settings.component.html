@@ -5,13 +5,15 @@
       <h3>Paramètres</h3>
     </div>
   </div>
+
   <!-- BOTTOM BOX -->
   <div class="center-box">
     <div class="center-box__input-group">
       <label for="defaultDestination">Destination</label>
       <button name="defaultDestination" id="defaultDestination" (click)="setDefaultDirectory()">
-        {{ defaultLocation }}
+        {{ defaultLocation?.name }}
       </button>
+      <span>Espace disponible : {{ defaultLocation?.size.data }} {{ defaultLocation?.size.unit }}</span>
     </div>
   </div>
 

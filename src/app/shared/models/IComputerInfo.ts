@@ -1,3 +1,5 @@
+import { IStorageValue } from "./IStorageValue";
+
 export interface IComputerInfo {
   username: string;
   os: string;
@@ -7,9 +9,9 @@ export interface IComputerInfo {
   memory: number;
   loaded: boolean;
   storage: {
-    desktop: number;
-    downloads: number;
-    documents: number;
-    total: number;
+    desktop: IStorageValue;
+    downloads: IStorageValue;
+    documents: IStorageValue;
+    total: IStorageValue;
   };
 }

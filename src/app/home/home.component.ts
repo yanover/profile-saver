@@ -12,14 +12,13 @@ import { DataService } from "../shared/services/data.service";
 })
 export class HomeComponent implements OnInit, OnDestroy {
   faTools = faTools;
-
   info: IComputerInfo;
   subscription: Subscription;
 
   constructor(private _electronService: ElectronService, private dataService: DataService) {}
 
   ngOnInit(): void {
-    this.subscription = this.dataService.getData().subscribe(async (computerInfo: IComputerInfo) => {
+    this.subscription = this.dataService.getComputerInfo().subscribe(async (computerInfo: IComputerInfo) => {
       if (computerInfo == undefined) {
         this.resetInfo();
         await this.process();
@@ -37,25 +36,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     // Retrieve informations
     this.info = await this._electronService.ipcRenderer.invoke("retrieve-info");
     this.info.storage = await this._electronService.ipcRenderer.invoke("retrieve-storage");
-    console.log(this.info);
-    // Process total storage
-    this.calcTotal();
     this.info.loaded = true;
     // Update subject
-    this.dataService.setData(this.info);
-  }
-
-  calcTotal(): void {
-    this.info.storage.total = 0;
-    for (let key in this.info.storage) {
-      if (key != "total") {
-        this.info.storage.total = +((Math.round(this.info.storage.total + this.info.storage[key]) * 100) / 100);
-      }
-    }
+    this.dataService.setComputerInfo(this.info);
   }
 
   resetInfo(): void {
-    console.log("CREATE EMPTY SHIT");
     this.info = {
       username: "",
       architecture: "",
@@ -65,12 +51,11 @@ export class HomeComponent implements OnInit, OnDestroy {
       memory: 0,
       loaded: false,
       storage: {
-        desktop: 0,
-        documents: 0,
-        downloads: 0,
-        total: 0,
+        desktop: { data: 0, unit: "" },
+        documents: { data: 0, unit: "" },
+        downloads: { data: 0, unit: "" },
+        total: { data: 0, unit: "" },
       },
     };
-    console.log(this.info);
   }
 }

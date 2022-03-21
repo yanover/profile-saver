@@ -45,6 +45,11 @@
         color: black;
         word-wrap: break-word;
       }
+
+      span {
+        display: block;
+        padding: 0.2rem 0;
+      }
     }
   }
 

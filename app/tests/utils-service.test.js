@@ -1,10 +1,11 @@
-const { isReacheable, isEmpty, deleteFolderRecursive } = require("../services/utils-service");
+const { isReacheable, isEmpty, getFolderSize, getFolderSpace } = require("../services/utils-service");
 const fs = require("fs-extra");
 const path = require('path');
 const { randomUUID } = require("crypto");
 
 // Static variables
 const TEST_PATH = path.join(__dirname, `_testFolder__${randomUUID()}`)
+const TEST_FILE = `${TEST_PATH}\\test.txt`
 const UNREACHABLE_PATH = "I'm an unreacheable path";
 
 
@@ -15,8 +16,9 @@ beforeAll(() => {
 
 afterAll(() => {
   try {
+    // Remove test file
     // Remove test folder at the end
-    fs.rmdirSync(TEST_PATH)
+    fs.rmdirSync(TEST_PATH, { recursive: true });
   } catch (err) {
     // Swallow
   }
@@ -35,6 +37,25 @@ test("Test if test drive is empty", () => {
   expect(resultTrue).toBe(true);
 });
 
+test("Test if test drive is not empty", () => {
+  fs.createFileSync(TEST_FILE)
+  const resultFalse = isEmpty(TEST_PATH);
+  // This folder shouldn't be empty to validate the test
+  expect(resultFalse).toBe(false);
+});
+
+test("Test if getFolderSize() return a correct value", async () => {
+  // Create random file to have a size to check
+  file = fs.openSync(TEST_FILE, 'w')
+  // Write 100ko to the file
+  fs.writeSync(file, Buffer.alloc(1), 0, 1, 102400 - 1);
+  fs.closeSync(file);
+  // Retrieve the folders' size
+  let size = await getFolderSize(TEST_PATH, "MB")
+  // Folder size should be 100 MB
+  expect(size).toBe(100)
+});
+
 // TODO, test access (writable or not)
 test("Test if isReacheable() return false if the drive is not accessible", () => {
   // Try to access unreachable drive
@@ -42,5 +63,7 @@ test("Test if isReacheable() return false if the drive is not accessible", () =>
   expect(resultFalse).toBe(false);
 });
 
-
-// TODO --> test execute stuff
+test("Test if getFolderSpace() return a number", async () => {
+  let result = await getFolderSpace("M:");
+  expect(typeof result).toBe('string')
+});

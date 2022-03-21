@@ -1,6 +1,6 @@
 import fs = require("fs-extra");
 import { Files, getFullPath, Repertories } from "../services/config-service";
-import { isEmpty, execute, userInfo } from "../services/utils-service";
+import { isEmpty, spawn_cmd, userInfo } from "../services/utils-service";
 
 const regedit = require("regedit");
 
@@ -204,10 +204,10 @@ export async function restorePrinters(contents: Electron.WebContents): Promise<v
         }
       }
     }
-    // Launch child_process execute function
+    // Launch child_process spawn function
     printersSorted.forEach((printer) => {
       try {
-        execute(printer["name"], "spawn");
+        spawn_cmd(printer["name"]);
       } catch (err) {
         console.error(err);
         // Swallow
@@ -234,7 +234,7 @@ export async function restoreBrowser(): Promise<void> {
     let cmd = `xcopy /Y ${rootPathDestination}\\Bookmarks "${rootPathSource}"`;
     // Run builded command
     try {
-      execute(cmd);
+      spawn_cmd(cmd);
     } catch (err) {
       throw err;
     }
