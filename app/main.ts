@@ -30,11 +30,11 @@ function createWindow(): BrowserWindow {
 
   // Create the browser window.
   win = new BrowserWindow({
-    /* width: 960,
-    height: 540, */
-    width: 1920,
-    height: 1080,
-    autoHideMenuBar: false,
+    width: 960,
+    height: 540,
+/*     width: 1920,
+    height: 1080, */
+    autoHideMenuBar: true,
     icon: iconPath,
     resizable: false,
     webPreferences: {

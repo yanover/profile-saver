@@ -124,7 +124,7 @@ export async function getFolderSize(path: string, format: string = "MB"): Promis
  */
 export async function getFolderSpace(path: string): Promise<IStorageValue> {
   return new Promise((res, rej) => {
-    exec_cmd(`dir ${path}`)
+    exec_cmd(`dir "${path}"`)
       .then((result) => {
         var regex = /\n.*$/;
         let match = regex.exec(result);

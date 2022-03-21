@@ -65,5 +65,6 @@ test("Test if isReacheable() return false if the drive is not accessible", () =>
 
 test("Test if getFolderSpace() return a number", async () => {
   let result = await getFolderSpace("M:");
-  expect(typeof result).toBe('string')
+  expect(typeof result.data).toBe('number')
+  expect(typeof result.unit).toBe('string')
 });
