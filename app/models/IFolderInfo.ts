@@ -1,4 +1,6 @@
+import { IStorageValue } from "./IStorageValue";
+
 export interface IFolderInfo {
   name: string;
-  size: string;
+  size: IStorageValue;
 }

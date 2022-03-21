@@ -37,7 +37,7 @@
     <div class="info-ruban">
       <div class="info-ruban__left">Taille totale: {{ this.info?.storage.total.data }} {{ this.info?.storage.total.unit }}</div>
       <div class="info-ruban__center">Destination: {{ defaultLocation?.name }}</div>
-      <div class="info-ruban__right">Espace disponible: {{ defaultLocation?.size }}</div>
+      <div class="info-ruban__right">Espace disponible: {{ defaultLocation?.size.data }} {{ defaultLocation?.size.unit }}</div>
     </div>
     <button class="left-btn" [routerLink]="['/']" *ngIf="!progressVisibility">
       <fa-icon [icon]="faArrowLeft"></fa-icon>

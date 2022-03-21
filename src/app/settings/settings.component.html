@@ -13,7 +13,7 @@
       <button name="defaultDestination" id="defaultDestination" (click)="setDefaultDirectory()">
         {{ defaultLocation?.name }}
       </button>
-      <span>Espace disponible : {{ defaultLocation?.size }}</span>
+      <span>Espace disponible : {{ defaultLocation?.size.data }} {{ defaultLocation?.size.unit }}</span>
     </div>
   </div>
 

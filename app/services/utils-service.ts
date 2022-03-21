@@ -3,7 +3,10 @@ import os = require("os");
 import { exec, spawn, SpawnOptions } from "child_process";
 import { BrowserWindow, dialog } from "electron";
 import { WarningException } from "../common";
+import { ByteConvertor } from "./converter-service";
+import { IStorageValue } from "../models/IStorageValue";
 const fastFolderSize = require("fast-folder-size");
+const convertor = new ByteConvertor();
 
 /**
  * Define if the path passed in argument is accessible and writeable
@@ -119,7 +122,7 @@ export async function getFolderSize(path: string, format: string = "MB"): Promis
  * @param path the path that needs to be inspected
  * @param format format must be a string ["KB", "MB", "GB"], default is MB
  */
-export async function getFolderSpace(path: string): Promise<string> {
+export async function getFolderSpace(path: string): Promise<IStorageValue> {
   return new Promise((res, rej) => {
     exec_cmd(`dir ${path}`)
       .then((result) => {
@@ -132,10 +135,10 @@ export async function getFolderSpace(path: string): Promise<string> {
           .split("'")
           .join("");
 
-        let sizeMB: number = Math.round(parseInt(size) / 1024 / 1024);
-        let freeSpace: string = sizeMB > 1000 ? `${(sizeMB / 1024).toFixed(2).toString()} GB` : `${sizeMB.toFixed(2).toString()} GB`;
-
-        if (freeSpace) {
+        // Add AUTO to convertor as an output feature
+        let freeSpace: IStorageValue = convertor.convert(parseInt(size), "B", "GB");
+        
+        if (freeSpace.data) {
           res(freeSpace);
         } else {
           rej("Impossible de déterminer l'espace disponible");
