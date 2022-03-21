@@ -87,6 +87,7 @@ export class SaveComponent implements OnInit {
         // TODO
       } else {
         this.info = computerInfo;
+        console.log(this.info);
       }
     });
     // Retrieve destination info
