@@ -135,9 +135,8 @@ export async function getFolderSpace(path: string): Promise<IStorageValue> {
           .split("'")
           .join("");
 
-        // Add AUTO to convertor as an output feature
         let freeSpace: IStorageValue = convertor.convert(parseInt(size), "B", "GB");
-        
+
         if (freeSpace.data) {
           res(freeSpace);
         } else {

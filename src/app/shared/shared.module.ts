@@ -12,11 +12,12 @@ import { LoadingDotComponent } from "./components/";
 
 // Services
 import { DataService } from "./services/data.service";
+import { ByteConvertorPipe } from "./pipe/byte-convertor.pipe";
 
 @NgModule({
-  declarations: [WebviewDirective, LoadingComponent, LoadingDotComponent],
+  declarations: [WebviewDirective, LoadingComponent, LoadingDotComponent, ByteConvertorPipe],
   imports: [CommonModule, TranslateModule, FormsModule],
-  exports: [TranslateModule, WebviewDirective, FormsModule, FontAwesomeModule, LoadingComponent, LoadingDotComponent],
+  exports: [TranslateModule, WebviewDirective, FormsModule, FontAwesomeModule, LoadingComponent, LoadingDotComponent, ByteConvertorPipe],
   providers: [DataService],
 })
 export class SharedModule {}

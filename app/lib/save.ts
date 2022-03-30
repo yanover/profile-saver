@@ -16,6 +16,7 @@ export async function initSave(win: any): Promise<number> {
   const rootPath = getFullPath();
 
   try {
+
     if (!fs.existsSync(rootPath)) {
       // Folder doesn't exist, creating
       fs.mkdirSync(rootPath);
